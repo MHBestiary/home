@@ -1,0 +1,1004 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+	<link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/128/8832/8832898.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>GENERADOR</title>
+    <style>
+        @font-face {
+            font-family: 'Albertus MT Std Regular';
+            font-style: normal;
+            font-weight: normal;
+            src: local('Albertus MT Std Regular'), 
+                url('fonts/FuenteMH.woff') format('woff');
+            font-display: swap;
+        }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0px;
+            max-width: 1100px;
+            padding: 20px;
+            padding-top: 0px;
+            background: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .form-section {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .delete-btn {
+            background: #e74c3c;
+            margin-left: 0.5rem;
+        }
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+        #jsonOutput {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #2c3e50;
+            color: #ecf0f1;
+            border-radius: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .grid-weaknesses {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.25rem;
+        }
+        .weakness-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .weakness-item select {
+            width: auto;
+        }
+        .item-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            background: #f9f9f9;
+        }
+        .generate-btn {
+            background: #27ae60;
+            width: 100%;
+            padding: 1rem;
+            margin-top: 2rem;
+            font-size: 1.2rem;
+        }
+        .generate-btn:hover {
+            background: #219a52;
+        }
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: normal;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+        .material-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr;
+            gap: 0.5rem;
+            align-items: center;
+        }
+		.parts-grid {
+            display: grid;
+            grid-template-columns: 0.1fr 3fr 1fr;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .damage-type-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: #f9f9f9;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+        }
+        
+        .damage-type-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .damage-type-item select {
+            width: 70px;
+        }
+
+        .custom-select-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            background-color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .custom-select:hover {
+            border-color: #888;
+        }
+
+        .options-container {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 2px;
+            display: none;
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .option {
+            padding: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .option:hover {
+            background-color: #f0f0f0;
+        }
+
+        .option img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .arrow {
+            border: solid #666;
+            border-width: 0 2px 2px 0;
+            display: inline-block;
+            padding: 3px;
+            transform: rotate(45deg);
+            margin-left: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-weaknesses {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .checkbox-group {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .material-grid {
+                grid-template-columns: 1fr;
+            }
+            .topcoso{
+                padding-top:30px;
+            }
+            body {
+                padding: 10px;
+                padding-top: 5px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-weaknesses {
+                grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+            }
+
+            .checkbox-group {
+                grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+            }
+
+            .damage-type-group {
+                grid-template-columns: repeat(1, 1fr);
+            }
+
+            .parts-grid {
+                grid-template-columns: 250px;
+            }
+
+            input, select, textarea {
+                font-size: 0.9rem; /* Tamaño de fuente más pequeño */
+                padding: 0.4rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-section {
+                padding: 1rem;
+            }
+
+            button {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Estilos del Sidebar */
+        #sidebar {
+            position: fixed;
+            left: -264px;
+            height: 100vh;
+            top: 0px;
+            width: 264px;
+            background: linear-gradient(to bottom, rgba(234, 239, 243, 0.8), rgba(174, 177, 180, 0.2));
+            backdrop-filter: blur(50px);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+            transition: left 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #sidebar .sidebar-header {
+            position: sticky;
+            top: 175px;
+            padding: 1rem;
+            z-index: 2;
+        }
+
+        #sidebar .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            padding-top: 20px;
+            padding-bottom: 140px;
+        }
+
+        #sidebar .sidebar-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #sidebar .sidebar-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #sidebar .sidebar-content::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        #sidebar .toggle-sidebar-button {
+            position: absolute;
+            right: -40px;
+            top: 10%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 60px;
+            background-color: rgba(235, 235, 235, 0.75);
+            backdrop-filter: blur(50px);
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #sidebar a {
+            font-family: 'Albertus MT Std Regular';
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            text-decoration: none;
+            color: black;
+        }
+
+        #sidebar a:hover {
+            transform: translateX(4px);
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        #sidebar img {
+            transition: transform 0.2s ease;
+        }
+
+        #sidebar a:hover img {
+            transform: scale(1.1);
+        }
+
+        .botonDark {
+            background-color: #939aa8;
+        }
+        .botonDark:hover {
+            background-color: #666a74;
+        }
+
+        /* Utility classes for sidebar */
+        .px-1\.5 { padding-left: 0.375rem; padding-right: 0.375rem; }
+        .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .transition-colors { transition-property: background-color, border-color, color, fill, stroke; }
+        .p-3 { padding: 0.75rem; }
+        .gap-3 { gap: 0.75rem; }
+        .w-8 { width: 2rem; }
+        .h-8 { height: 2rem; }
+        .h-6 { height: 1.5rem; }
+        .w-6 { width: 1.5rem; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .gap-2 { gap: 0.5rem; }
+        .flex { display: flex; }
+    </style>
+</head>
+<body>
+    <!-- Add sidebar -->
+    <div id="sidebar" class="fixed -left-64 h-full w-64 shadow-lg transition-all duration-300 z-40">
+        <div class="toggle-sidebar-button" onclick="toggleSidebar()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+        </div>
+        <div class="sidebar-content">
+            <div class="space-y-4">  
+                <div class="flex items-center justify-between gap-2">
+                    <button 
+                        onclick="window.location.href='https://ellandeperez.github.io/MHBestiary/'"
+                        class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
+                        <img style="width:35px;height:35px;" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/home.png?raw=true" class="h-6 w-6" alt="Alternar Modo Oscuro">
+                    </button>                     
+                </div>
+                <a href="https://ellandeperez.github.io/MHBestiary/menu.html" 
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <img src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/bbq.png?raw=true" 
+                        class="w-8 h-8" alt="Menu">
+                    <span>Menú Wilds</span>
+                </a>
+                <a href="https://ellandeperez.github.io/MHBestiary/galeria.html" 
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <img src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/map.png?raw=true" 
+                        class="w-8 h-8" alt="Menu">
+                    <span>Galeria</span>
+                </a>
+                <a href="https://ellandeperez.github.io/MHBestiary/wheel.html" 
+                   class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <img src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/question.png?raw=true" 
+                         class="w-8 h-8" alt="Ruleta">
+                    <span>Ruleta de Monstruos</span>
+                </a>
+                <a href="https://ellandeperez.github.io/MHBestiary/GeneraMonstruos.html" 
+                   class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <img src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/book_blue.png?raw=true" 
+                         class="w-8 h-8" alt="Ruleta">
+                    <span>Generar Monstruos</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <h1 class="topcoso">GENERADOR DE MONSTRUOS</h1>
+	<div class="form-section">
+        <div class="form-grid">
+            <div class="input-group">
+                <label>ID:</label>
+                <input type="number" id="monsterId" min="1">
+            </div>
+            
+            <div class="input-group">
+                <label>Nombre:</label>
+                <input type="text" id="monsterName">
+            </div>
+            
+            <div class="input-group">
+                <label>Tipo:</label>				
+                <select id="monsterType">
+                    <option value="Temnoceran">Temnocerante</option>
+                    <option value="Bird Wyvern">Wyvern Pajaro</option>
+                    <option value="Flying Wyvern">Wyvern Volador</option>
+                    <option value="Piscine Wyvern">Wyvern Piscina</option>
+                    <option value="Carapaceon">Carapaceon</option>
+                    <option value="Amphibian">Amphibio</option>
+                    <option value="Fanged Beast">Bestia con Colmillos</option>
+                    <option value="Leviathan">Leviathan</option>
+                    <option value="Cephalopod">Cephalopod</option>
+                    <option value="Snake Wyvern">Wyvern Serpiente</option>
+                    <option value="Brute Wyvern">Wyvern Bruto</option>
+                    <option value="Fanged Wyvern">Wyvern con Colmillos</option>
+                    <option value="Elder Dragon">Dragon Anciano</option>
+                    <option value="Unknown">Desconocido</option>
+                    <option value="Relict">Relict</option>
+                    <option value="Construct">Guardian</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label>Peligro:</label>
+                <select id="monsterThreat">
+                    <option value="1">★</option>
+                    <option value="2">★★</option>
+                    <option value="3">★★★</option>
+                    <option value="4">★★★★</option>
+                    <option value="5">★★★★★</option>
+                    <option value="6">★★★★★★</option>
+                    <option value="7">★★★★★★★</option>
+                    <option value="8">★★★★★★★★</option>
+                    <option value="9">★★★★★★★★★</option>
+                    <option value="10">★★★★★★★★★★</option>
+                </select>
+            </div>
+            
+            <div class="input-group full-width">
+                <label>Juegos:</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="games" value="MH1"> MH1</label>
+                    <label><input type="checkbox" name="games" value="MH2"> MH2</label>
+                    <label><input type="checkbox" name="games" value="MH3"> MH3</label>
+                    <label><input type="checkbox" name="games" value="MH4"> MH4</label>
+                    <label><input type="checkbox" name="games" value="MH FRONTIERS"> MH FRONTIERS</label>
+                    <label><input type="checkbox" name="games" value="MH GENERATIONS"> MH GENERATIONS</label>
+                    <label><input type="checkbox" name="games" value="MH WORLD"> MH WORLD</label>
+                    <label><input type="checkbox" name="games" value="MH RISE"> MH RISE</label>
+                    <label><input type="checkbox" name="games" value="MH WILDS"> MH WILDS</label>
+                </div>
+            </div>
+            
+            <div class="input-group full-width">
+                <label>Hábitat:</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" name="locale" value="Normal"> Normal</label>
+                    <label><input type="checkbox" name="locale" value="Water"> Agua</label>
+                    <label><input type="checkbox" name="locale" value="Snow"> Nieve</label>
+                    <label><input type="checkbox" name="locale" value="Desert"> Desierto</label>
+                    <label><input type="checkbox" name="locale" value="Volcano"> Volcán</label>
+                    <label><input type="checkbox" name="locale" value="Unknown"> Desconocido</label>
+                </div>
+            </div>
+            
+            <div class="input-group full-width">
+                <label>Debilidades:</label>
+                <div class="grid-weaknesses">
+                    <div class="weakness-item">
+                        <label>Fuego:</label>
+                        <select class="weakness" data-element="fuego">
+							<option value="0">x</option>
+							<option value="1">★</option>
+							<option value="2">★★</option>
+							<option value="3">★★★</option>
+                        </select>
+                    </div>
+                    <div class="weakness-item">
+                        <label>Agua:</label>
+                        <select class="weakness" data-element="agua">
+							<option value="0">x</option>
+							<option value="1">★</option>
+							<option value="2">★★</option>
+							<option value="3">★★★</option>
+                        </select>
+                    </div>
+                    <div class="weakness-item">
+                        <label>Rayo:</label>
+                        <select class="weakness" data-element="rayo">
+							<option value="0">x</option>
+							<option value="1">★</option>
+							<option value="2">★★</option>
+							<option value="3">★★★</option>
+                        </select>
+                    </div>
+                    <div class="weakness-item">
+                        <label>Hielo:</label>
+                        <select class="weakness" data-element="hielo">
+							<option value="0">x</option>
+							<option value="1">★</option>
+							<option value="2">★★</option>
+							<option value="3">★★★</option>
+                        </select>
+                    </div>
+                    <div class="weakness-item">
+                        <label>Dragón:</label>
+                        <select class="weakness" data-element="dragon">
+							<option value="0">x</option>
+							<option value="1">★</option>
+							<option value="2">★★</option>
+							<option value="3">★★★</option>
+                        </select>
+                    </div>
+                    <div class="weakness-item">
+                        <label>Nitro:</label>
+                        <select class="weakness" data-element="nitro">
+							<option value="0">x</option>
+							<option value="1">★</option>
+							<option value="2">★★</option>
+							<option value="3">★★★</option>
+                        </select>
+                    </div>
+                    <div class="weakness-item">
+                        <label>Veneno:</label>
+                        <select class="weakness" data-element="veneno">
+							<option value="0">x</option>
+							<option value="1">★</option>
+							<option value="2">★★</option>
+							<option value="3">★★★</option>
+                        </select>
+                    </div>
+                    <div class="weakness-item">
+                        <label>Parálisis:</label>
+                        <select class="weakness" data-element="paralisis">
+							<option value="0">x</option>
+							<option value="1">★</option>
+							<option value="2">★★</option>
+							<option value="3">★★★</option>
+                        </select>
+                    </div>
+                    <div class="weakness-item">
+                        <label>Sueño:</label>
+                        <select class="weakness" data-element="sueño">
+							<option value="0">x</option>
+							<option value="1">★</option>
+							<option value="2">★★</option>
+							<option value="3">★★★</option>
+                        </select>
+                    </div>
+                    <div class="weakness-item">
+                        <label>Stun:</label>
+                        <select class="weakness" data-element="stun">
+							<option value="0">x</option>
+							<option value="1">★</option>
+							<option value="2">★★</option>
+							<option value="3">★★★</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label>Descripción:</label>
+                <textarea id="monsterDescription"></textarea>
+            </div>
+            
+            <div class="input-group">
+                <label>Imagen Principal:</label>
+                <input type="text" id="monsterImage" placeholder="URL de la imagen">
+            </div>
+            
+            <div class="input-group full-width">
+                <label>Variantes:</label>
+                <button type="button" onclick="addVariant()">Añadir Variante</button>
+                <div id="variantsContainer"></div>
+            </div>
+            
+            <div class="input-group full-width">
+                <label>Galería:</label>
+                <button type="button" onclick="addGalleryImage()">Añadir Imagen</button>
+                <div id="galleryContainer"></div>
+            </div>
+            
+            <div class="input-group full-width">
+                <label>Materiales:</label>
+                <button type="button" onclick="addMaterial()">Añadir Material</button>
+                <div id="materialsContainer"></div>
+            </div>
+			
+			<div class="input-group full-width">
+                <label>Partes:</label>
+                <button type="button" onclick="addPart()">Añadir Parte</button>
+                <div id="partsContainer"></div>
+            </div>
+        </div>
+        
+        <button onclick="generateJSON()" class="generate-btn">GENERAR MONSTRUOS</button>
+    </div>
+    
+    <pre id="jsonOutput"></pre>
+
+    <script>
+        function addVariant() {
+            const container = document.getElementById('variantsContainer');
+            const variantDiv = document.createElement('div');
+            variantDiv.className = 'item-container variant-item';
+            variantDiv.innerHTML = `
+                <input type="text" placeholder="Nombre de Variante" class="variant-name">
+                <input type="text" placeholder="URL de Imagen" class="variant-image">
+                <button type="button" class="delete-btn" onclick="this.parentNode.remove()">Eliminar</button>
+            `;
+            container.appendChild(variantDiv);
+        }
+
+        function addGalleryImage() {
+            const container = document.getElementById('galleryContainer');
+            const imageInput = document.createElement('div');
+            imageInput.className = 'item-container gallery-item';
+            imageInput.innerHTML = `
+                <input type="text" placeholder="URL de Imagen" class="gallery-image">
+                <button type="button" class="delete-btn" onclick="this.parentNode.remove()">Eliminar</button>
+            `;
+            container.appendChild(imageInput);
+        }
+
+        function addMaterial() {
+            const container = document.getElementById('materialsContainer');
+            const materialDiv = document.createElement('div');
+            materialDiv.className = 'item-container material-grid material-item';
+            materialDiv.innerHTML = `
+                <input type="text" placeholder="Nombre" class="material-name">
+                <input type="number" placeholder="Rareza (1-7)" class="material-rarity" min="1" max="7">
+                <input type="number" placeholder="Drop (Sin '%')" class="material-droprate" min="0" max="100">
+                <input type="text" placeholder="Parte de monstruo" class="material-source">
+                <div class="custom-select-container">
+                    <label>Icono de Material:</label>
+                    <div class="custom-select" onclick="toggleOptions(this)">
+                        <span class="selected-value">Selecciona un icono</span>
+                        <input type="hidden" class="selected-image-url" value="">
+                        <span class="arrow"></span>
+                    </div>
+                    <div class="options-container">
+                        <div class="option" data-value="Manto" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_mantle.png?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_mantle.png?raw=true" alt="Manto">
+                            <span>Manto</span>
+                        </div>
+                        <div class="option" data-value="Gema" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_gem.png?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_gem.png?raw=true" alt="Gema">
+                            <span>Gema</span>
+                        </div>
+                        <div class="option" data-value="Ticket" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/ticket_white.png?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/ticket_white.png?raw=true" alt="Ticket">
+                            <span>Ticket</span>
+                        </div>
+                        <div class="option" data-value="Cabeza" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_head.png?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_head.png?raw=true" alt="Cabeza">
+                            <span>Cabeza</span>
+                        </div>
+                        <div class="option" data-value="Cuerpo" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_body.png?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_body.png?raw=true" alt="Cuerpo">
+                            <span>Cuerpo</span>
+                        </div>
+                        <div class="option" data-value="Hueso" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_bone.png?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_bone.png?raw=true" alt="Hueso">
+                            <span>Hueso</span>
+                        </div>
+                        <div class="option" data-value="Piel" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_skin.png?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_skin.png?raw=true" alt="Piel">
+                            <span>Piel</span>
+                        </div>
+                        <div class="option" data-value="Cola" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_tail.png?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_tail.png?raw=true" alt="Cola">
+                            <span>Cola</span>
+                        </div>
+                        <div class="option" data-value="Ala" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_wing.png?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_wing.png?raw=true" alt="Ala">
+                            <span>Ala</span>
+                        </div>
+                        <div class="option" data-value="Cuerno" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_horn.png?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_horn.png?raw=true" alt="Cuerno">
+                            <span>Cuerno/Colmillo</span>
+                        </div>
+                        <div class="option" data-value="Placa" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_plate.png?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_plate.png?raw=true" alt="Placa">
+                            <span>Placa</span>
+                        </div>
+                        <div class="option" data-value="Escama" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_scale.png?raw=true?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_scale.png?raw=true?raw=true" alt="Escama">
+                            <span>Escama</span>
+                        </div>
+                        <div class="option" data-value="Cortex" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_cortex.png?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_cortex.png?raw=true" alt="Cortex">
+                            <span>Cortex</span>
+                        </div>
+                        <div class="option" data-value="Saco" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_sac.png?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_sac.png?raw=true" alt="Saco">
+                            <span>Saco</span>
+                        </div>
+                        <div class="option" data-value="Fluido" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_drink.png?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_drink.png?raw=true" alt="Fluido">
+                            <span>Fluido</span>
+                        </div>
+                        <div class="option" data-value="Webbing" data-image="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_webbing.png?raw=true" onclick="selectOption(this)">
+                            <img style="width:30px;height:30px" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/particons/m_webbing.png?raw=true" alt="Webbing">
+                            <span>Webbing</span>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="delete-btn" onclick="this.parentNode.remove()">Eliminar</button>
+            `;
+            container.appendChild(materialDiv);
+        }
+
+        function toggleOptions(selectElement) {
+            if (!selectElement) return;
+
+            const optionsContainer = selectElement.nextElementSibling;
+            if (!optionsContainer) return;
+
+            optionsContainer.classList.toggle('show');
+            
+            // Cerrar al hacer clic fuera
+            function closeOptions(e) {
+                if (!selectElement.contains(e.target)) {
+                    optionsContainer.classList.remove('show');
+                    document.removeEventListener('click', closeOptions);
+                }
+            }
+
+            document.addEventListener('click', closeOptions);
+        }
+
+        // Funciones auxiliares para el select personalizado
+        function selectOption(option) {
+            // Verificaciones de seguridad
+            if (!option) {
+                console.error('No option selected');
+                return;
+            }
+
+            // Buscar los elementos necesarios
+            const selectContainer = option.closest('.custom-select-container');
+            if (!selectContainer) {
+                console.error('Could not find select container');
+                return;
+            }
+
+            const selectedValue = selectContainer.querySelector('.selected-value');
+            const selectedImageUrl = selectContainer.querySelector('.selected-image-url');
+            const optionsContainer = selectContainer.querySelector('.options-container');
+            const customSelect = selectContainer.querySelector('.custom-select');
+
+            // Verificar que todos los elementos existan
+            if (!selectedValue || !selectedImageUrl || !optionsContainer || !customSelect) {
+                console.error('Missing required elements', {
+                    selectedValue, 
+                    selectedImageUrl, 
+                    optionsContainer,
+                    customSelect
+                });
+                return;
+            }
+
+            // Obtener el texto y la imagen de la opción
+            const optionText = option.querySelector('span') ? option.querySelector('span').textContent : option.textContent;
+            const optionImage = option.dataset.image || '';
+
+            // Actualizar los valores
+            selectedValue.innerHTML = `
+                ${optionImage ? `<img src="${optionImage}" style="width:20px; margin-right:8px;" alt="${optionText}">` : ''}
+                ${optionText}
+            `;
+            selectedImageUrl.value = optionImage;
+            optionsContainer.classList.remove('show');
+        }
+
+        function addPart() {
+            const container = document.getElementById('partsContainer');
+            const partDiv = document.createElement('div');
+            partDiv.className = 'item-container part-item';
+            partDiv.innerHTML = `
+                <div class="parts-grid">
+                    <input type="text" placeholder="Nombre de la parte" class="part-name">
+                    <div style="display: flex; align-items: center;">
+                        <label style="color:red;">*SLECCIONA SOLO UNA DE LAS DOS*</label>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <label>Cortable:</label>
+                        <input type="checkbox" class="part-cortable">
+                        <label>Rompible:</label>
+                        <input type="checkbox" class="part-breakable">
+                    </div>
+                    <div class="damage-type-group">
+                        <div class="damage-type-item">
+                            <label>Corte:</label>
+                            <select class="part-slash">
+                                <option value="0">-</option>
+                                <option value="1">★</option>
+                                <option value="2">★★</option>
+                                <option value="3">★★★</option>
+                            </select>
+                        </div>
+                        <div class="damage-type-item">
+                            <label>Contundente:</label>
+                            <select class="part-blunt">
+                                <option value="0">-</option>
+                                <option value="1">★</option>
+                                <option value="2">★★</option>
+                                <option value="3">★★★</option>
+                            </select>
+                        </div>
+                        <div class="damage-type-item">
+                            <label>Perforante:</label>
+                            <select class="part-pierce">
+                                <option value="0">-</option>
+                                <option value="1">★</option>
+                                <option value="2">★★</option>
+                                <option value="3">★★★</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="button" class="delete-btn" onclick="this.parentNode.parentNode.remove()">Eliminar</button>
+                </div>
+            `;
+            container.appendChild(partDiv);
+        }
+
+        function generateJSON() {
+            const variants = Array.from(document.querySelectorAll('.variant-item')).map(item => ({
+                name: item.querySelector('.variant-name').value,
+                image: item.querySelector('.variant-image').value
+            }));
+
+            const gallery = Array.from(document.querySelectorAll('.gallery-item'))
+                .map(item => item.querySelector('.gallery-image').value);
+
+            const materials = Array.from(document.querySelectorAll('.material-item')).map(item => ({
+                name: item.querySelector('.material-name').value,
+                rarity: parseInt(item.querySelector('.material-rarity').value),
+                dropRate: parseInt(item.querySelector('.material-droprate').value),
+                source: item.querySelector('.material-source').value,
+                icon: item.querySelector('.selected-image-url').value // Añadimos el icono al JSON
+            }));
+
+            const parts = Array.from(document.querySelectorAll('.part-item')).map(item => ({
+                name: item.querySelector('.part-name').value,
+                breakable: item.querySelector('.part-breakable').checked,
+                cortable: item.querySelector('.part-cortable').checked,
+                weaknesses: {
+                    slash: parseInt(item.querySelector('.part-slash').value),
+                    blunt: parseInt(item.querySelector('.part-blunt').value),
+                    pierce: parseInt(item.querySelector('.part-pierce').value)
+                }
+            }));
+
+            const weaknesses = {};
+            document.querySelectorAll('.weakness').forEach(select => {
+                weaknesses[select.dataset.element] = parseInt(select.value);
+            });
+
+            const jsonObject = {
+				id: parseInt(document.getElementById('monsterId').value) || null,
+				name: document.getElementById('monsterName').value,
+				type: document.getElementById('monsterType').value,
+				threat: parseInt(document.getElementById('monsterThreat').value),
+				locale: Array.from(document.querySelectorAll('input[name="locale"]:checked')).map(cb => cb.value),
+				variants: variants,
+				game: Array.from(document.querySelectorAll('input[name="games"]:checked')).map(cb => cb.value),
+				image: document.getElementById('monsterImage').value,
+				gallery: gallery,
+				description: document.getElementById('monsterDescription').value,
+				weaknesses: weaknesses,
+				materials: materials,
+				parts: parts
+			};
+
+			// Función personalizada para formatear el JSON
+			function customStringify(obj, indent = 4) {
+				const space = ' '.repeat(indent);
+				
+				// Función para determinar si un array debe ir en una línea o múltiples
+				const formatArray = (arr, key) => {
+					if (arr.length === 0) return '[]';
+					
+					// Arrays simples (locale y game) en una línea
+					if (['locale', 'game'].includes(key)) {
+						return `[${arr.map(item => JSON.stringify(item)).join(', ')}]`;
+					}
+					
+					// Gallery en múltiples líneas pero valores simples
+					if (key === 'gallery') {
+						return `[\n${space}${space}    ${arr.map(item => JSON.stringify(item)).join(',\n' + space + space + '    ')}\n${space}${space}]`;
+					}
+					
+					// Arrays de objetos (variants, materials, parts) en múltiples líneas
+					return `[\n${space}${space}    ${arr.map(item => JSON.stringify(item)).join(',\n' + space + space + '    ')}\n${space}${space}]`;
+				};
+
+				// Función para formatear objetos
+				const formatObject = (obj, key) => {
+					// Formato especial para weaknesses
+					if (key === 'weaknesses' || (key === 'weaknesses' && obj.hasOwnProperty('slash'))) {
+						return `${JSON.stringify(obj)}`;
+						return JSON.stringify(obj);
+					}
+					
+					const entries = Object.entries(obj);
+					if (entries.length === 0) return '{}';
+					
+					return `{\n${space}    ${entries.map(([k, v]) => {
+						const formatted = Array.isArray(v) ? formatArray(v, k) :
+							typeof v === 'object' && v !== null ? formatObject(v, k) :
+							JSON.stringify(v);
+						return `"${k}": ${formatted}`;
+					}).join(',\n' + space + '    ')}\n${space}}`;
+				};
+
+				return formatObject(obj, '');
+			}
+
+			document.getElementById('jsonOutput').textContent = customStringify(jsonObject);
+		}
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-264px';
+            } else {
+                sidebar.style.left = '0px';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MENU</title>
+    <link rel="icon" type="image/png" href="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/bbq.png?raw=true">
+    <style>
+        body {
+            background-image: url('https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/background.jpg?raw=true');
+            background-size: cover;
+            background-repeat: repeat;
+        }
+
+        h1{
+            text-shadow: 0px 0px 20px #f0b675;
+            font-size: 75px;
+            color: #000000;
+            margin:0;
+        }
+
+        h2{            
+            margin:0;
+        }
+
+        @font-face {
+			font-family: 'Albertus MT Std Regular';
+			font-style: normal;
+			font-weight: normal;
+			src: local('Albertus MT Std Regular'), url('fonts/FuenteMH.woff') format('woff');
+		}
+
+        .cooking-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .ingredients-section {
+            flex: 1;
+            margin-bottom: 0;
+            background-color: rgba(83, 59, 36, 0.5);
+            border-radius: 8px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            width: 100%;
+        }
+
+        .tab {
+            padding: 10px 30px;
+            cursor: pointer;
+            border: none;
+            font-size: 24px;
+            font-weight: bold;
+            background: #c5976f;
+            flex: 1;
+        }
+
+        .tab.active {
+            background: #ebb98e;
+        }
+
+        .ingredient-type {
+            display: none;
+            padding: 10px;
+        }
+
+        .ingredient-type.active {
+            display: block;
+        }
+
+        .ingredients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 15px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .ingredient-item {
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.1s;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ingredient-item:hover {
+            transform: scale(1.05);
+        }
+
+        .ingredient-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .ingredient-item img {
+            width: 400px;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .selected-ingredients {
+            width: 450px;
+            position: sticky;
+            background-color: rgba(83, 59, 36, 0.5);
+            padding: 20px;
+            padding-top: 10px;
+            border-radius: 8px;
+            margin-bottom: 0;
+        }
+
+        .selection-slots {
+            flex-direction: column;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .slot {
+            width: 75px;
+            margin: 0;
+            height: 75px;
+            border: 5px dashed #e2cdbb;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            margin-top: 5px;
+            cursor: pointer; /* Añadir cursor pointer para indicar que es clickeable */
+        }
+
+        .slot img {
+            width: 400px;
+            height: 100px;
+            object-fit: contain;
+            filter: drop-shadow(0px 0px 5px #000000); 
+        }
+
+        .effects-panel {
+            margin-top: 0px;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .nav-button {
+            width: 75px;
+            height: 75px;
+            border-radius: 8px;
+            background: rgba(43, 26, 11, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.1s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .nav-button img {
+            width: 50px;
+            height: 50px;
+            filter: drop-shadow(0px 0px 2px #c79345);
+            transition: transform 0.2s;
+        }
+
+        .nav-button img:hover {
+            transform: scale(1.1);
+        }
+
+        /* Estilos responsive para móvil */
+        @media (max-width: 768px) {
+            .cooking-container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .main-content {
+                flex-direction: column;
+            }
+
+            .ingredients-section {
+                width: 100%;
+            }
+
+            .ingredients-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .ingredient-item {
+                height: 50px;
+            }
+
+            .ingredient-item img {
+                width: 300px;
+                height: 60px;
+            }
+
+            .selected-ingredients {
+                width: -webkit-fill-available;
+                position: static;
+                margin-top: 5px;
+            }
+
+            .tabs {
+                flex-direction: row;
+            }
+
+            .tab {
+                padding: 10px;
+                font-size: 16px;
+            }
+
+            .selection-slots {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .slot {
+                width: 60px;
+                height: 60px;
+            }
+
+            .slot img {
+                width: 200px;
+                height: 75px;
+                object-fit: contain;
+                filter: drop-shadow(0px 0px 5px #000000); 
+            }
+
+            .effects-panel {
+                margin-top: 20px;
+            }
+
+            .nav-button {
+                width: 60px;
+                height: 60px;
+            }
+
+            .nav-button img {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* Ajustes adicionales para pantallas muy pequeñas */
+        @media (max-width: 380px) {
+            h1 {
+                font-size: 30px;
+            }
+
+            .tab {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            .ingredient-item img {
+                width: 250px;
+                height: 60px;
+            }
+
+            .slot {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Sidebar styles */
+        #sidebar {
+            position: fixed;
+            left: -264px;
+            height: 100vh;
+            top: 0px;
+            width: 264px;
+            background-color: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(50px);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: left 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #sidebar .sidebar-header {
+            position: sticky;
+            top: 175px;
+            padding: 1rem;
+            z-index: 2;
+        }
+
+        #sidebar .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            padding-top: 20px;
+            padding-bottom: 140px;
+        }
+
+        #sidebar .sidebar-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #sidebar .sidebar-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #sidebar .sidebar-content::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        #sidebar .toggle-sidebar-button {
+            position: absolute;
+            right: -40px;
+            top: 10%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(50px);
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .dark #sidebar .toggle-sidebar-button {
+            background-color: rgba(42, 44, 48, 0.95);
+        }
+
+        #sidebar .toggle-sidebar-button:hover {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .dark #sidebar .toggle-sidebar-button:hover {
+            background-color: rgba(70, 73, 78, 0.95);
+        }
+
+        .dark #sidebar {
+            background-color: rgba(40, 42, 43, 0.95);
+        }
+
+        #sidebar a {
+            font-family: 'Albertus MT Std Regular';
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(5px);
+            text-decoration: none;
+            color: #000000;
+        }
+
+        .dark #sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            background-color: rgba(81, 86, 90, 0.95);
+        }
+
+        #sidebar a:hover {
+            transform: translateX(4px);
+            color: #000000;
+        }
+
+        #sidebar img {
+            transition: transform 0.2s ease;
+        }
+
+        #sidebar a:hover img {
+            transform: scale(1.1);
+        }
+
+        .botonDark{
+            border: none;
+            background-color: #939aa8;
+            transition: background-color 0.2s ease;
+        }
+        .botonDark:hover{
+            background-color: #666a74;
+        }
+
+        /* Utility classes for sidebar */
+        .px-1\.5 { padding-left: 0.375rem; padding-right: 0.375rem; }
+        .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .transition-colors { transition-property: background-color, border-color, color, fill, stroke; }
+        .p-3 { padding: 0.75rem; }
+        .gap-3 { gap: 0.75rem; }
+        .w-8 { width: 2rem; }
+        .h-8 { height: 2rem; }
+        .h-6 { height: 1.5rem; }
+        .w-6 { width: 1.5rem; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .gap-2 { gap: 0.5rem; }
+        .flex { display: flex; }
+    </style>
+</head>
+<body style="font-family:'Albertus MT Std Regular';">
+    <!-- Add sidebar here -->
+    <div id="sidebar" class="fixed -left-64 h-full w-64 shadow-lg transition-all duration-300 z-40">
+        <div class="toggle-sidebar-button" onclick="toggleSidebar()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+        </div>
+        <div class="sidebar-content">
+            <div class="space-y-4">  
+                <div class="flex items-center justify-between gap-2">                    
+                    <button 
+                        onclick="window.location.href='https://ellandeperez.github.io/MHBestiary/'"
+                        class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
+                        <img style="width:35px;height:35px;" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/home.png?raw=true" class="h-6 w-6" alt="Alternar Modo Oscuro">
+                    </button>                       
+                </div>
+                <a href="https://ellandeperez.github.io/MHBestiary/menu.html" 
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <img src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/bbq.png?raw=true" 
+                        class="w-8 h-8" alt="Menu">
+                    <span>Menú Wilds</span>
+                </a>
+                <a href="https://ellandeperez.github.io/MHBestiary/galeria.html" 
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <img src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/map.png?raw=true" 
+                        class="w-8 h-8" alt="Menu">
+                    <span>Galeria</span>
+                </a>
+                <a href="https://ellandeperez.github.io/MHBestiary/wheel.html" 
+                   class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <img src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/question.png?raw=true" 
+                         class="w-8 h-8" alt="Ruleta">
+                    <span>Ruleta de Monstruos</span>
+                </a>
+                <a href="https://ellandeperez.github.io/MHBestiary/GeneraMonstruos.html" 
+                   class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <img src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/book_blue.png?raw=true" 
+                         class="w-8 h-8" alt="Ruleta">
+                    <span>Generar Monstruos</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="cooking-container">
+        <div class="header-container">
+            <h1>MH WILDS MENU</h1>
+        </div>
+        
+        <div class="main-content">
+            <div class="ingredients-section">
+                <div class="tabs">
+                    <button style="font-family:'Albertus MT Std Regular';" class="tab active" onclick="showTab('racion')">RACION</button>
+                    <button style="font-family:'Albertus MT Std Regular';" class="tab" onclick="showTab('adicional')">ADICIONAL</button>
+                    <button style="font-family:'Albertus MT Std Regular';" class="tab" onclick="showTab('toque')">TOQUE FINAL</button>
+                </div>
+
+                <div class="ingredient-type active" id="racion-type">
+                    <div id="racion-grid" class="ingredients-grid"></div>
+                </div>
+                
+                <div class="ingredient-type" id="adicional-type">
+                    <div id="adicional-grid" class="ingredients-grid"></div>
+                </div>
+                
+                <div class="ingredient-type" id="toque-type">
+                    <div id="toque-grid" class="ingredients-grid"></div>
+                </div>
+            </div>
+
+            <div class="selected-ingredients">
+                <h2>INGREDIENTES</h2>
+                <div class="selection-slots">
+                    <div id="racion-slot" class="slot">
+                        <span>Ración</span>
+                    </div>
+                    <div id="adicional-slot" class="slot">
+                        <span>Adicional</span>
+                    </div>
+                    <div id="toque-slot" class="slot">
+                        <span>Toque</span>
+                    </div>
+                </div>
+                <div class="effects-panel">
+                    <h2 id="effects-title" style="display: none;">EFECTOS</h2>
+                    <div id="effects-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let menuData = [];
+        let selectedIngredients = {
+            racion: null,
+            adicional: null,
+            toque: null
+        };
+
+        async function loadMenuData() {
+            const response = await fetch('https://raw.githubusercontent.com/ellandeperez/MHBestiary/refs/heads/main/menu.json');
+            menuData = await response.json();
+            renderIngredients();
+        }
+
+        function renderIngredients() {
+            const tipos = ['racion', 'adicional', 'toque'];
+            tipos.forEach(tipo => {
+                const grid = document.getElementById(`${tipo}-grid`);
+                const ingredients = menuData.filter(item => item.tipo === tipo);
+                
+                grid.innerHTML = ingredients.map(ing => `
+                    <div class="ingredient-item" onclick="selectIngredient('${tipo}', ${menuData.indexOf(ing)})">
+                        <img src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/food/m_${ing.icon}.png?raw=true" alt="${ing.name}">
+                    </div>
+                `).join('');
+            });
+            
+            updateIngredientStates();
+        }
+
+        function selectIngredient(tipo, index) {
+            const ingredient = menuData[index];
+            
+            if (tipo === 'adicional' && !selectedIngredients.racion) return;
+            if (tipo === 'toque' && !selectedIngredients.adicional) return;
+            
+            // Si el ingrediente ya está seleccionado, lo deseleccionamos
+            if (selectedIngredients[tipo] && selectedIngredients[tipo] === ingredient) {
+                deselectIngredient(tipo);
+            } else {
+                selectedIngredients[tipo] = ingredient;
+                updateSlots();
+                updateEffects();
+                updateIngredientStates();
+            }
+        }
+
+        function deselectIngredient(tipo) {
+            // Si deseleccionamos un ingrediente, también deseleccionamos los que dependen de él
+            if (tipo === 'racion') {
+                selectedIngredients.racion = null;
+                selectedIngredients.adicional = null;
+                selectedIngredients.toque = null;
+            } else if (tipo === 'adicional') {
+                selectedIngredients.adicional = null;
+                selectedIngredients.toque = null;
+            } else {
+                selectedIngredients.toque = null;
+            }
+            
+            updateSlots();
+            updateEffects();
+            updateIngredientStates();
+        }
+
+        function updateSlots() {
+            Object.entries(selectedIngredients).forEach(([tipo, ing]) => {
+                const slot = document.getElementById(`${tipo}-slot`);
+                if (ing) {
+                    slot.innerHTML = `
+                        <img src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/food/f_${ing.icon.replace(/\d+$/, '')}.png?raw=true" alt="${ing.name}" onclick="deselectIngredient('${tipo}')">
+                    `;
+                } else {
+                    slot.innerHTML = `<span>${tipo.charAt(0).toUpperCase() + tipo.slice(1)}</span>`;
+                }
+            });
+        }
+
+        function updateEffects() {
+            const effectsList = document.getElementById('effects-list');
+            const effectsTitle = document.getElementById('effects-title');
+            let effects = [];
+            
+            // Comprobar si hay algún ingrediente seleccionado
+            const hasIngredients = Object.values(selectedIngredients).some(ing => ing !== null);
+            
+            // Mostrar u ocultar el título según haya ingredientes
+            effectsTitle.style.display = hasIngredients ? 'block' : 'none';
+            
+            if (selectedIngredients.racion) {
+                effects.push('Salud +50');
+                effects.push('Resistencia +150');
+            }
+            
+            if (selectedIngredients.adicional) {
+                effects.push('Duración +50:00');
+            } else if (selectedIngredients.racion) {
+                effects.push('Duración +30:00');
+            }
+            
+            if (selectedIngredients.toque) {
+                effects.push('Defensa elemental +5');
+            }
+            
+            // Add spacing before ingredient effects
+            if (selectedIngredients.racion) effects.push('<br>');
+            
+            Object.values(selectedIngredients).forEach(ing => {
+                if (ing) {
+                    effects.push(`${ing.effect.toUpperCase()}`);
+                    effects.push(`${ing.description}`);
+                    effects.push('<br>'); // Add spacing after each ingredient
+                }
+            });
+            
+            effectsList.innerHTML = effects.map(effect => `<div>${effect}</div>`).join('');
+        }
+
+        function updateIngredientStates() {
+            const adicionalItems = document.querySelectorAll('#adicional-grid .ingredient-item');
+            const toqueItems = document.querySelectorAll('#toque-grid .ingredient-item');
+            
+            adicionalItems.forEach(item => {
+                if (!selectedIngredients.racion) {
+                    item.classList.add('disabled');
+                } else {
+                    item.classList.remove('disabled');
+                }
+            });
+            
+            toqueItems.forEach(item => {
+                if (!selectedIngredients.adicional) {
+                    item.classList.add('disabled');
+                } else {
+                    item.classList.remove('disabled');
+                }
+            });
+
+            const adicionalTab = document.querySelector('.tab[onclick="showTab(\'adicional\')"]');
+            const toqueTab = document.querySelector('.tab[onclick="showTab(\'toque\')"]');
+            
+            if (!selectedIngredients.racion) {
+                adicionalTab.style.opacity = '0.5';
+                toqueTab.style.opacity = '0.5';
+                if (document.querySelector('.tab.active[onclick="showTab(\'adicional\')"]')) {
+                    showTab('racion');
+                }
+            } else {
+                adicionalTab.style.opacity = '1';
+                if (!selectedIngredients.adicional) {
+                    toqueTab.style.opacity = '0.5';
+                    if (document.querySelector('.tab.active[onclick="showTab(\'toque\')"]')) {
+                        showTab('adicional');
+                    }
+                } else {
+                    toqueTab.style.opacity = '1';
+                }
+            }
+        }
+
+        function showTab(tipo) {
+            // Desactivar todas las pestañas y contenidos
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.ingredient-type').forEach(content => content.classList.remove('active'));
+            
+            // Activar la pestaña y contenido seleccionados
+            document.querySelector(`.tab[onclick="showTab('${tipo}')"]`).classList.add('active');
+            document.getElementById(`${tipo}-type`).classList.add('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', loadMenuData);
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-264px';
+            } else {
+                sidebar.style.left = '0px';
+            }
+        }
+    </script>
+</body>
+</html>
