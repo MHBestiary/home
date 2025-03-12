@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GALERIA</title>    
-    <link rel="icon" type="image/png" href="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/map.png?raw=true">
+    <link rel="icon" type="image/png" href="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/map.png?raw=true">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
@@ -19,32 +19,32 @@
             <div class="space-y-4">  
                 <div class="flex items-center justify-between gap-2">
                     <button 
-                        onclick="window.location.href='https://ellandeperez.github.io/MHBestiary/'"
+                        onclick="window.location.href='https://mhbestiary.github.io/home/'"
                         class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
-                        <img style="width:35px;height:35px;" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/home.png?raw=true" class="h-6 w-6" alt="Alternar Modo Oscuro">
+                        <img style="width:35px;height:35px;" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/home.png?raw=true" class="h-6 w-6" alt="Alternar Modo Oscuro">
                     </button>                     
                 </div>
-                <a href="https://ellandeperez.github.io/MHBestiary/menu.html" 
+                <a href="https://mhbestiary.github.io/home/menu.html" 
                 class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                    <img src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/bbq.png?raw=true" 
+                    <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/bbq.png?raw=true" 
                         class="w-8 h-8" alt="Menu">
                     <span>Menú Wilds</span>
                 </a>
-                <a href="https://ellandeperez.github.io/MHBestiary/galeria.html" 
+                <a href="https://mhbestiary.github.io/home/galeria.html" 
                 class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                    <img src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/map.png?raw=true" 
+                    <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/map.png?raw=true" 
                         class="w-8 h-8" alt="Menu">
                     <span>Galeria</span>
                 </a>
-                <a href="https://ellandeperez.github.io/MHBestiary/wheel.html" 
+                <a href="https://mhbestiary.github.io/home/wheel.html" 
                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                    <img src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/question.png?raw=true" 
+                    <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/question.png?raw=true" 
                          class="w-8 h-8" alt="Ruleta">
                     <span>Ruleta de Monstruos</span>
                 </a>
-                <a href="https://ellandeperez.github.io/MHBestiary/GeneraMonstruos.html" 
+                <a href="https://mhbestiary.github.io/home/GeneraMonstruos.html" 
                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                    <img src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Icons/book_blue.png?raw=true" 
+                    <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/book_blue.png?raw=true" 
                          class="w-8 h-8" alt="Ruleta">
                     <span>Generar Monstruos</span>
                 </a>
@@ -69,7 +69,7 @@
     <script>
         async function loadGallery() {
             try {
-                const response = await fetch('https://raw.githubusercontent.com/ellandeperez/MHBestiary/refs/heads/main/galeria.json');
+                const response = await fetch('https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/galeria.json');
                 const data = await response.json();
 
                 const featuredImage = data.find(item => item.destacado);
@@ -79,9 +79,9 @@
                     document.querySelector('.featured-image').innerHTML = `
                         <div style="position: relative; display: inline-block;">
                             <img src="${featuredImage.imagen}" alt="${featuredImage.pj}" onclick="openModal('${featuredImage.imagen}', '${featuredImage.pj}')">
-                            <img class="frame" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Galeria/0_marco_G.png?raw=true" alt="marco">
+                            <img class="frame" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Galeria/0_marco_G.png?raw=true" alt="marco">
                             <div class="pj-name linear-wipe"><span>${featuredImage.pj}</span></div>
-                            <img class="adorno-featured" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Galeria/0_adorno.png?raw=true" alt="adorno">
+                            <img class="adorno-featured" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Galeria/0_adorno.png?raw=true" alt="adorno">
                         </div>
                     `;
                 }
@@ -89,7 +89,7 @@
                 const galleryHTML = regularImages.map(item => `
                     <div class="gallery-item">
                         <img src="${item.imagen}" alt="${item.pj}" onclick="openModal('${item.imagen}', '${item.pj}')">
-                        <img class="frame" src="https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/0_Galeria/0_marco_P.png?raw=true" alt="marco">
+                        <img class="frame" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Galeria/0_marco_P.png?raw=true" alt="marco">
                         <div class="pj-name">${item.pj}</div>
                     </div>
                 `).join('');
@@ -174,7 +174,7 @@
             src: local('Albertus MT Std Regular'), url('fonts/FuenteMH.woff') format('woff');
         }
         body {
-            background-image: url('https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/background.jpg?raw=true');
+            background-image: url('https://github.com/mhbestiary/home/blob/main/MHImages/background.jpg?raw=true');
             background-attachment: fixed;
             background-size: cover;
             margin: 0;
