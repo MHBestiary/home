@@ -408,10 +408,18 @@
         font-family: 'Albertus MT Std Regular';
         font-weight: bold;
         border-radius: 5px;
+        transition: all 0.2s;
     }
 
     .wheel-selector:hover {
-        transform: rotate(15deg);
+        animation: wobble 0.2s ease-in-out;
+    }
+
+    @keyframes wobble {
+        0% { transform: rotate(0deg); }
+        33% { transform: rotate(15deg); }
+        66% { transform: rotate(-15deg); }
+        100% { transform: rotate(0deg); }
     }
 
     .wheel-selector.active {
