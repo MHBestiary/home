@@ -83,7 +83,7 @@
         </div>
         <div class="fixed top-0 left-0 right-0 pr-7 pl-7 pt-5 pb-2 shadow-lg z-50 topcoso" style="padding-top: 65px;">
             <div class="relative flex justify-between items-center mb-2 w-full" style="pointer-events: none;">
-                <h1 style="text-shadow: 0px 0px 10px #000000;color:white;padding-bottom: 20px;width:100%;" class="font-semibold absolute left-1/2 transform -translate-x-1/2 text-center text-3xl sm:text-2xl md:text-4xl lg:text-6xl">MONSTER HUNTER</h1>
+                <h1 style="text-shadow: 0px 0px 10px #000000;color:white;width:100%;" class="titulo font-semibold absolute left-1/2 transform -translate-x-1/2 text-center text-3xl sm:text-2xl md:text-4xl lg:text-6xl">MONSTER HUNTER</h1>
             </div>
             
             <div class="flex flex-wrap sm:gap-2 gap-1 items-center mb-1">
@@ -1322,6 +1322,9 @@
     </script>
 </body>
 <style>
+.titulo{
+    padding-bottom: 50px;
+}
 #sidebar {
     position: fixed;
     left: -264px;
@@ -1859,6 +1862,10 @@
 
 /* Ajustes específicos para móvil */
 @media (max-width: 768px) {
+    
+    .titulo{
+        padding-bottom: 20px;
+    }
 	.close-filters-btn {
 		display: block;
 		font-size: 35px;
