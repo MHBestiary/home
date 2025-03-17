@@ -58,8 +58,8 @@
         <h1 class="header-title">MH WILDS ROULETTE</h1>
     </div>
     <div class="wheel-selector-container">
-        <button id="monsters-btn" class="wheel-selector active">Monstruos</button>
-        <button id="weapons-btn" class="wheel-selector">Armas</button>
+        <button id="monsters-btn" class="wheel-selector active"><img src="https://github.com/MHBestiary/home/blob/main/MHImages/0_Icons/unknown.png?raw=true"></button>
+        <button id="weapons-btn" class="wheel-selector"><img src="https://github.com/MHBestiary/home/blob/main/MHImages/0_Icons/weapons/DB.png?raw=true"></button>
     </div>
 
     <div class="wrapper">
@@ -388,8 +388,19 @@
         margin-bottom: 20px;
     }
 
+    .wheel-selector img {
+        position: static !important; /* Anular la posición absolute */
+        width: 50px;
+        height: 50px;
+        display: block; /* Asegurar que la imagen sea visible */
+    }
+
+    /* Ajustar el estilo general de img para que no afecte a los selectores */
     .wheel-selector {
-        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
         background: radial-gradient(#e28c46 50%, #331c07 85%);
         border: #000000 3px outset;
         color: #000000;
@@ -397,11 +408,10 @@
         font-family: 'Albertus MT Std Regular';
         font-weight: bold;
         border-radius: 5px;
-        transition: all 0.2s;
     }
 
     .wheel-selector:hover {
-        transform: scale(1.05);
+        transform: rotate(15deg);
     }
 
     .wheel-selector.active {
@@ -662,6 +672,7 @@
         align-items: center;
         justify-content: center;
         padding: 20px;
+        padding-bottom: 10px;
         padding-top: 50px;   
         position: relative;
         gap: 20px;
