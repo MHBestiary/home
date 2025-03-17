@@ -57,6 +57,10 @@
     <div class="header-container">
         <h1 class="header-title">MH WILDS ROULETTE</h1>
     </div>
+    <div class="wheel-selector-container">
+        <button id="monsters-btn" class="wheel-selector active">Monstruos</button>
+        <button id="weapons-btn" class="wheel-selector">Armas</button>
+    </div>
 
     <div class="wrapper">
       <div class="container">
@@ -95,6 +99,11 @@
         'Hirabami', 'Jin Dahaad', 'Lala Barina', 'Nerscylla', 'Nu Udra',
         'Quematrice', 'Rathalos', 'Rathian', 'Rey Dau', 'Rompopolo',
         'Uth Duna', 'Xu Wu', 'Yian Kut-Ku', 'Zoh Shia'
+    ];
+    const armas = [
+        'GS', 'LS', 'SNS', 'DB', 'LANCE',
+        'GL', 'HAMMER', 'HH', 'SA', 'CB',
+        'IG', 'LBG', 'HBG', 'BOW'
     ];
 
     // Crear un array con el mismo valor para cada sección
@@ -146,20 +155,27 @@
                 },
                 datalabels: {
                     color: "#ffffff",
-                    formatter: (_, context) => context.chart.data.labels[context.dataIndex],
+                    formatter: (_, context) => {
+                        const currentMode = context.chart.data.currentMode;
+                        if (currentMode === 'weapons') {
+                            return ''; // No mostrar texto para armas
+                        }
+                        return context.chart.data.labels[context.dataIndex];
+                    },
                     font: { 
                         size: window.innerWidth <= 768 ? 11 : 18,
                         weight: 'bold',
                         family: 'Albertus MT Std Regular'
                     },
-                    align: 'end',
+                    align: 'center',
                     anchor: 'center',
-                    offset: -10,
+                    offset: 0,
                     textStrokeColor: 'black',
                     textStrokeWidth: 4,
                     rotation: (context) => {
                         const angle = context.chart.options.rotation || 0;
-                        const sectionAngle = (360 / monsters.length);
+                        const currentArray = context.chart.data.currentMode === 'monsters' ? monsters : armas;
+                        const sectionAngle = (360 / currentArray.length);
                         return (angle + (context.dataIndex * sectionAngle) + sectionAngle/2 + -90);
                     }
                 },
@@ -168,27 +184,96 @@
     });
 
     const valueGenerator = (angleValue) => {
-        // La flecha apunta a la derecha (0 grados), necesitamos ajustar el ángulo
         let normalizedAngle = (-angleValue + 90) % 360;
         if (normalizedAngle < 0) normalizedAngle += 360;
         
-        const sectionSize = 360 / monsters.length;
+        const currentArray = currentMode === 'monsters' ? monsters : armas;
+        const sectionSize = 360 / currentArray.length;
         const index = Math.floor(normalizedAngle / sectionSize);
-        const monster = monsters[index];
+        const result = currentArray[index];
         
-        finalValue.innerHTML = `<p style="font-family:'Albertus MT Std Regular';font-weight: bold;font-size:32px;">¡${monster}!</p>`;
+        finalValue.innerHTML = `<p style="font-family:'Albertus MT Std Regular';font-weight: bold;font-size:32px;">¡${result}!</p>`;
         
-        // Mostrar el modal con la imagen
         const modal = document.getElementById("monsterModal");
         const modalName = document.getElementById("modalMonsterName");
         const modalImage = document.getElementById("modalMonsterImage");
         
-        modalName.textContent = monster;
-        modalImage.src = `https://github.com/MHBestiary/home/blob/main/MHImages/${monster}/Icon.png?raw=true`;
-        modal.style.display = "block";
+        modalName.textContent = result;
         
+        // Cambiar la ruta de la imagen según el modo
+        if (currentMode === 'monsters') {
+            modalImage.src = `https://github.com/MHBestiary/home/blob/main/MHImages/${result}/Icon.png?raw=true`;
+        } else {
+            modalImage.src = `https://github.com/MHBestiary/home/blob/main/MHImages/0_Icons/weapons/${result}.png?raw=true`;
+        }
+        
+        modal.style.display = "block";
         spinBtn.disabled = false;
     };
+    let currentMode = 'monsters';
+    const monstersBtn = document.getElementById('monsters-btn');
+    const weaponsBtn = document.getElementById('weapons-btn');
+
+    function updateWheel(mode) {
+        currentMode = mode;
+        const currentArray = mode === 'monsters' ? monsters : armas;
+        const data = Array(currentArray.length).fill(100/currentArray.length);
+        const pieColors = currentArray.map((_, index) => {
+            return index % 2 === 0 ? '#b0805b' : '#995a29';
+        });
+
+        // Actualizar la configuración del gráfico
+        myChart.data.labels = currentArray;
+        myChart.data.datasets[0].data = data;
+        myChart.data.datasets[0].backgroundColor = pieColors;
+        myChart.data.currentMode = mode; // Añadir el modo actual al chart
+
+        // Si es modo armas, añadir las imágenes como elementos HTML
+        if (mode === 'weapons') {
+            const canvas = document.getElementById('wheel');
+            const ctx = canvas.getContext('2d');
+            
+            // Limpiar imágenes existentes
+            const existingImages = document.querySelectorAll('.weapon-icon');
+            existingImages.forEach(img => img.remove());
+
+            // Crear contenedor para las imágenes
+            const container = document.createElement('div');
+            container.style.position = 'absolute';
+            container.style.top = '0';
+            container.style.left = '0';
+            container.style.width = '100%';
+            container.style.height = '100%';
+            container.style.pointerEvents = 'none';
+            
+            currentArray.forEach((weapon, index) => {
+                const img = document.createElement('img');
+                img.src = `https://github.com/MHBestiary/home/blob/main/MHImages/0_Icons/weapons/${weapon}.png?raw=true`;
+                img.classList.add('weapon-icon');
+                img.style.position = 'absolute';
+                img.style.width = '30px';
+                img.style.height = '30px';
+                img.style.transform = `rotate(${index * (360/currentArray.length)}deg) translate(100px) rotate(-${index * (360/currentArray.length)}deg)`;
+                container.appendChild(img);
+            });
+
+            canvas.parentNode.appendChild(container);
+        }
+
+        myChart.update();
+    }
+
+    monstersBtn.addEventListener('click', () => {
+        monstersBtn.classList.add('active');
+        weaponsBtn.classList.remove('active');
+        updateWheel('monsters');
+    });
+
+    weaponsBtn.addEventListener('click', () => {
+        weaponsBtn.classList.add('active');
+        monstersBtn.classList.remove('active');
+        updateWheel('weapons');
+    });
 
     // Añadir el código para cerrar el modal
     const modal = document.getElementById("monsterModal");
@@ -253,8 +338,37 @@
             sidebar.style.left = '0px';
         }
     }
+
+    updateWheel('monsters');
   </script>
   <style>
+    .wheel-selector-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .wheel-selector {
+        padding: 10px 20px;
+        background: radial-gradient(#e28c46 50%, #331c07 85%);
+        border: #000000 3px outset;
+        color: #000000;
+        cursor: pointer;
+        font-family: 'Albertus MT Std Regular';
+        font-weight: bold;
+        border-radius: 5px;
+        transition: all 0.2s;
+    }
+
+    .wheel-selector:hover {
+        transform: scale(1.05);
+    }
+
+    .wheel-selector.active {
+        background: radial-gradient(#995a29 50%, #331c07 85%);
+        border-style: inset;
+    }
     @font-face {
         font-family: 'Albertus MT Std Regular';
         font-style: normal;
@@ -283,7 +397,9 @@
     transform: translate(-50%, -50%);
     top: 50%;
     left: 50%;
-    padding: 3em;
+    margin-top: 2em;
+    padding-right: 3em;
+    padding-left: 3em;
     border-radius: 1em;
     }
     .container {
@@ -689,5 +805,11 @@
     font-family: 'Albertus MT Std Regular', sans-serif !important;
     color: inherit;
 }
+    .weapon-icon {
+        position: absolute;
+        transform-origin: center;
+        pointer-events: none;
+        z-index: 1;
+    }
   </style>
 </html>
