@@ -1058,7 +1058,7 @@
                             <div class="flex-1">
                                 <div class="selectable-content">
                                     <h2 class="${isListView ? `` : 'mb-1'} text-xl flex items-center justify-center" style="font-family: 'Permanent Marker'">${monsterName}</h2>
-                                    ${isListView ? `<p class="mb-1">${isSpoiler ? 'MHWILDS SPOILER' : monster.description}</p>` : ''}
+                                    ${isListView ? `<p class="mb-1">${isSpoiler ? '' : monster.description}</p>` : ''}
                                 </div>       
                                 <div class="relative cursor-pointer" onclick="toggleMonsterDetails(${monster.id}, event)">  
                                     <div class="${getThreatColor(monster.threat)} text-white font-bold w-10 h-10 rounded-full flex items-center justify-center shadow-sm absolute top-2 left-2">
@@ -1070,32 +1070,36 @@
                         </div>
                         
                         <div class="monster-details ${isExpanded ? 'expanded' : ''} mt-1 selectable-content">      
-                            <p>${isSpoiler ? 'MHWILDS SPOILER' : monster.type}</p>                    
-                            <div class="flex flex-wrap gap-1 mb-4 selectable-content">
-                                ${monster.game.map(game => `
-                                    <span class="cartita px-2 py-1 bg-gray-100 dark:bg-gray-800 text-xs rounded-md">
-                                        ${game}
-                                    </span>
-                                `).join('')}
-                            </div>
-                            ${!isListView ? `<p class="mb-4">${isSpoiler ? 'MHWILDS SPOILER' : monster.description}</p>` : ''}
+                            <p>${isSpoiler ? '' : monster.type}</p>                    
+                            ${isSpoiler ? '' : `
+                                <div class="flex flex-wrap gap-1 mb-4 selectable-content">
+                                    ${monster.game.map(game => `
+                                        <span class="cartita px-2 py-1 bg-gray-100 dark:bg-gray-800 text-xs rounded-md">
+                                            ${game}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                            `}
+                            ${!isListView ? `<p class="mb-4">${isSpoiler ? '' : monster.description}</p>` : ''}
                             
                             <div class="space-y-2">
                                 ${monster.parts && monster.parts.length > 0 ? `
+                                    ${isSpoiler ? '' : `
                                     <div class="collapsible-section">
                                         <div class="collapsible-header" onclick="event.stopPropagation(); toggleSection(this)">
                                             <h3 class="font-semibold">Partes del Monstruo</h3>
                                             <span class="collapsible-icon">+</span>
                                         </div>
                                         <div class="collapsible-content">
-                                            ${isSpoiler ? '<p class="text-center p-4">MHWILDS SPOILER</p>' : partesHtml}
+                                            ${partesHtml}
                                         </div>
-                                    </div>
+                                    </div>`}
                                 ` : ''}
                                 
-                                ${materialsHtml}
+                                ${isSpoiler ? '' : materialsHtml}
                                 
                                 ${monster.variants && monster.variants.length > 0 ? `
+                                    ${isSpoiler ? '' : `
                                     <div class="collapsible-section">
                                         <div class="collapsible-header" onclick="event.stopPropagation(); toggleSection(this)">
                                             <h3 class="font-semibold">Variantes</h3>
@@ -1113,10 +1117,11 @@
                                                 `).join('')}
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>`}                                
                                 ` : ''}
 
                                 ${monster.gallery && monster.gallery.length > 0 ? `
+                                    ${isSpoiler ? '' : `
                                     <div class="collapsible-section">
                                         <div class="collapsible-header" onclick="event.stopPropagation(); toggleSection(this)">
                                             <h3 class="font-semibold">Galería</h3>
@@ -1132,7 +1137,7 @@
                                                 `).join('')}
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>`}
                                 ` : ''}
                             </div>
                         </div>                        
