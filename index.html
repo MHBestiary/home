@@ -78,13 +78,14 @@
                              class="w-8 h-8" alt="Ruleta">
                         <span>Generar Monstruos</span>
                     </a>
-                    <button 
+                    <a 
+                        style="cursor: pointer;"
                         onclick="toggleSpoilers()"
                         class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <img id="spoilerIcon" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/unknown.png?raw=true" 
+                        <img id="spoilerIcon" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/smoke.png?raw=true" 
                             class="w-8 h-8" alt="Spoilers">
-                        <span>Mostrar Spoilers</span>
-                    </button>
+                        <span style="pointer-events: none;">TOGGLE SPOILERS</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -297,8 +298,8 @@
             const spoilerIcon = document.getElementById('spoilerIcon');
             if (spoilerIcon) {
                 spoilerIcon.src = showSpoilers ? 
-                    "https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/book_blue.png?raw=true" :
-                    "https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/unknown.png?raw=true";
+                    "https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/smoke.png?raw=true" :
+                    "https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/no smoke.png?raw=true";
             }
             
             filterMonsters();
@@ -673,8 +674,8 @@
             const spoilerIcon = document.getElementById('spoilerIcon');
             if (spoilerIcon) {
                 spoilerIcon.src = showSpoilers ? 
-                    "https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/book_blue.png?raw=true" :
-                    "https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/unknown.png?raw=true";
+                    "https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/smoke.png?raw=true" :
+                    "https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/no smoke.png?raw=true";
             }
         });
 
@@ -829,12 +830,19 @@
             if (!monster) return;
 
             const isSpoiler = monster.spoiler === true && !showSpoilers;
-            const monsterName = isSpoiler ? 'SPOILER' : monster.name;
-            const monsterImage = isSpoiler ? 
-                'https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/Ronda%20Hardcore/Icon.png?raw=true' : 
-                monster.image;
-
-            const modalContent = `
+            const modalContent = isSpoiler ? `
+                <div class="flex flex-col gap-6">
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/2">
+                            <div class="relative mb-2 flex items-center justify-center">
+                                <img src="https://github.com/MHBestiary/home/blob/main/MHImages/Ronda%20Hardcore/Icon.png?raw=true" 
+                                    alt="SPOILER" class="w-72 rounded-lg">
+                            </div>
+                            <h2 class="text-2xl font-bold mb-2 text-center dark:text-white">MHWILDS SPOILER</h2>
+                        </div>
+                    </div>
+                </div>
+            ` : `
                 <div class="flex flex-col gap-6">
                     <!-- Sección principal -->
                     <div class="flex flex-col md:flex-row gap-6">
@@ -972,9 +980,9 @@
         // Actualizar la función createMonsterCard solo para el supergrid
         function createMonsterCard(monster, isListView = false) {
             const isSpoiler = monster.spoiler === true && !showSpoilers;
-            const monsterName = isSpoiler ? 'SPOILER' : monster.name;
+            const monsterName = isSpoiler ? 'MHWILDS SPOILER' : monster.name;
             const monsterImage = isSpoiler ? 
-                'https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/Ronda%20Hardcore/Icon.png?raw=true' : 
+                'https://github.com/MHBestiary/home/blob/main/MHImages/Ronda%20Hardcore/Icon.png?raw=true' : 
                 monster.image;
 
             if (currentView === 'supergrid') {
@@ -987,27 +995,82 @@
             
             const isExpanded = expandedCards.has(monster.id);
             
+            // Crear una versión de materiales para spoiler
+            const materialsHtml = monster.materials && monster.materials.length > 0 ? `
+                <div class="collapsible-section">
+                    <div class="collapsible-header" onclick="event.stopPropagation(); toggleSection(this)">
+                        <h3 class="font-semibold">Materiales</h3>
+                        <span class="collapsible-icon">+</span>
+                    </div>
+                    <div class="collapsible-content">
+                        ${isSpoiler ? 
+                            '<p class="text-center p-4">MHWILDS SPOILER</p>' : 
+                            createMaterialsList(monster.materials)}
+                    </div>
+                </div>
+            ` : '';
+
+            const partesHtml = monster.materials && monster.materials.length > 0 ? `
+                <div class="grid gap-1 columnitas">
+                    ${monster.parts.map(part => `
+                        <div class="debilidadestilo p-2 rounded-lg bg-gray-50">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-medium">${part.name}</span>
+                                ${part.breakable ? `
+                                    <span class="text-xs px-2 py-1 bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-200 rounded-full">
+                                        Rompible
+                                    </span>
+                                ` : ''}
+                                ${part.cortable ? `
+                                    <span class="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-200 rounded-full">
+                                        Cortable
+                                    </span>
+                                ` : ''}
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span><img style="width:20px" alt="Cortante" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/slash.png?raw=true"></img></span>
+                                    <span class="text-xs">Cortar</span>                                                            
+                                    ${createWeaknessStars(part.weaknesses.slash)}
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span><img style="width:20px" alt="Stun" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/blunt.png?raw=true"></img></span>
+                                    <span class="text-xs">Impacto</span>                                                            
+                                    ${createWeaknessStars(part.weaknesses.blunt)}
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span><img style="width:20px" alt="Perforante" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/m_pierce.png?raw=true"></img></span>
+                                    <span class="text-xs">Perforar</span>                                                            
+                                    ${createWeaknessStars(part.weaknesses.pierce)}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            ` : '';
+
+
+
             return `
                 <div id="monster-${monster.id}" class="card ${isExpanded ? 'expanded' : ''}">
                     <div class="p-2">
                         <div class="flex justify-between items-start">
                             <div class="flex-1">
                                 <div class="selectable-content">
-                                    <h2 class="${isListView ? `` : 'mb-1'} text-xl flex items-center justify-center" style="font-family: 'Permanent Marker'">${monster.name}</h2>
-                                    ${isListView ? `<p class="mb-1">${monster.description}</p>` : ''}
+                                    <h2 class="${isListView ? `` : 'mb-1'} text-xl flex items-center justify-center" style="font-family: 'Permanent Marker'">${monsterName}</h2>
+                                    ${isListView ? `<p class="mb-1">${isSpoiler ? 'MHWILDS SPOILER' : monster.description}</p>` : ''}
                                 </div>       
                                 <div class="relative cursor-pointer" onclick="toggleMonsterDetails(${monster.id}, event)">  
                                     <div class="${getThreatColor(monster.threat)} text-white font-bold w-10 h-10 rounded-full flex items-center justify-center shadow-sm absolute top-2 left-2">
                                         ${monster.threat}
                                     </div>
-                                    <img class="h-40 object-cover rounded-lg mx-auto imagenmonstro" src="${monster.image}" alt="${monster.name}">
+                                    <img class="h-40 object-cover rounded-lg mx-auto imagenmonstro" src="${monsterImage}" alt="${monsterName}">
                                 </div>
                             </div>
-
                         </div>
                         
                         <div class="monster-details ${isExpanded ? 'expanded' : ''} mt-1 selectable-content">      
-                            <p>${monster.type}</p>                    
+                            <p>${isSpoiler ? 'MHWILDS SPOILER' : monster.type}</p>                    
                             <div class="flex flex-wrap gap-1 mb-4 selectable-content">
                                 ${monster.game.map(game => `
                                     <span class="cartita px-2 py-1 bg-gray-100 dark:bg-gray-800 text-xs rounded-md">
@@ -1015,7 +1078,7 @@
                                     </span>
                                 `).join('')}
                             </div>
-                            ${!isListView ? `<p class="mb-4">${monster.description}</p>` : ''}
+                            ${!isListView ? `<p class="mb-4">${isSpoiler ? 'MHWILDS SPOILER' : monster.description}</p>` : ''}
                             
                             <div class="space-y-2">
                                 ${monster.parts && monster.parts.length > 0 ? `
@@ -1025,83 +1088,12 @@
                                             <span class="collapsible-icon">+</span>
                                         </div>
                                         <div class="collapsible-content">
-                                            <div class="grid gap-1 columnitas">
-                                                ${monster.parts.map(part => `
-                                                    <div class="debilidadestilo p-2 rounded-lg bg-gray-50">
-                                                        <div class="flex justify-between items-center mb-2">
-                                                            <span class="font-medium">${part.name}</span>
-                                                            ${part.breakable ? `
-                                                                <span class="text-xs px-2 py-1 bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-200 rounded-full">
-                                                                    Rompible
-                                                                </span>
-                                                            ` : ''}
-                                                            ${part.cortable ? `
-                                                                <span class="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-200 rounded-full">
-                                                                    Cortable
-                                                                </span>
-                                                            ` : ''}
-                                                        </div>
-                                                        <div class="space-y-2">
-                                                            <div class="flex justify-between items-center">
-                                                                <span><img style="width:20px" alt="Cortante" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/slash.png?raw=true"></img></span>
-                                                                <span class="text-xs">Cortar</span>                                                            
-                                                                ${createWeaknessStars(part.weaknesses.slash)}
-                                                            </div>
-                                                            <div class="flex justify-between items-center">
-                                                                <span><img style="width:20px" alt="Stun" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/blunt.png?raw=true"></img></span>
-                                                                <span class="text-xs">Impacto</span>                                                            
-                                                                ${createWeaknessStars(part.weaknesses.blunt)}
-                                                            </div>
-                                                            <div class="flex justify-between items-center">
-                                                                <span><img style="width:20px" alt="Perforante" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/m_pierce.png?raw=true"></img></span>
-                                                                <span class="text-xs">Perforar</span>                                                            
-                                                                ${createWeaknessStars(part.weaknesses.pierce)}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                `).join('')}
-                                            </div>
+                                            ${isSpoiler ? '<p class="text-center p-4">MHWILDS SPOILER</p>' : partesHtml}
                                         </div>
                                     </div>
                                 ` : ''}
                                 
-                                <div class="collapsible-section">
-                                    <div class="collapsible-header" onclick="event.stopPropagation(); toggleSection(this)">
-                                        <h3 class="font-semibold">Debilidades</h3>
-                                        <span class="collapsible-icon">+</span>
-                                    </div>
-                                    <div class="collapsible-content">
-                                        <div class="grid gap-2 columnitas">
-                                            ${Object.entries(monster.weaknesses).map(([element, value]) => `
-                                                <div class="debilidadestilo flex justify-between items-center p-2 rounded-lg bg-gray-50">
-                                                    <div class="flex items-center">
-                                                        <span class="element-icon">
-                                                            <img src="${weaknessImages[element] || 'https://cdn-icons-png.flaticon.com/128/1828/1828774.png'}" class="h-6 w-6" alt="${element} icon">
-                                                        </span>
-                                                        <span class="capitalize">${element}</span>
-                                                    </div>
-                                                    <div class="flex gap-1">
-                                                        ${Array.from({length: 3}).map((_, i) => `
-                                                            <span class="weakness-star h-2 w-2 rounded-full ${i < value ? 'bg-yellow-400' : 'bg-gray-200 dark:bg-gray-700'}"></span>
-                                                        `).join('')}
-                                                    </div>
-                                                </div>
-                                            `).join('')}
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                ${monster.materials && monster.materials.length > 0 ? `
-                                    <div class="collapsible-section">
-                                        <div class="collapsible-header" onclick="event.stopPropagation(); toggleSection(this)">
-                                            <h3 class="font-semibold">Materiales</h3>
-                                            <span class="collapsible-icon">+</span>
-                                        </div>
-                                        <div class="collapsible-content">
-                                            ${createMaterialsList(monster.materials)}
-                                        </div>
-                                    </div>
-                                ` : ''}
+                                ${materialsHtml}
                                 
                                 ${monster.variants && monster.variants.length > 0 ? `
                                     <div class="collapsible-section">

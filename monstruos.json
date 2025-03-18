@@ -78,7 +78,7 @@
   {
     "id": 82,
     "name": "Arkveld",
-    "type": "Temnoceran",
+    "type": "Flying Wyvern",
     "threat": 8,
     "locale": ["Normal", "Water", "Snow", "Desert", "Volcano"],
     "variants": [{"name":"G. Arkveld","image":"https://github.com/ellandeperez/MHBestiary/blob/main/MHImages/G. Arkveld/Icon.png?raw=true"}],
@@ -109,7 +109,7 @@
   {
     "id": 80,
     "name": "Balahara",
-    "type": "Temnoceran",
+    "type": "Leviathan",
     "threat": 3,
     "locale": ["Desert"],
     "variants": [],
