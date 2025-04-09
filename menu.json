@@ -1,136 +1,192 @@
 [
-    
     {
-    "tipo": "adicional",
-    "name": "Ajo de Sild",
-    "effect": "Menú de sangre fría I",
-    "description": "Evita desmayos una vez al recibir mas daño de la salud restante.",
-    "icon": "ajo"
+        "tipo": "adicional",
+        "name": "Ajo de Sild",
+        "name_en": "Sild Garlic",
+        "effect": "Menú de sangre fría I",
+        "effect_en": "Cold Blood Menu I",
+        "description": "Evita desmayos una vez al recibir mas daño de la salud restante.",
+        "description_en": "Prevents fainting once when receiving more damage than remaining health.",
+        "icon": "ajo"
     },
     {
-    "tipo": "adicional",
-    "name": "Ajo de Sild especial",
-    "effect": "Menú de sangre fría II",
-    "description": "Evita desmayos una vez al recibir mas daño de la salud restante y te cura un poco.",
-    "icon": "ajo2"
+        "tipo": "adicional",
+        "name": "Ajo de Sild especial",
+        "name_en": "Special Sild Garlic",
+        "effect": "Menú de sangre fría II",
+        "effect_en": "Cold Blood Menu II",
+        "description": "Evita desmayos una vez al recibir mas daño de la salud restante y te cura un poco.",
+        "description_en": "Prevents fainting once when receiving more damage than remaining health and heals you a bit.",
+        "icon": "ajo2"
     },
     {
-    "tipo": "adicional",
-    "name": "Quesso de Kunafa",
-    "effect": "Menú defensor I",
-    "description": "A veces reduce el daño recibido.",
-    "icon": "queso"
+        "tipo": "adicional",
+        "name": "Quesso de Kunafa",
+        "name_en": "Kunafa Cheese",
+        "effect": "Menú defensor I",
+        "effect_en": "Defender Menu I",
+        "description": "A veces reduce el daño recibido.",
+        "description_en": "Sometimes reduces damage received.",
+        "icon": "queso"
     },
     {
-    "tipo": "adicional",
-    "name": "Quesso de Kunafa",
-    "effect": "Menú defensor II",
-    "description": "A menudo reduce el daño recibido.",
-    "icon": "queso2"
+        "tipo": "adicional",
+        "name": "Quesso de Kunafa",
+        "name_en": "Kunafa Cheese",
+        "effect": "Menú defensor II",
+        "effect_en": "Defender Menu II",
+        "description": "A menudo reduce el daño recibido.",
+        "description_en": "Often reduces damage received.",
+        "icon": "queso2"
     },
     {
-    "tipo": "adicional",
-    "name": "Huevo esponjoso",
-    "effect": "Menú de capricho I",
-    "description": "Activa varias mejoras de ataque en intervalos aleatorios.",
-    "icon": "huevo"
+        "tipo": "adicional",
+        "name": "Huevo esponjoso",
+        "name_en": "Fluffy Egg",
+        "effect": "Menú de capricho I",
+        "effect_en": "Whimsy Menu I",
+        "description": "Activa varias mejoras de ataque en intervalos aleatorios.",
+        "description_en": "Activates various attack boosts at random intervals.",
+        "icon": "huevo"
     },
     {
-    "tipo": "adicional",
-    "name": "Huevo ligero",
-    "effect": "Menú de capricho II",
-    "description": "Activa varias grandes mejoras de ataque en intervalos aleatorios.",
-    "icon": "huevo2"
+        "tipo": "adicional",
+        "name": "Huevo ligero",
+        "name_en": "Light Egg",
+        "effect": "Menú de capricho II",
+        "effect_en": "Whimsy Menu II",
+        "description": "Activa varias grandes mejoras de ataque en intervalos aleatorios.",
+        "description_en": "Activates various large attack boosts at random intervals.",
+        "icon": "huevo2"
     },
     {
-    "tipo": "racion",
-    "name": "Carne",
-    "effect": "Ataque +2",
-    "description": "Aumenta el ataque en 2 puntos.",
-    "icon": "carne"
+        "tipo": "racion",
+        "name": "Carne",
+        "name_en": "Meat",
+        "effect": "Ataque +2",
+        "effect_en": "Attack +2",
+        "description": "Aumenta el ataque en 2 puntos.",
+        "description_en": "Increases attack by 2 points.",
+        "icon": "carne"
     },
     {
-    "tipo": "toque",
-    "name": "Chile de monstruo",
-    "effect": "Menú sabroso",
-    "description": "Niega los efectos del calor y del frio, adicionalmente aumenta la defensa en dichos climas.",
-    "icon": "chile"
+        "tipo": "toque",
+        "name": "Chile de monstruo",
+        "name_en": "Monster Chili",
+        "effect": "Menú sabroso",
+        "effect_en": "Tasty Menu",
+        "description": "Niega los efectos del calor y del frio, adicionalmente aumenta la defensa en dichos climas.",
+        "description_en": "Negates heat and cold effects, additionally increases defense in those climates.",
+        "icon": "chile"
     },
     {
-    "tipo": "adicional",
-    "name": "Gamba de lodo",
-    "effect": "Menú de vaso I",
-    "description": "Incrementa ligeramente la ventana de inmunidad al esquivar.",
-    "icon": "gamba"
+        "tipo": "adicional",
+        "name": "Gamba de lodo",
+        "name_en": "Mud Shrimp",
+        "effect": "Menú de vaso I",
+        "effect_en": "Glass Menu I",
+        "description": "Incrementa ligeramente la ventana de inmunidad al esquivar.",
+        "description_en": "Slightly increases the immunity window when dodging.",
+        "icon": "gamba"
     },
     {
-    "tipo": "adicional",
-    "name": "Gamba turbia",
-    "effect": "Menú de vaso II",
-    "description": "Incrementa la ventana de inmunidad al esquivar.",
-    "icon": "gamba2"
+        "tipo": "adicional",
+        "name": "Gamba turbia",
+        "name_en": "Murky Shrimp",
+        "effect": "Menú de vaso II",
+        "effect_en": "Glass Menu II",
+        "description": "Incrementa la ventana de inmunidad al esquivar.",
+        "description_en": "Increases the immunity window when dodging.",
+        "icon": "gamba2"
     },
     {
-    "tipo": "toque",
-    "name": "Hierba salvaje",
-    "effect": "Menú inmunizador",
-    "description": "Disminuye el efecto de los venenos y enfermedades.",
-    "icon": "hierba"
+        "tipo": "toque",
+        "name": "Hierba salvaje",
+        "name_en": "Wild Herb",
+        "effect": "Menú inmunizador",
+        "effect_en": "Immunizer Menu",
+        "description": "Disminuye el efecto de los venenos y enfermedades.",
+        "description_en": "Reduces the effects of poisons and diseases.",
+        "icon": "hierba"
     },
     {
-    "tipo": "toque",
-    "name": "Miel del este",
-    "effect": "Menú médico",
-    "description": "Aumenta la cantidad de vida recuperada al curarse",
-    "icon": "miel"
+        "tipo": "toque",
+        "name": "Miel del este",
+        "name_en": "Eastern Honey",
+        "effect": "Menú médico",
+        "effect_en": "Medic Menu",
+        "description": "Aumenta la cantidad de vida recuperada al curarse",
+        "description_en": "Increases the amount of health recovered when healing.",
+        "icon": "miel"
     },
     {
-    "tipo": "racion",
-    "name": "Pescado",
-    "effect": "Defensa +4",
-    "description": "Aumenta la defensa en 4 puntos.",
-    "icon": "pescado"
+        "tipo": "racion",
+        "name": "Pescado",
+        "name_en": "Fish",
+        "effect": "Defensa +4",
+        "effect_en": "Defense +4",
+        "description": "Aumenta la defensa en 4 puntos.",
+        "description_en": "Increases defense by 4 points.",
+        "icon": "pescado"
     },
     {
-    "tipo": "adicional",
-    "name": "Seta babosa",
-    "effect": "Menú de cinto negro I",
-    "description": "Disminuye el consumo de stamina al realizar movimientos que la consuman ej.(esquivar)",
-    "icon": "seta"
+        "tipo": "adicional",
+        "name": "Seta babosa",
+        "name_en": "Slimy Mushroom",
+        "effect": "Menú de cinto negro I",
+        "effect_en": "Black Belt Menu I",
+        "description": "Disminuye el consumo de stamina al realizar movimientos que la consuman ej.(esquivar)",
+        "description_en": "Reduces stamina consumption when performing stamina-consuming actions (e.g., dodging).",
+        "icon": "seta"
     },
     {
-    "tipo": "adicional",
-    "name": "Champiñam",
-    "effect": "Menú de cinto negro II",
-    "description": "Disminuye mas el consumo de stamina al realizar movimientos que la consuman ej.(esquivar)",
-    "icon": "seta2"
+        "tipo": "adicional",
+        "name": "Champiñam",
+        "name_en": "Champignon",
+        "effect": "Menú de cinto negro II",
+        "effect_en": "Black Belt Menu II",
+        "description": "Disminuye mas el consumo de stamina al realizar movimientos que la consuman ej.(esquivar)",
+        "description_en": "Further reduces stamina consumption when performing stamina-consuming actions (e.g., dodging).",
+        "icon": "seta2"
     },
     {
-    "tipo": "toque",
-    "name": "Huevas salmonete de lujo",
-    "effect": "Menú nadador",
-    "description": "Aumenta el ataque al mojarse",
-    "icon": "huevas"
+        "tipo": "toque",
+        "name": "Huevas salmonete de lujo",
+        "name_en": "Luxury Salmon Roe",
+        "effect": "Menú nadador",
+        "effect_en": "Swimmer Menu",
+        "description": "Aumenta el ataque al mojarse",
+        "description_en": "Increases attack when wet.",
+        "icon": "huevas"
     },
     {
-    "tipo": "toque",
-    "name": "Aceite de semilla salvaje",
-    "effect": "Menú especialista",
-    "description": "Aumenta la potencia de los ataques de estados alterados.",
-    "icon": "aceite"
+        "tipo": "toque",
+        "name": "Aceite de semilla salvaje",
+        "name_en": "Wild Seed Oil",
+        "effect": "Menú especialista",
+        "effect_en": "Specialist Menu",
+        "description": "Aumenta la potencia de los ataques de estados alterados.",
+        "description_en": "Increases the power of status effect attacks.",
+        "icon": "aceite"
     },
     {
-    "tipo": "toque",
-    "name": "Trufa de Conga",
-    "effect": "Menú recolector",
-    "description": "A veces aumenta la cantidad de objetos que recolectas de huesos, minerales, etc.",
-    "icon": "trufa"
+        "tipo": "toque",
+        "name": "Trufa de Conga",
+        "name_en": "Conga Truffle",
+        "effect": "Menú recolector",
+        "effect_en": "Gatherer Menu",
+        "description": "A veces aumenta la cantidad de objetos que recolectas de huesos, minerales, etc.",
+        "description_en": "Sometimes increases the amount of items collected from bones, minerals, etc.",
+        "icon": "trufa"
     },
     {
-    "tipo": "racion",
-    "name": "Verduras",
-    "effect": "Defensa +2 Defensa.E +3",
-    "description": "Aumenta la defensa en 2 puntos y la elemental en 3.",
-    "icon": "verduras"
+        "tipo": "racion",
+        "name": "Verduras",
+        "name_en": "Vegetables",
+        "effect": "Defensa +2 Defensa.E +3",
+        "effect_en": "Defense +2 Elemental Defense +3",
+        "description": "Aumenta la defensa en 2 puntos y la elemental en 3.",
+        "description_en": "Increases defense by 2 points and elemental defense by 3.",
+        "icon": "verduras"
     }
 ]
