@@ -117,9 +117,9 @@
                     <div class="stat-content">
                         <div class="stat-label">MONSTRUOS INCLUIDOS</div>
                         <div class="stat-number-container">
-                            <svg class="progress-ring" width="150" height="150">
-                                <circle class="progress-ring__background" r="60" cx="75" cy="75"/>
-                                <circle class="progress-ring__circle" r="60" cx="75" cy="75"/>
+                            <svg class="progress-ring" width="120" height="120">
+                                <circle class="progress-ring__background" r="45" cx="60" cy="60"/>
+                                <circle class="progress-ring__circle" r="45" cx="60" cy="60"/>
                             </svg>
                             <div class="stat-number" data-target="75">0</div>
                         </div>
@@ -131,18 +131,18 @@
                     <div class="stat-content">
                         <div class="stat-label">MONSTRUOS RESTANTES</div>
                         <div class="stat-number-container">
-                            <svg class="progress-ring" width="150" height="150">
-                                <circle class="progress-ring__background" r="60" cx="75" cy="75"/>
-                                <circle class="progress-ring__circle" r="60" cx="75" cy="75"/>
+                            <svg class="progress-ring" width="120" height="120">
+                                <circle class="progress-ring__background" r="45" cx="60" cy="60"/>
+                                <circle class="progress-ring__circle" r="45" cx="60" cy="60"/>
                             </svg>
-                            <div class="stat-number" data-target="259">0</div>
+                            <div class="stat-number" data-target="250">0</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             <div class="info-section">
                 <h2>¿Qué es esto?</h2>
                 <p>Esta aplicación web es un bestiario completo para Monster Hunter Wilds y otros juegos de la saga Monster Hunter. Permite a los cazadores:</p>
@@ -427,8 +427,9 @@
         
         .info-container {
             max-width: 1200px;
-            margin: 40px auto;
-            padding: 20px;
+            margin: 10px auto;
+            padding: 10px;
+            padding-bottom: 5px;
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -441,12 +442,11 @@
             text-align: center;
             color: #2e1a0b;
             font-size: 2.5em;
-            margin-bottom: 30px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .info-section {
-            margin-bottom: 40px;
+            margin-bottom: 10px;
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.7);
             border-radius: 10px;
@@ -564,10 +564,6 @@
                 grid-template-columns: 1fr;
             }
             
-            .contact-section {
-                margin-top: 10px;
-            }
-            
             .contact-button {
                 font-size: 1em;
                 padding: 8px 16px;
@@ -602,7 +598,6 @@
         .contact-section {
             text-align: center;
             background-color: rgba(255, 255, 255, 0.8);
-            margin-top: 20px;
         }
 
         .contact-content {
@@ -687,7 +682,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 2.5em;
+            font-size: 2.4em;
             font-weight: bold;
             margin: 0;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
@@ -704,8 +699,8 @@
 
         .stat-number-container {
             position: relative;
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
             margin: 0 auto;
         }
 
