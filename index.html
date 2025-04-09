@@ -28,7 +28,13 @@
                             onclick="toggleTheme()"
                             class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
                             <img style="width:35px;height:35px;" src="https://cdn-icons-png.flaticon.com/128/4129/4129212.png" class="h-6 w-6" alt="Alternar Modo Oscuro">
-                        </button>                    
+                        </button>     
+                        <button 
+                            onclick="toggleSpoilers()"
+                            class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
+                            <img id="spoilerIcon" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/smoke.png?raw=true" 
+                            class="w-8 h-8" alt="Spoilers">
+                        </button>                
                         <button 
                             onclick="toggleView()" 
                             id="viewToggleBtn"
@@ -54,14 +60,6 @@
                             </svg>
                         </button>
                     </div>
-                    <a 
-                        style="cursor: pointer;"
-                        onclick="toggleSpoilers()"
-                        class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <img id="spoilerIcon" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/smoke.png?raw=true" 
-                            class="w-8 h-8" alt="Spoilers">
-                        <span style="pointer-events: none;">TOGGLE SPOILERS</span>
-                    </a>
                     <a href="https://mhbestiary.github.io/home/menu.html" 
                     class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/bbq.png?raw=true" 
@@ -846,6 +844,8 @@
                                     alt="SPOILER" class="w-72 rounded-lg">
                             </div>
                             <h2 class="text-2xl font-bold mb-2 text-center dark:text-white">MHWILDS SPOILER</h2>
+                            
+                            <h2 class="text-2xl font-bold mb-2 text-center dark:text-white">UNCHECK SPOILERS ON SIDEBAR</h2>
                         </div>
                     </div>
                 </div>
