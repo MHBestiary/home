@@ -12,10 +12,10 @@
     <div class="container mx-auto max-w-6x1">
         <div id="sidebar" class="fixed -left-64 h-full w-64 shadow-lg transition-all duration-300 z-40">
             <div class="toggle-sidebar-button" onclick="toggleSidebar()">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                    </svg>
-                </div>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </div>
             <div class="sidebar-content">
                 <div class="space-y-4">  
                     <div class="flex items-center justify-between gap-2">
@@ -54,6 +54,14 @@
                             </svg>
                         </button>
                     </div>
+                    <a 
+                        style="cursor: pointer;"
+                        onclick="toggleSpoilers()"
+                        class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <img id="spoilerIcon" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/smoke.png?raw=true" 
+                            class="w-8 h-8" alt="Spoilers">
+                        <span style="pointer-events: none;">TOGGLE SPOILERS</span>
+                    </a>
                     <a href="https://mhbestiary.github.io/home/menu.html" 
                     class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/bbq.png?raw=true" 
@@ -77,14 +85,6 @@
                         <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/book_blue.png?raw=true" 
                              class="w-8 h-8" alt="Ruleta">
                         <span>GENERAR MONSTRUOS</span>
-                    </a>
-                    <a 
-                        style="cursor: pointer;"
-                        onclick="toggleSpoilers()"
-                        class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <img id="spoilerIcon" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/smoke.png?raw=true" 
-                            class="w-8 h-8" alt="Spoilers">
-                        <span style="pointer-events: none;">TOGGLE SPOILERS</span>
                     </a>
                     <a href="https://mhbestiary.github.io/home/info.html" 
                        class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
@@ -1288,6 +1288,7 @@
 
     #sidebar a:hover {
         transform: translateX(4px);
+        box-shadow: 0 10px 10px rgba(0,0,0,0.2);
     }
 
     #sidebar img {
