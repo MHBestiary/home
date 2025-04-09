@@ -110,6 +110,38 @@
             </div>
         </div>
         
+        <div class="info-section stats-section">
+            <h2>Estadísticas del Proyecto</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-content">
+                        <div class="stat-label">MONSTRUOS INCLUIDOS</div>
+                        <div class="stat-number-container">
+                            <svg class="progress-ring" width="150" height="150">
+                                <circle class="progress-ring__background" r="60" cx="75" cy="75"/>
+                                <circle class="progress-ring__circle" r="60" cx="75" cy="75"/>
+                            </svg>
+                            <div class="stat-number" data-target="75">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-decoration"></div>
+                    <div class="stat-decoration"></div>
+                    <div class="stat-content">
+                        <div class="stat-label">MONSTRUOS RESTANTES</div>
+                        <div class="stat-number-container">
+                            <svg class="progress-ring" width="150" height="150">
+                                <circle class="progress-ring__background" r="60" cx="75" cy="75"/>
+                                <circle class="progress-ring__circle" r="60" cx="75" cy="75"/>
+                            </svg>
+                            <div class="stat-number" data-target="259">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             <div class="info-section">
                 <h2>¿Qué es esto?</h2>
@@ -146,6 +178,111 @@
     </div>
 
     <script>
+        // Animación de conteo para las estadísticas
+        function animateNumbers() {
+            const numbers = document.querySelectorAll('.stat-number');
+            
+            numbers.forEach(num => {
+                const target = parseInt(num.getAttribute('data-target'));
+                let startTime = null;
+                // Calculamos la duración basada en el número objetivo
+                // 50 -> 1000ms, 150 -> 3000ms, 250 -> 5000ms
+                const duration = Math.min(2000 + (target * 16), 5000); // limitamos a 5 segundos máximo
+                
+                const circle = num.parentElement.querySelector('.progress-ring__circle');
+                const radius = circle.r.baseVal.value;
+                const circumference = radius * 2 * Math.PI;
+                
+                circle.style.strokeDasharray = `${circumference} ${circumference}`;
+                circle.style.strokeDashoffset = circumference;
+                
+                num.style.transition = 'all 0.1s ease-out';
+                circle.style.transition = 'all 0.1s ease-out';
+                
+                function easeInOutQuart(x) {
+                    return x < 0.5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2;
+                }
+
+                function animate(currentTime) {
+                    if (startTime === null) startTime = currentTime;
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    const easedProgress = easeInOutQuart(progress);
+                    const current = Math.floor(easedProgress * target);
+                    
+                    // Actualizar número
+                    num.textContent = current;
+                    
+                    // Actualizar círculo de progreso
+                    const offset = circumference - (easedProgress * circumference);
+                    circle.style.strokeDashoffset = offset;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        num.textContent = target;
+                        circle.style.strokeDashoffset = 0;
+                        // Efecto brillante final
+                        num.style.transform = 'translate(-50%, -50%) scale(1.2)';
+                        num.style.textShadow = '0 0 15px #FFD700, 0 0 25px #FFD700';
+                        circle.style.stroke = '#FFD700';
+                        circle.style.filter = 'drop-shadow(0 0 4px #FFD700)';
+                        
+                        setTimeout(() => {
+                            num.style.transform = 'translate(-50%, -50%) scale(1)';
+                            num.style.textShadow = 'none';
+                            circle.style.filter = 'none';
+                        }, 1000);
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            });
+        }
+
+        function fadeInCards() {
+            const cards = document.querySelectorAll('.feature-card');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+            });
+
+            const cardObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.style.transition = 'all 0.5s ease-out';
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, index * 100); // Añade un retraso escalonado para cada tarjeta
+                        cardObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            cards.forEach(card => cardObserver.observe(card));
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.classList.contains('stats-section')) {
+                        animateNumbers();
+                    } else if (entry.target.classList.contains('feature-grid')) {
+                        fadeInCards();
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        document.querySelectorAll('.stats-section, .feature-grid').forEach(section => {
+            observer.observe(section);
+        });
+
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             if (sidebar.style.left === '0px') {
@@ -355,6 +492,9 @@
             border-radius: 10px;
             text-align: center;
             transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow 0.3s ease;
         }
 
         .feature-card:hover {
@@ -432,6 +572,10 @@
                 font-size: 1em;
                 padding: 8px 16px;
             }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
         @media (max-width: 480px) {
             .info-container {
@@ -449,6 +593,10 @@
 
             div[style*="grid-template-columns: 1fr 1fr"] {
                 grid-template-columns: 1fr !important;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
         }
         .contact-section {
@@ -488,6 +636,99 @@
         .contact-button img {
             width: 24px;
             height: 24px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(45deg, #995a29, #e28c46);
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            border: 5px outset #2e1a0b;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .stat-icon {
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .stat-icon:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+        }
+
+        .stat-content {
+            position: relative;
+            z-index: 1;
+            padding: 10px;
+        }
+
+        .stat-number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stat-label {
+            font-size: 1.2em;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+
+        .stat-number-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+        }
+
+        .progress-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.1s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            stroke: #FFD700;
+            stroke-width: 8;
+            fill: transparent;
+        }
+
+        .progress-ring__background {
+            stroke: rgba(255,255,255,0.2);
+            stroke-width: 8;
+            fill: transparent;
         }
     </style>
 </body>
