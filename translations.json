@@ -1,0 +1,338 @@
+{
+    "es": {
+        "nav": {
+            "menu": "MENU WILDS",
+            "gallery": "GALERIA",
+            "wheel": "RULETA DE MONSTRUOS",
+            "generator": "GENERAR MONSTRUOS",
+            "info": "INFO GENERAL",
+            "support": "Apóyame en Ko-fi"
+        },
+        "monsters": {
+            "partes": "Partes del Monstruo",
+            "materiales": "Materiales",
+            "debilidad": "Debilidades",
+            "debilidad_e": "Debilidad Elemental",
+            "variantes": "Variantes",
+            "cortable": "Cortable",
+            "rompible": "Rompible",
+            "corte": "Cortar",
+            "impacto": "Impacto",
+            "perforante": "Perforar",
+            "probabilidad": "ratio",
+            "tipo": "Tipo de Monstruo",
+            "peligro": "Nivel de Peligro",
+            "juegos": "Aparición en Juegos",
+            "habitat": "Tipo de Hábitat",
+            "debilidades": {
+                "fuego": "Fuego",
+                "agua": "Agua",
+                "trueno": "Trueno",
+                "hielo": "Hielo",
+                "dragon": "Dragón",
+                "nitro": "Nitro",
+                "veneno": "Veneno",
+                "paralisis": "Parálisis",
+                "sueño": "Sueño",
+                "stun": "Aturdir"
+            },
+            "tipos": {                
+                "temnocerante": "Temnocerante",
+                "wyvern_pajaro": "Wyvern Pájaro",
+                "wyvern_volador": "Wyvern Volador",
+                "wyvern_piscina": "Wyvern Piscina",
+                "carapaceon": "Carapaceon",
+                "anfibio": "Anfibio",
+                "bestia_colmillos": "Bestia Colmillos",
+                "leviathan": "Leviathan",
+                "Cefalopodo": "Cefalópodo",
+                "wyvern_serpiente": "Wyvern Serpiente",
+                "wyvern_bruto": "Wyvern Bruto",
+                "wyvern_colmillos": "Wyvern Colmillos",
+                "dragon_anciano": "Dragón Anciano",
+                "desconocido": "Desconocido",
+                "relict": "Reliquia",
+                "guardian": "Guardian"
+            },
+            "peligros": {
+                "bajo": "Bajo (1-3)",
+                "medio": "Medio (4-5)",
+                "alto": "Alto (6-8)",
+                "extremo": "Extremo (9-10)"
+            },
+            "habitats": {
+                "normal": "Bosque",
+                "agua": "Agua",
+                "nieve": "Nieve",
+                "desierto": "Desierto",
+                "volcan": "Volcán",
+                "Desconocido": "Desconocido"
+            }
+        },
+        "home": {
+            "title": "BESTIARIO",
+            "entrada": "MONSTER HUNTER",
+            "search": "Busca meowstruos..."
+        },
+        "menu": {
+            "title": "MENU",
+            "entrada": "MENÚ MH WILDS",
+            "racion": "Racion",
+            "toque": "Toque",
+            "toque_f": "TOQUE FINAL",
+            "adicional": "Adicional",
+            "ingredientes": "INGREDIENTES",
+            "efectos": "EFECTOS"
+
+        },
+        "galeria":{
+            "title": "GALERIA",
+            "entrada": "GALERIA MH WILDS"
+        },
+        "ruleta": {
+            "title": "RULETA",
+            "entrada": "RULETA MH WILDS",
+            "spin": "¡GIRA!",
+            "spinning": "¡Girando!"
+        },
+        "generador": {
+            "title": "GENERADOR",
+            "entrada": "GENERADOR DE MONSTRUOS",
+            "secciones": {
+                "id": "ID:",
+                "nombre": "Nombre:",
+                "tipo": "Tipo:",
+                "peligro": "Peligro:",
+                "juegos": "Juegos:",
+                "habitat": "Hábitat:",
+                "debilidades": "Debilidades:",
+                "descripcion": "Descripción:",
+                "imagen_principal": "Imagen Principal:",
+                "variantes": "Variantes:",
+                "galeria": "Galería:",
+                "materiales": "Materiales:",
+                "partes": "Partes:"
+            },
+            "botones": {
+                "agregar_variantes": "+ Variantes",
+                "agregar_imagenes": "+ Imagenes",
+                "agregar_materiales": "+ Materiales",
+                "agregar_partes": "+ Partes", 
+                "generar_monstruo": "GENERAR MONSTRUO"
+            }
+        },
+        "info": {
+            "title": "INFO",
+            "entrada": "INFO DEL BESTIARIO",
+            "caracteristicas": {
+                "title": "Características",
+                "bestiario": {
+                    "title": "Bestiario Principal",
+                    "description": "Base de datos completa con todos los monstruos, sus características y debilidades."
+                },
+                "menu": {
+                    "title": "Menu Wilds",
+                    "description": "Sistema de comida y buffs para preparar tus cacerías."
+                },
+                "galeria": {
+                    "title": "Galería",
+                    "description": "Colección de imágenes y arte conceptual de monstruos."
+                },
+                "ruleta": {
+                    "title": "Ruleta de Monstruos",
+                    "description": "Selección aleatoria de monstruos y armas para tus cacerías."
+                },
+                "generador": {
+                    "title": "Generador de Monstruos",
+                    "description": "Página interna para generar monstruos. Si generas uno, contacta al admin para incluirlo!"
+                }
+            },
+            "estadisticas": {
+                "title": "Estadísticas del Proyecto",
+                "incluidos": "MONSTRUOS INCLUIDOS",
+                "restantes": "MONSTRUOS RESTANTES" 
+            },
+            "sobre": {
+                "title": "¿Qué es esto?",
+                "description": "Esta aplicación web es un bestiario completo para Monster Hunter Wilds y otros juegos de la saga Monster Hunter. Permite a los cazadores: buscar y consultar información sobre los monstruos, sus debilidades, partes y materiales. Además, incluye un sistema de comida y buffs para preparar tus cacerías."
+            },
+            "proyecto": {
+                "title": "Sobre el Proyecto",
+                "description": "Este bestiario es un proyecto fan-made creado por y para la comunidad de Monster Hunter. La información se actualiza regularmente para mantener al día los datos más recientes del juego. Puede que haya inconcluencias con informacion relacionada con los monstruos",
+                "donacion": "Si quieres apoyar el proyecto:"
+            },
+            "contacto": {
+                "title": "Contacto",
+                "description": "¡¡Contacta para plantear cambios, funciones, mejoras o incluir datos nuevos!!"
+            }
+        }
+    },
+    "en": {
+        "nav": {
+            "menu": "WILDS MENU",
+            "gallery": "GALLERY",
+            "wheel": "MONSTER ROULETTE",
+            "generator": "GENERATE MONSTERS",
+            "info": "PAGE INFO",
+            "support": "Support me on Ko-fi"
+        },
+        "monsters": {
+            "partes": "Monster parts",
+            "materiales": "Materials",
+            "debilidad": "Weaknesses",
+            "debilidad_e": "Elemental Weakness",
+            "variantes": "Variants",
+            "cortable": "Cutable",
+            "rompible": "Breakable",
+            "corte": "Cut",
+            "impacto": "Stun",
+            "perforante": "Pierce",
+            "probabilidad": "rate",
+            "tipo": "Monstruo Type",
+            "peligro": "Danger Level",
+            "juegos": "Game appearance",
+            "habitat": "Habitat Type",
+            "debilidades": {
+                "fuego": "Fire",
+                "agua": "Water",
+                "trueno": "Thunder",
+                "hielo": "Ice",
+                "dragon": "Dragon",
+                "nitro": "Nitro",
+                "veneno": "Poison",
+                "paralisis": "Paralysis",
+                "sueño": "Sleep",
+                "stun": "Stun"
+            },
+            "tipos": {                
+                "temnocerante": "Temnoceran",
+                "wyvern_pajaro": "Bird Wyvern",
+                "wyvern_volador": "Flying Wyvern",
+                "wyvern_piscina": "Piscine Wyvern",
+                "carapaceon": "Carapaceon",
+                "anfibio": "Amphibian",
+                "bestia_colmillos": "Fanged Beast",
+                "leviathan": "Leviathan",
+                "Cefalopodo": "Cephalopod",
+                "wyvern_serpiente": "Snake Wyvern",
+                "wyvern_bruto": "Brute Wyvern",
+                "wyvern_colmillos": "Fanged Wyvern",
+                "dragon_anciano": "Elder Dragon",
+                "desconocido": "Unknown",
+                "relict": "Relict",
+                "guardian": "Guardian"
+            },
+            "peligros": {
+                "bajo": "Low (1-3)",
+                "medio": "Medium (4-5)",
+                "alto": "High (6-8)",
+                "extremo": "Extreme (9-10)"
+            },
+            "habitats": {
+                "normal": "Forest",
+                "agua": "Water",
+                "nieve": "Snow",
+                "desierto": "Desert",
+                "volcan": "Volcano",
+                "Desconocido": "Unknown"
+            }
+        },
+        "home": {
+            "title": "BESTIARY",            
+            "entrada": "MONSTER HUNTER",
+            "search": "Search meowsters..."
+        },
+        "menu": {
+            "title": "MENU",
+            "entrada": "MH WILDS MENU",
+            "racion": "Ration",
+            "toque": "Touch",
+            "toque_f": "FINAL TOUCH",
+            "adicional": "Additional",
+            "ingredientes": "INGREDIENTS",
+            "efectos": "EFFECTS"
+
+        },
+        "galeria":{
+            "title": "GALLERY",            
+            "entrada": "MH WILDS GALLERY"
+        },
+        "ruleta": {
+            "title": "ROULETTE",
+            "entrada": "MH WILDS ROULETTE",
+            "spin": "SPIN",
+            "spinning": "SPINNING"
+        },
+        "generador": {
+            "title": "GENERATOR",            
+            "entrada": "MONSTER GENERATOR",
+            "secciones": {
+                "id": "ID:",
+                "nombre": "Name:",
+                "tipo": "Type:",
+                "peligro": "Danger:",
+                "juegos": "Games:",
+                "habitat": "Habitat:",
+                "debilidades": "Weaknesses:",
+                "descripcion": "Description:",
+                "imagen_principal": "Main Image:",
+                "variantes": "Variants:",
+                "galeria": "Gallery:",
+                "materiales": "Materials:",
+                "partes": "Parts:"
+            },            
+            "botones": {
+                "agregar_variantes": "+ Variants",                
+                "agregar_imagenes": "+ Images",
+                "agregar_materiales": "+ Materials",
+                "agregar_partes": "+ Parts",
+                "generar_monstruo": "GENERATE MONSTER"
+            }
+        },
+        "info": {
+            "title": "INFO",
+            "entrada": "BESTIARY INFO",
+            "caracteristicas": {
+                "title": "Features",
+                "bestiario": {
+                    "title": "Bestiary",
+                    "description": "Complete database with all monsters, their characteristics and weaknesses."
+                },
+                "menu": {
+                    "title": "Wilds Menu",
+                    "description": "Food and buffs system to prepare your hunts."
+                },
+                "galeria": {
+                    "title": "Gallery",
+                    "description": "Collection of images and concept art of monsters."
+                },
+                "ruleta": {
+                    "title": "Monster Roulette",
+                    "description": "Random selection of monsters and weapons for your hunts."
+                },
+                "generador": {
+                    "title": "Monster Generator",
+                    "description": "Internal page to generate monsters. If you generate one, contact the admin to include it!"
+                }
+            },
+            "estadisticas": {
+                "title": "Project Statistics",
+                "incluidos": "INCLUDED MONSTERS",
+                "restantes": "REMAINING MONSTERS" 
+            },
+            "sobre": {
+                "title": "What is this?",
+                "description": "This web application is a complete bestiary for Monster Hunter Wilds and other games in the Monster Hunter saga. It allows hunters to: search and consult information about monsters, their weaknesses, parts and materials. It also includes a food and buffs system to prepare your hunts."
+            },
+            "proyecto": {
+                "title": "About the Project",
+                "description": "This bestiary is a fan-made project created by and for the Monster Hunter community. The information is regularly updated to keep the most recent data of the game up to date. There may be inconsistencies with information related to monsters.",
+                "donacion": "If you want to support the project:"
+            },
+            "contacto": {
+                "title": "Contact",
+                "description": "!!Contact to propose changes, functions, improvements or include new data!!"
+            }
+        }
+    }
+  }
