@@ -24,6 +24,7 @@
             "peligro": "Nivel de Peligro",
             "juegos": "Aparición en Juegos",
             "habitat": "Tipo de Hábitat",
+            "todos": "Todos",
             "debilidades": {
                 "fuego": "Fuego",
                 "agua": "Agua",
@@ -188,10 +189,11 @@
             "impacto": "Stun",
             "perforante": "Pierce",
             "probabilidad": "rate",
-            "tipo": "Monstruo Type",
+            "tipo": "Monster Type",
             "peligro": "Danger Level",
             "juegos": "Game appearance",
             "habitat": "Habitat Type",
+            "todos": "All",
             "debilidades": {
                 "fuego": "Fire",
                 "agua": "Water",
