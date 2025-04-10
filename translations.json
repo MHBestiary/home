@@ -9,6 +9,7 @@
             "support": "Apóyame en Ko-fi"
         },
         "monsters": {
+            "cerrar": "Cerrar",
             "partes": "Partes del Monstruo",
             "materiales": "Materiales",
             "debilidad": "Debilidades",
@@ -178,6 +179,7 @@
             "support": "Support me on Ko-fi"
         },
         "monsters": {
+            "cerrar": "Close",
             "partes": "Monster parts",
             "materiales": "Materials",
             "debilidad": "Weaknesses",

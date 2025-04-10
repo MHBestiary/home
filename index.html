@@ -20,6 +20,13 @@
                 <div class="space-y-4">  
                     <div class="flex items-center justify-between gap-2">
                         <button 
+                            onclick="toggleLanguage()"
+                            class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
+                            <img id="languageIcon" style="width:35px;height:35px;" 
+                                src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/es.png?raw=true" 
+                                class="h-6 w-6" alt="Language">
+                        </button>
+                        <button 
                             onclick="window.location.href='https://mhbestiary.github.io/home/'"
                             class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
                             <img style="width:35px;height:35px;" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/home.png?raw=true" class="h-6 w-6" alt="Alternar Modo Oscuro">
@@ -64,31 +71,31 @@
                     class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/bbq.png?raw=true" 
                             class="w-8 h-8" alt="Menu">
-                        <span>MENU WILDS</span>
+                        <span data-translation-key="menu">MENU WILDS</span>
                     </a>
                     <a href="https://mhbestiary.github.io/home/galeria.html" 
                     class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/map.png?raw=true" 
                             class="w-8 h-8" alt="Menu">
-                        <span>GALERIA</span>
+                        <span data-translation-key="gallery">GALERIA</span>
                     </a>
                     <a href="https://mhbestiary.github.io/home/wheel.html" 
                        class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/unknown.png?raw=true" 
                              class="w-8 h-8" alt="Ruleta">
-                        <span>RULETA DE MONSTRUOS</span>
+                        <span data-translation-key="wheel">RULETA DE MONSTRUOS</span>
                     </a>
                     <a href="https://mhbestiary.github.io/home/GeneraMonstruos.html" 
                        class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/book_blue.png?raw=true" 
                              class="w-8 h-8" alt="Ruleta">
-                        <span>GENERAR MONSTRUOS</span>
+                        <span data-translation-key="generator">GENERAR MONSTRUOS</span>
                     </a>
                     <a href="https://mhbestiary.github.io/home/info.html" 
                        class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                         <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/question.png?raw=true" 
                              class="w-8 h-8" alt="Ruleta">
-                        <span>PAGE INFO</span>
+                        <span data-translation-key="info">INFO GENERAL</span>
                     </a>                    
                     <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#ebce65', 'S6S41D5TNA');kofiwidget2.draw();</script> 
                 </div>
@@ -251,10 +258,20 @@
     </div>
 
     <script>
+        let currentLanguage = localStorage.getItem('language') || 'es';
+        let translations = {};
         let monsters = [];
         let currentPage = 1;
         let monstersPerPage = 20; // Cambiado a 20 para la vista supergrid inicial
         let isLoading = false;
+        async function loadTranslations() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/translations.json');
+                translations = await response.json();
+            } catch (error) {
+                console.error('Error loading translations:', error);
+            }
+        }
 
 		async function loadMonsters() {
 			try {
@@ -268,6 +285,157 @@
 				console.error('Error cargando los monstruos:', error);
 			}
 		}
+
+        // Función para cambiar idioma
+        async function toggleLanguage() {
+            // Asegurarnos que las traducciones están cargadas
+            if (Object.keys(translations).length === 0) {
+                await loadTranslations();
+            }
+
+            currentLanguage = currentLanguage === 'es' ? 'en' : 'es';
+            localStorage.setItem('language', currentLanguage);
+            
+            // Cambiar icono
+            const icon = document.getElementById('languageIcon');
+            icon.src = `https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/${currentLanguage}.png?raw=true`;
+            
+            applyTranslations();
+        }
+
+        // Función para aplicar traducciones
+        function applyTranslations() {
+            if (!translations || !translations[currentLanguage]) {
+                console.error('Translations not loaded yet');
+                return;
+            }
+
+            // Título principal y búsqueda (existente)
+            const tituloElement = document.querySelector('.titulo');
+            if (tituloElement) {
+                tituloElement.textContent = translations[currentLanguage].home.entrada;
+            }
+            
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.placeholder = translations[currentLanguage].home.search;
+            }
+            const allLabels = document.querySelectorAll('label.block.text-sm.font-medium');
+            allLabels.forEach((label, index) => {
+                if (index === 0) {
+                    label.textContent = translations[currentLanguage].monsters.tipo;
+                } else if (index === 1) {
+                    label.textContent = translations[currentLanguage].monsters.peligro;  
+                } else if (index === 2) {
+                    label.textContent = translations[currentLanguage].monsters.habitat;
+                } else if (index === 3) {
+                    label.textContent = translations[currentLanguage].monsters.juegos;
+                }
+            });
+
+            const elementLabel = document.querySelector('label:has(+ .grid-cols-2)');
+            if (elementLabel) {
+                elementLabel.textContent = translations[currentLanguage].monsters.debilidad_e;
+            }
+
+            const elementButtons = document.querySelectorAll('.element-filter span');
+            elementButtons.forEach((button, index) => {
+                if (index === 0) {
+                    button.textContent = translations[currentLanguage].monsters.debilidades.fuego;
+                } else if (index === 1) {
+                    button.textContent = translations[currentLanguage].monsters.debilidades.agua;  
+                } else if (index === 2) {
+                    button.textContent = translations[currentLanguage].monsters.debilidades.trueno;
+                } else if (index === 3) {
+                    button.textContent = translations[currentLanguage].monsters.debilidades.hielo;
+                } else if (index === 4) {
+                    button.textContent = translations[currentLanguage].monsters.debilidades.dragon;
+                }
+            });
+
+
+
+            // Actualizar opciones de los selectores
+            const typeFilter = document.getElementById('typeFilter');
+            if (typeFilter) {
+                const tipos = translations[currentLanguage].monsters.tipos;
+                typeFilter.innerHTML = `
+                    <option value="">${translations[currentLanguage].monsters.todos}</option>
+                    <option value="Temnoceran">${tipos.temnocerante}</option>
+                    <option value="Bird Wyvern">${tipos.wyvern_pajaro}</option>
+                    <option value="Flying Wyvern">${tipos.wyvern_volador}</option>
+                    <option value="Piscine Wyvern">${tipos.wyvern_piscina}</option>
+                    <option value="Carapaceon">${tipos.carapaceon}</option>
+                    <option value="Amphibian">${tipos.anfibio}</option>
+                    <option value="Fanged Beast">${tipos.bestia_colmillos}</option>
+                    <option value="Leviathan">${tipos.leviathan}</option>
+                    <option value="Cephalopod">${tipos.Cefalopodo}</option>
+                    <option value="Snake Wyvern">${tipos.wyvern_serpiente}</option>
+                    <option value="Brute Wyvern">${tipos.wyvern_bruto}</option>
+                    <option value="Fanged Wyvern">${tipos.wyvern_colmillos}</option>
+                    <option value="Elder Dragon">${tipos.dragon_anciano}</option>
+                    <option value="Unknown">${tipos.desconocido}</option>
+                    <option value="Relict">${tipos.relict}</option>
+                    <option value="Construct">${tipos.guardian}</option>
+                `;
+            }
+
+            const threatFilter = document.getElementById('threatFilter');
+            if (threatFilter) {
+                const peligros = translations[currentLanguage].monsters.peligros;
+                threatFilter.innerHTML = `
+                    <option value="">${translations[currentLanguage].monsters.todos}</option>
+                    <option value="1-3">${peligros.bajo}</option>
+                    <option value="4-5">${peligros.medio}</option>
+                    <option value="6-8">${peligros.alto}</option>
+                    <option value="9-10">${peligros.extremo}</option>
+                `;
+            }
+
+            const localeFilter = document.getElementById('localeFilter');
+            if (localeFilter) {
+                const habitats = translations[currentLanguage].monsters.habitats;
+                localeFilter.innerHTML = `
+                    <option value="">${translations[currentLanguage].monsters.todos}</option>
+                    <option value="Normal">${habitats.normal}</option>
+                    <option value="Water">${habitats.agua}</option>
+                    <option value="Snow">${habitats.nieve}</option>
+                    <option value="Desert">${habitats.desierto}</option>
+                    <option value="Volcano">${habitats.volcan}</option>
+                    <option value="Unknown">${habitats.Desconocido}</option>
+                `;
+            }
+
+            
+
+            const gameFilter = document.getElementById('gameFilter');
+            if (gameFilter) {
+                const habitats = translations[currentLanguage].monsters.habitats;
+                gameFilter.innerHTML = `
+                    <option value="">${translations[currentLanguage].monsters.todos}</option>
+                    <option value="MH1">MH1</option>
+                    <option value="MH2">MH2</option>
+                    <option value="MH3">MH3</option>
+                    <option value="MH4">MH4</option>
+                    <option value="MH FRONTIERS">MH FRONTIERS</option>
+                    <option value="MH GENERATIONS">MH GENERATIONS</option>
+                    <option value="MH WORLD">MH WORLD</option>
+                    <option value="MH RISE">MH RISE</option>
+                    <option value="MH WILDS">MH WILDS</option>
+                `;
+            }
+
+            // Links del sidebar (existente)
+            document.querySelectorAll('#sidebar .sidebar-content a span').forEach(span => {
+                const key = span.getAttribute('data-translation-key');
+                if (key && translations[currentLanguage].nav[key]) {
+                    span.textContent = translations[currentLanguage].nav[key];
+                }
+            });
+
+            // Re-renderizar los monstruos para actualizar descripciones
+            filterMonsters();
+        }
 
 		document.addEventListener("DOMContentLoaded", loadMonsters);
 
@@ -386,7 +554,9 @@
                             <div class="flex items-center gap-2">
                                 <img style="width:30px;" src="${material.icon}"></img>                                    
                                 <div>
-                                    <span class="font-medium debilidadestilotexto text-gray-700 dark:text-gray-300">${material.name}</span>
+                                    <span class="font-medium debilidadestilotexto text-gray-700 dark:text-gray-300">
+                                        ${currentLanguage === 'es' ? material.name : material.name_en}
+                                    </span>
                                     <span class="text-sm debilidadestilotexto text-gray-500 dark:text-gray-400 block">${material.source}</span>
                                 </div>
                             </div>
@@ -667,7 +837,15 @@
         }
 
         // Asegúrate de que la vista inicial es correcta
-        document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", async () => {            
+            await loadTranslations();
+            await loadMonsters();
+            setupInfiniteScroll();
+            
+            // Configurar idioma inicial
+            const icon = document.getElementById('languageIcon');
+            icon.src = `https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/${currentLanguage}.png?raw=true`;
+            applyTranslations();
             loadMonsters();
             setupInfiniteScroll();
             // Configurar visualización inicial del botón
@@ -834,6 +1012,17 @@
             const monster = monsters.find(m => m.id === parseInt(monsterId));
             if (!monster) return;
 
+            const description = currentLanguage === 'es' ? monster.description : monster.description_en;
+            const t = translations[currentLanguage].monsters; // Shorthand para traducciones
+            const translatedMaterials = monster.materials?.map(material => ({
+                ...material,
+                name: currentLanguage === 'es' ? material.name : material.name_en
+            }));
+            const translatedParts = monster.parts?.map(part => ({
+                ...part,
+                name: currentLanguage === 'es' ? part.name : part.name_en
+            }));
+
             const isSpoiler = monster.spoiler === true && !showSpoilers;
             const modalContent = isSpoiler ? `
                 <div class="flex flex-col gap-6">
@@ -868,13 +1057,13 @@
                                     <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 rounded-full text-sm">${game}</span>
                                 `).join('')}
                             </div>
-                            <p class="text-gray-600 dark:text-gray-300 text-center mb-2">${monster.description}</p>
+                            <p class="text-gray-600 dark:text-gray-300 text-center mb-2">${description}</p>
 
                             
                             <!-- Sección de Variantes si existen -->
                             ${monster.variants && monster.variants.length > 0 ? `
                                 <div class="variantessupergrid">
-                                    <h3 class="text-lg font-semibold">Variantes</h3>
+                                    <h3 class="text-lg font-semibold">${t.variantes}</h3>
                                     <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
                                         ${monster.variants.map(variant => `
                                             <div class="relative group" onclick="openModal('${variant.image}')">
@@ -891,7 +1080,7 @@
                             <!-- Sección de Galería si existe -->
                             ${monster.gallery && monster.gallery.length > 0 ? `
                                 <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 mt-4">
-                                    <h3 class="text-lg font-semibold mb-3 dark:text-white">Galería</h3>
+                                    <h3 class="text-lg font-semibold mb-3 dark:text-white">${t.galeria}</h3>
                                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                                         ${monster.gallery.map(image => `
                                             <div class="relative group" onclick="openModal('${image}')">
@@ -907,38 +1096,38 @@
                         <!-- Columna derecha con debilidades y stats -->
                         <div class="md:w-1/2">
                             <div class="space-y-2">
-                                ${monster.parts && monster.parts.length > 0 ? `
+                                ${translatedParts && translatedParts.length > 0 ? `
                                     <h3 class="font-semibold">Partes del Monstruo</h3>
                                         <div class="grid gap-1 columnitas">
-                                            ${monster.parts.map(part => `
+                                            ${translatedParts.map(part => `
                                                 <div class="debilidadestilo p-2 rounded-lg bg-gray-50">
                                                     <div class="flex justify-between items-center mb-2">
                                                         <span class="font-medium text-md">${part.name}</span>
                                                         ${part.breakable ? `
                                                             <span class="text-md px-2 py-1 bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-200 rounded-full">
-                                                                Rompible
+                                                                ${t.rompible}
                                                             </span>
                                                         ` : ''}
                                                         ${part.cortable ? `
                                                             <span class="text-md px-2 py-1 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-200 rounded-full">
-                                                                Cortable
+                                                                ${t.cortable}
                                                             </span>
                                                         ` : ''}
                                                     </div>
                                                     <div class="space-y-2">
                                                         <div class="flex justify-between items-center">
                                                             <span><img style="width:25px" alt="Cortante" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/slash.png?raw=true"></img></span>
-                                                            <span class="text-md">Cortar</span>                                                            
+                                                            <span class="text-md">${t.corte}</span>                                                            
                                                             ${createWeaknessStars(part.weaknesses.slash)}
                                                         </div>
                                                         <div class="flex justify-between items-center">
                                                             <span><img style="width:25px" alt="Stun" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/blunt.png?raw=true"></img></span>
-                                                            <span class="text-md">Impacto</span>                                                            
+                                                            <span class="text-md">${t.impacto}</span>                                                            
                                                             ${createWeaknessStars(part.weaknesses.blunt)}
                                                         </div>
                                                         <div class="flex justify-between items-center">
                                                             <span><img style="width:25px" alt="Perforante" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/m_pierce.png?raw=true"></img></span>
-                                                            <span class="text-md">Perforar</span>                                                            
+                                                            <span class="text-md">${t.perforante}</span>                                                            
                                                             ${createWeaknessStars(part.weaknesses.pierce)}
                                                         </div>
                                                     </div>
@@ -965,9 +1154,9 @@
                                     </div>
                                 `).join('')}
                             </div>                     
-                            ${monster.materials && monster.materials.length > 0 ? `
+                            ${translatedMaterials && translatedMaterials.length > 0 ? `
                                 <h3 class="font-semibold">Materiales</h3>
-                                ${createMaterialsList(monster.materials)}
+                                ${createMaterialsList(translatedMaterials)}
                             ` : ''}
                         </div>
                     </div>
@@ -977,6 +1166,10 @@
             document.getElementById('superGridModalContent').innerHTML = modalContent;
             document.getElementById('superGridModal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+            const closeButton = document.querySelector('button[onclick="closeSuperGridModal()"]');
+            if (closeButton) {
+                closeButton.textContent = t.cerrar;
+            }
         }
 
         function closeSuperGridModal() {
@@ -987,6 +1180,20 @@
         // Actualizar la función createMonsterCard solo para el supergrid
         function createMonsterCard(monster, isListView = false) {
             const isSpoiler = monster.spoiler === true && !showSpoilers;
+            const description = currentLanguage === 'es' ? monster.description : monster.description_en;
+            
+            // En el caso de los materiales, traducir cada uno
+            const translatedMaterials = monster.materials?.map(material => ({
+                ...material,
+                name: currentLanguage === 'es' ? material.name : material.name_en
+            }));
+
+            // En el caso de las partes, traducir cada una
+            const translatedParts = monster.parts?.map(part => ({
+                ...part,
+                name: currentLanguage === 'es' ? part.name : part.name_en
+            }));
+
             const monsterName = isSpoiler ? 'MHWILDS SPOILER' : monster.name;
             const monsterImage = isSpoiler ? 
                 'https://github.com/MHBestiary/home/blob/main/MHImages/Ronda%20Hardcore/Icon.png?raw=true' : 
@@ -1003,7 +1210,7 @@
             const isExpanded = expandedCards.has(monster.id);
             
             // Crear una versión de materiales para spoiler
-            const materialsHtml = monster.materials && monster.materials.length > 0 ? `
+            const materialsHtml = translatedMaterials && translatedMaterials.length > 0 ? `
                 <div class="collapsible-section">
                     <div class="collapsible-header" onclick="event.stopPropagation(); toggleSection(this)">
                         <h3 class="font-semibold">Materiales</h3>
@@ -1012,14 +1219,14 @@
                     <div class="collapsible-content">
                         ${isSpoiler ? 
                             '<p class="text-center p-4">MHWILDS SPOILER</p>' : 
-                            createMaterialsList(monster.materials)}
+                            createMaterialsList(translatedMaterials)}
                     </div>
                 </div>
             ` : '';
 
-            const partesHtml = monster.materials && monster.materials.length > 0 ? `
+            const partesHtml = translatedParts && translatedParts.length > 0 ? `
                 <div class="grid gap-1 columnitas">
-                    ${monster.parts.map(part => `
+                    ${translatedParts.map(part => `
                         <div class="debilidadestilo p-2 rounded-lg bg-gray-50">
                             <div class="flex justify-between items-center mb-2">
                                 <span class="font-medium">${part.name}</span>
@@ -1065,7 +1272,7 @@
                             <div class="flex-1">
                                 <div class="selectable-content">
                                     <h2 class="${isListView ? `` : 'mb-1'} text-xl flex items-center justify-center" style="font-family: 'Permanent Marker'">${monsterName}</h2>
-                                    ${isListView ? `<p class="mb-1">${isSpoiler ? '' : monster.description}</p>` : ''}
+                                    ${isListView ? `<p class="mb-1">${isSpoiler ? '' : description}</p>` : ''}
                                 </div>       
                                 <div class="relative cursor-pointer" onclick="toggleMonsterDetails(${monster.id}, event)">  
                                     <div class="${getThreatColor(monster.threat)} text-white font-bold w-10 h-10 rounded-full flex items-center justify-center shadow-sm absolute top-2 left-2">
@@ -1087,10 +1294,10 @@
                                     `).join('')}
                                 </div>
                             `}
-                            ${!isListView ? `<p class="mb-4">${isSpoiler ? '' : monster.description}</p>` : ''}
+                            ${!isListView ? `<p class="mb-4">${isSpoiler ? '' : description}</p>` : ''}
                             
                             <div class="space-y-2">
-                                ${monster.parts && monster.parts.length > 0 ? `
+                                ${translatedParts && translatedParts.length > 0 ? `
                                     ${isSpoiler ? '' : `
                                     <div class="collapsible-section">
                                         <div class="collapsible-header" onclick="event.stopPropagation(); toggleSection(this)">
