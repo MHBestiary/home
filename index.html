@@ -20,13 +20,6 @@
                 <div class="space-y-4">  
                     <div class="flex items-center justify-between gap-2">
                         <button 
-                            onclick="toggleLanguage()"
-                            class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
-                            <img id="languageIcon" style="width:35px;height:35px;" 
-                                src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/es.png?raw=true" 
-                                class="h-6 w-6" alt="Language">
-                        </button>
-                        <button 
                             onclick="window.location.href='https://mhbestiary.github.io/home/'"
                             class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
                             <img style="width:35px;height:35px;" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/home.png?raw=true" class="h-6 w-6" alt="Alternar Modo Oscuro">
@@ -34,7 +27,7 @@
                         <button 
                             onclick="toggleTheme()"
                             class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
-                            <img style="width:35px;height:35px;" src="https://cdn-icons-png.flaticon.com/128/4129/4129212.png" class="h-6 w-6" alt="Alternar Modo Oscuro">
+                            <img style="width:35px;height:35px;" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/night.png?raw=true" class="h-6 w-6" alt="Alternar Modo Oscuro">
                         </button>     
                         <button 
                             onclick="toggleSpoilers()"
@@ -107,6 +100,14 @@
             </div>
             
             <div class="flex flex-wrap sm:gap-2 gap-1 items-center mb-1">
+                
+                <button 
+                    onclick="toggleLanguage()"
+                    class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
+                    <img id="languageIcon" style="width:35px;height:35px;" 
+                        src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/es.png?raw=true" 
+                        class="h-6 w-6" alt="Language">
+                </button>
                 <div class="flex-1 min-w-[200px]">
                     <input 
                         type="text" 
@@ -242,7 +243,12 @@
     <!-- Modificar el modal del supergrid -->
     <div id="superGridModal" class="hidden fixed inset-0 bg-black bg-opacity-90 z-50 overflow-y-auto" onclick="handleModalClick(event)">
         <div class="min-h-screen px-4 flex items-center justify-center">
-            <div class="supertarjeta  dark:bg-gray-800 w-full max-w-4xl rounded-lg relative m-4">
+            <div class="supertarjeta  dark:bg-gray-800 w-full max-w-4xl rounded-lg relative m-4">                
+                <div class="sticky top-0 right-0 flex justify-end p-4 z-50">
+                    <button onclick="closeSuperGridModal()" class="close-button px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg">
+                        ✕
+                    </button>
+                </div>
                 <!-- Contenido del modal -->
                 <div id="superGridModalContent" class="p-4"></div>
 
@@ -1143,7 +1149,7 @@
                                     <div class="debilidadestilo flex justify-between items-center p-2 rounded-lg bg-gray-50">
                                         <div class="flex items-center">
                                             <span class="element-icon">
-                                                <img src="${weaknessImages[element] || 'https://cdn-icons-png.flaticon.com/128/1828/1828774.png'}" class="h-6 w-6" alt="${element} icon">
+                                                <img src="${weaknessImages[element] || 'https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/X.png?raw=true'}" class="h-6 w-6" alt="${element} icon">
                                             </span>
                                             <span class="capitalize">${debilidades[element] || element}</span>
                                         </div>
@@ -1167,13 +1173,19 @@
             document.getElementById('superGridModalContent').innerHTML = modalContent;
             document.getElementById('superGridModal').classList.remove('hidden');
             document.body.style.overflow = 'hidden';
-            const closeButton = document.querySelector('button[onclick="closeSuperGridModal()"]');
-            if (closeButton) {
-                closeButton.textContent = t.cerrar;
-            }
         }
 
         function closeSuperGridModal() {
+            const t = translations[currentLanguage].monsters; // Obtener traducciones
+            const closeButtons = document.querySelectorAll('button[onclick="closeSuperGridModal()"]');
+            
+            // Actualizar texto de los botones antes de cerrar
+            closeButtons.forEach(button => {
+                // Solo actualizar si el botón no es el de la X (que no tiene texto)
+                if (!button.classList.contains('close-button')) {
+                    button.textContent = t.cerrar;
+                }
+            });
             document.getElementById('superGridModal').classList.add('hidden');
             document.body.style.overflow = '';
         }
@@ -1271,7 +1283,7 @@
                             <div class="debilidadestilo flex justify-between items-center p-2 rounded-lg bg-gray-50">
                                 <div class="flex items-center">
                                     <span class="element-icon">
-                                        <img src="${weaknessImages[element] || 'https://cdn-icons-png.flaticon.com/128/1828/1828774.png'}" 
+                                        <img src="${weaknessImages[element] || 'https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/X.png?raw=true'}" 
                                             class="h-6 w-6" alt="${element} icon">
                                     </span>
                                     <span class="capitalize">${translations[currentLanguage].monsters.debilidades[element] || element}</span>
