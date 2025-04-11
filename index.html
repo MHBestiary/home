@@ -34,30 +34,14 @@
                             class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
                             <img id="spoilerIcon" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/smoke.png?raw=true" 
                             class="w-8 h-8" alt="Spoilers">
-                        </button>                
+                        </button>      
+                        
                         <button 
-                            onclick="toggleView()" 
-                            id="viewToggleBtn"
-                            class="botonDark view-toggle-btn sm:px-4 py-2 px-2 text-white rounded-lg flex items-center justify-center">
-                            <svg id="supergridIcon" class="w-8 h-8" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1">
-                                <!-- Grid de 4 (cuadrados más grandes y más separados) -->
-                                <rect x="2" y="2" width="9" height="9" rx="2" />
-                                <rect x="13" y="2" width="9" height="9" rx="2" />
-                                <rect x="2" y="13" width="9" height="9" rx="2" />
-                                <rect x="13" y="13" width="9" height="9" rx="2" />
-                            </svg>
-                            <svg id="gridIcon" class="w-8 h-8" viewBox="0 0 30 30" fill="none" stroke="black" stroke-width="1">
-                                <!-- Grid de 9 (cuadrados más grandes y más separados) -->
-                                <rect x="1" y="1" width="8" height="8" rx="1" />
-                                <rect x="11" y="1" width="8" height="8" rx="1" />
-                                <rect x="21" y="1" width="8" height="8" rx="1" />
-                                <rect x="1" y="11" width="8" height="8" rx="1" />
-                                <rect x="11" y="11" width="8" height="8" rx="1" />
-                                <rect x="21" y="11" width="8" height="8" rx="1" />
-                                <rect x="1" y="21" width="8" height="8" rx="1" />
-                                <rect x="11" y="21" width="8" height="8" rx="1" />
-                                <rect x="21" y="21" width="8" height="8" rx="1" />
-                            </svg>
+                            onclick="toggleLanguage()"
+                            class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
+                            <img id="languageIcon" style="width:35px;height:35px;" 
+                                src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/es.png?raw=true" 
+                                class="h-6 w-6" alt="Language">
                         </button>
                     </div>
                     <a href="https://mhbestiary.github.io/home/menu.html" 
@@ -99,14 +83,30 @@
                 <h1 style="text-shadow: 0px 0px 10px #000000;color:white;width:100%;" class="titulo font-semibold absolute left-1/2 transform -translate-x-1/2 text-center text-3xl sm:text-2xl md:text-4xl lg:text-6xl">MONSTER HUNTER</h1>
             </div>
             
-            <div class="flex flex-wrap sm:gap-2 gap-1 items-center mb-1">
-                
+            <div class="flex flex-wrap sm:gap-2 gap-1 items-center mb-1">                          
                 <button 
-                    onclick="toggleLanguage()"
-                    class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
-                    <img id="languageIcon" style="width:35px;height:35px;" 
-                        src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/es.png?raw=true" 
-                        class="h-6 w-6" alt="Language">
+                    onclick="toggleView()" 
+                    id="viewToggleBtn"
+                    class="botonDark view-toggle-btn sm:px-4 py-2 px-2 text-white rounded-lg flex items-center justify-center">
+                    <svg id="supergridIcon" class="w-8 h-8" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1">
+                        <!-- Grid de 4 (cuadrados más grandes y más separados) -->
+                        <rect x="2" y="2" width="9" height="9" rx="2" />
+                        <rect x="13" y="2" width="9" height="9" rx="2" />
+                        <rect x="2" y="13" width="9" height="9" rx="2" />
+                        <rect x="13" y="13" width="9" height="9" rx="2" />
+                    </svg>
+                    <svg id="gridIcon" class="w-8 h-8" viewBox="0 0 30 30" fill="none" stroke="black" stroke-width="1">
+                        <!-- Grid de 9 (cuadrados más grandes y más separados) -->
+                        <rect x="1" y="1" width="8" height="8" rx="1" />
+                        <rect x="11" y="1" width="8" height="8" rx="1" />
+                        <rect x="21" y="1" width="8" height="8" rx="1" />
+                        <rect x="1" y="11" width="8" height="8" rx="1" />
+                        <rect x="11" y="11" width="8" height="8" rx="1" />
+                        <rect x="21" y="11" width="8" height="8" rx="1" />
+                        <rect x="1" y="21" width="8" height="8" rx="1" />
+                        <rect x="11" y="21" width="8" height="8" rx="1" />
+                        <rect x="21" y="21" width="8" height="8" rx="1" />
+                    </svg>
                 </button>
                 <div class="flex-1 min-w-[200px]">
                     <input 

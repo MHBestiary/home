@@ -68,7 +68,7 @@
                 "nieve": "Nieve",
                 "desierto": "Desierto",
                 "volcan": "Volcán",
-                "Desconocido": "Desconocido"
+                "desconocido": "Desconocido"
             }
         },
         "home": {
@@ -217,7 +217,7 @@
                 "anfibio": "Amphibian",
                 "bestia_colmillos": "Fanged Beast",
                 "leviathan": "Leviathan",
-                "Cefalopodo": "Cephalopod",
+                "Cefalopodo": "Cephalopodo",
                 "wyvern_serpiente": "Snake Wyvern",
                 "wyvern_bruto": "Brute Wyvern",
                 "wyvern_colmillos": "Fanged Wyvern",
@@ -238,7 +238,7 @@
                 "nieve": "Snow",
                 "desierto": "Desert",
                 "volcan": "Volcano",
-                "Desconocido": "Unknown"
+                "desconocido": "Unknown"
             }
         },
         "home": {
