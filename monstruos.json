@@ -49,7 +49,7 @@
     "parts": [{"name": "Cabeza", "name_en": "Head", "breakable": true, "cortable": false, "weaknesses": {"slash": 3, "blunt": 3, "pierce": 1}}, {"name": "Cuerpo", "name_en": "Body", "breakable": true, "cortable": false, "weaknesses": {"slash": 1, "blunt": 1, "pierce": 2}}, {"name": "Alas", "name_en": "Wings", "breakable": true, "cortable": false, "weaknesses": {"slash": 2, "blunt": 2, "pierce": 1}}, {"name": "Cola", "name_en": "Tail", "breakable": false, "cortable": true, "weaknesses": {"slash": 2, "blunt": 2, "pierce": 2}}]
   },
   {
-    "id": 7,
+    "id": 102,
     "name": "Alatreon (Ice)",
     "type": "Elder Dragon",
     "threat": 9,
@@ -65,7 +65,7 @@
     "parts": [{"name": "Cabeza", "name_en": "Head", "breakable": true, "cortable": false, "weaknesses": {"slash": 3, "blunt": 3, "pierce": 1}}, {"name": "Cuerpo", "name_en": "Body", "breakable": true, "cortable": false, "weaknesses": {"slash": 1, "blunt": 1, "pierce": 2}}, {"name": "Alas", "name_en": "Wings", "breakable": true, "cortable": false, "weaknesses": {"slash": 2, "blunt": 2, "pierce": 1}}, {"name": "Cola", "name_en": "Tail", "breakable": false, "cortable": true, "weaknesses": {"slash": 2, "blunt": 2, "pierce": 2}}]
   },
   {
-    "id": 7,
+    "id": 103,
     "name": "Alatreon (Dragon)",
     "type": "Elder Dragon",
     "threat": 9,
