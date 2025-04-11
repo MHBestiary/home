@@ -1022,6 +1022,7 @@
                 ...part,
                 name: currentLanguage === 'es' ? part.name : part.name_en
             }));
+            const debilidades = translations[currentLanguage].monsters.debilidades;
 
             const isSpoiler = monster.spoiler === true && !showSpoilers;
             const modalContent = isSpoiler ? `
@@ -1144,7 +1145,7 @@
                                             <span class="element-icon">
                                                 <img src="${weaknessImages[element] || 'https://cdn-icons-png.flaticon.com/128/1828/1828774.png'}" class="h-6 w-6" alt="${element} icon">
                                             </span>
-                                            <span class="capitalize">${element}</span>
+                                            <span class="capitalize">${debilidades[element] || element}</span>
                                         </div>
                                         <div class="flex gap-1">
                                             ${Array.from({length: 3}).map((_, i) => `

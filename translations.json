@@ -29,7 +29,7 @@
             "debilidades": {
                 "fuego": "Fuego",
                 "agua": "Agua",
-                "trueno": "Trueno",
+                "rayo": "Rayo",
                 "hielo": "Hielo",
                 "dragon": "Dragón",
                 "nitro": "Nitro",
@@ -199,7 +199,7 @@
             "debilidades": {
                 "fuego": "Fire",
                 "agua": "Water",
-                "trueno": "Thunder",
+                "Rayo": "Thunder",
                 "hielo": "Ice",
                 "dragon": "Dragon",
                 "nitro": "Nitro",
