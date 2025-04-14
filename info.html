@@ -21,37 +21,44 @@
                         onclick="window.location.href='https://mhbestiary.github.io/home/'"
                         class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
                         <img style="width:35px;height:35px;" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/home.png?raw=true" class="h-6 w-6" alt="Alternar Modo Oscuro">
-                    </button>                       
+                    </button>        
+                    <button 
+                        onclick="toggleLanguage()"
+                        class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
+                        <img id="languageIcon" style="width:35px;height:35px;" 
+                            src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/es.png?raw=true" 
+                            class="h-6 w-6" alt="Language">
+                    </button>               
                 </div>
                 <a href="https://mhbestiary.github.io/home/menu.html" 
                 class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/bbq.png?raw=true" 
                         class="w-8 h-8" alt="Menu">
-                    <span>MENU WILDS</span>
+                    <span data-translation-key="menu">MENU WILDS</span>
                 </a>
                 <a href="https://mhbestiary.github.io/home/galeria.html" 
                 class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/map.png?raw=true" 
                         class="w-8 h-8" alt="Menu">
-                    <span>GALERIA</span>
+                    <span data-translation-key="galeria">GALERIA</span>
                 </a>
                 <a href="https://mhbestiary.github.io/home/wheel.html" 
                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/unknown.png?raw=true" 
                          class="w-8 h-8" alt="Ruleta">
-                    <span>RULETA DE MONSTRUOS</span>
+                    <span data-translation-key="ruleta">RULETA DE MONSTRUOS</span>
                 </a>
                 <a href="https://mhbestiary.github.io/home/GeneraMonstruos.html" 
                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/book_blue.png?raw=true" 
                          class="w-8 h-8" alt="Ruleta">
-                    <span>GENERAR MONSTRUOS</span>
+                    <span data-translation-key="generar">GENERAR MONSTRUOS</span>
                 </a>
                 <a href="https://mhbestiary.github.io/home/info.html" 
                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/question.png?raw=true" 
                          class="w-8 h-8" alt="Ruleta">
-                    <span>PAGE INFO</span>
+                    <span data-translation-key="info">PAGE INFO</span>
                 </a>
             </div>
         </div>
@@ -83,7 +90,7 @@
                     </a>
                     <h3>Menú Wilds</h3>
                     <p>Sistema de comidas y buffs para preparar tus cacerías.</p>
-                    <p class="mhwilds">Solo para MH WILDS</p>
+                    <p class="mhwilds">MH WILDS</p>
                 </div>
                 <div class="feature-card">
                     <a href="https://mhbestiary.github.io/home/galeria.html">
@@ -98,7 +105,7 @@
                     </a>
                     <h3>Ruleta de Monstruos</h3>
                     <p>Selección aleatoria de monstruos y armas para tus cacerías.</p>
-                    <p class="mhwilds">Solo para MH WILDS</p>
+                    <p class="mhwilds">MH WILDS</p>
                 </div>
                 <div class="feature-card">
                     <a href="https://mhbestiary.github.io/home/GeneraMonstruos.html">
@@ -143,16 +150,9 @@
         </div>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div class="info-section">
+            <div class="info-section what-is-section">
                 <h2>¿Qué es esto?</h2>
                 <p>Esta aplicación web es un bestiario completo para Monster Hunter Wilds y otros juegos de la saga Monster Hunter. Permite a los cazadores:</p>
-                <ul>
-                    <li>Explorar información detallada de monstruos</li>
-                    <li>Ver debilidades elementales y estados</li>
-                    <li>Consultar materiales y tasas de drops</li>
-                    <li>Descubrir variantes y subespecies</li>
-                    <li>Acceder a galerías de imágenes</li>
-                </ul>
             </div>
 
             <div class="info-section">
@@ -173,6 +173,19 @@
                     <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/ticket_white.png?raw=true" alt="Email">
                     MHBESTIARY@GMAIL.COM
                 </a>
+            </div>
+        </div>
+        
+        <div class="info-section credits">
+            <h2>Creditos</h2>
+            <div class="contact-content">
+                <p style="width: 50%; margin: auto;">Gran parte de información y iconos han sido costumizados o creados de 0 para el contenido de esta pagina, basado o en referencias de diversas fuentes, también utilizandolas para ampliar el contenido:</p>
+                <a href="https://www.flaticon.es/iconos-gratis/bandera" title="bandera iconos">Bandera iconos creados por Freepik - Flaticon</a>
+                <a href="https://www.flaticon.es/iconos-gratis/espana" title="españa iconos">España iconos creados por IconsBox - Flaticon</a>
+                <a href="https://www.flaticon.es/iconos-gratis/cerca" title="cerca iconos">Cerca iconos creados por Freepik - Flaticon</a>
+                <a href="https://www.flaticon.es/iconos-gratis/media-luna" title="media-luna iconos">Media-luna iconos creados por raanpooo - Flaticon</a>
+                <a href="https://fanonmonsterhunter.fandom.com/wiki/Item_Icon_List" title="fandom icons">FANON MONSTER HUNTER WIKI ICONS</a>
+                <a href="https://monsterhunter.fandom.com/wiki/Monster_Hunter_Wiki" title="fandom icons">MONSTER HUNTER WIKI</a>
             </div>
         </div>
     </div>
@@ -291,6 +304,99 @@
                 sidebar.style.left = '0px';
             }
         }
+    </script>
+    <script>
+        let currentLanguage = localStorage.getItem('language') || 'es';
+        let translations = {};
+
+        async function loadTranslations() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/translations.json');
+                translations = await response.json();
+                applyTranslations();
+            } catch (error) {
+                console.error('Error loading translations:', error);
+            }
+        }
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'es' ? 'en' : 'es';
+            localStorage.setItem('language', currentLanguage);
+            
+            // Cambiar icono
+            const icon = document.getElementById('languageIcon');
+            icon.src = `https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/${currentLanguage}.png?raw=true`;
+            
+            applyTranslations();
+        }
+
+        function applyTranslations() {
+            if (!translations || !translations[currentLanguage]) return;
+
+            const t = translations[currentLanguage].info;
+
+            // Actualizar título principal
+            document.querySelector('h1').textContent = t.entrada;
+
+            // Actualizar títulos de sección
+            document.querySelectorAll('.info-section h2').forEach(heading => {
+                if (heading.closest('.stats-section')) {
+                    heading.textContent = t.estadisticas.title;
+                } 
+            });
+            
+
+            // Actualizar sección de características
+            document.querySelector('.info-section h2').textContent = t.caracteristicas.title;
+            
+            const features = document.querySelectorAll('.feature-card h3');
+            features.forEach((feature, index) => {
+                const key = Object.keys(t.caracteristicas)[index + 1];
+                if (t.caracteristicas[key]) {
+                    feature.textContent = t.caracteristicas[key].title;
+                    feature.nextElementSibling.textContent = t.caracteristicas[key].description;
+                }
+            });
+
+            // Actualizar estadísticas
+            document.querySelectorAll('.stat-label').forEach((label, index) => {
+                label.textContent = index === 0 ? 
+                    t.estadisticas.incluidos : 
+                    t.estadisticas.restantes;
+            });
+
+            // Actualizar sección "¿Qué es esto?"
+            const queEsSection = document.querySelector('.what-is-section');
+            if (queEsSection) {
+                queEsSection.querySelector('h2').textContent = t.sobre.title;
+                queEsSection.querySelector('p').textContent = t.sobre.description;
+            }
+
+            // Actualizar sección "Sobre el Proyecto"
+            const sobreProyectoSection = document.querySelectorAll('.info-section')[3];
+            if (sobreProyectoSection) {
+                sobreProyectoSection.querySelector('h2').textContent = t.proyecto.title;
+                sobreProyectoSection.querySelector('p').textContent = t.proyecto.description;
+                sobreProyectoSection.querySelector('.support-section p').textContent = t.proyecto.donacion;
+            }
+
+            // Actualizar sección de contacto
+            const contactSection = document.querySelector('.contact-section');
+            if (contactSection) {
+                contactSection.querySelector('h2').textContent = t.contacto.title;
+                contactSection.querySelector('p').textContent = t.contacto.description;
+            }
+
+            // Actualizar enlaces del sidebar
+            document.querySelectorAll('#sidebar .sidebar-content a span').forEach(span => {
+                const key = span.getAttribute('data-translation-key');
+                if (key && translations[currentLanguage].nav[key]) {
+                    span.textContent = translations[currentLanguage].nav[key];
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadTranslations);
     </script>
     <style>
         @font-face {
@@ -729,3 +835,4 @@
     </style>
 </body>
 </html>
+``` 

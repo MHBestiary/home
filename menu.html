@@ -184,20 +184,21 @@
         }
 
         function updateSlots() {
-            Object.entries(selectedIngredients).forEach(([tipo, ing]) => {
-                const slot = document.getElementById(`${tipo}-slot`);
-                if (!slot) return;
-                
-                if (ing) {
-                    const imagePath = `https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/food/f_${ing.icon.replace(/\d+$/, '')}${currentLanguage === 'en' ? '_en' : ''}.png?raw=true`;
-                    slot.innerHTML = `
-                        <img src="${imagePath}" 
-                             alt="${currentLanguage === 'en' ? ing.name_en : ing.name}" 
-                             onclick="deselectIngredient('${tipo}')">
-                    `;
-                } else {
-                    slot.innerHTML = `<span>${translations[currentLanguage].menu[tipo]}</span>`;
-                }
+    Object.entries(selectedIngredients).forEach(([tipo, ing]) => {
+        const slot = document.getElementById(`${tipo}-slot`);
+        if (!slot) return;
+        
+        if (ing) {
+            // Quitamos el sufijo _en para las imágenes de los slots
+            const imagePath = `https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/food/f_${ing.icon.replace(/\d+$/, '')}.png?raw=true`;
+            slot.innerHTML = `
+                <img src="${imagePath}" 
+                     alt="${currentLanguage === 'en' ? ing.name_en : ing.name}" 
+                     onclick="deselectIngredient('${tipo}')">
+            `;
+        } else {
+            slot.innerHTML = `<span>${translations[currentLanguage].menu[tipo]}</span>`;
+        }
             });
         }
 
@@ -326,16 +327,8 @@
             currentLanguage = currentLanguage === 'es' ? 'en' : 'es';
             localStorage.setItem('language', currentLanguage);
             
-            // Actualizar las traducciones base y elementos visuales
-            applyTranslations();
-            renderIngredients();
-            updateSlots();
-            updateEffects();
-            updateIngredientStates();
-            
-            // Actualizar el icono del botón de idioma
-            const langButton = document.getElementById('languageIcon');
-            langButton.src = `https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/${currentLanguage}.png?raw=true`;
+            // Recargar la página
+            window.location.reload();
         }
 
         function applyTranslations() {
