@@ -25,39 +25,39 @@
                     <button 
                         onclick="toggleLanguage()"
                         class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
-                        <img style="width:35px;height:35px;" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/translate.png?raw=true" class="h-6 w-6" alt="Translate">
-                    </button>   
+                        <img id="languageIcon" style="width:35px;height:35px;" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/es.png?raw=true" class="h-6 w-6" alt="Translate">
+                    </button>
                                         
                 </div>
                 <a href="https://mhbestiary.github.io/home/menu.html" 
-                class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                   class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/bbq.png?raw=true" 
                         class="w-8 h-8" alt="Menu">
-                    <span>MENU WILDS</span>
+                    <span data-translation-key="menu">MENU WILDS</span>
                 </a>
                 <a href="https://mhbestiary.github.io/home/galeria.html" 
-                class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                   class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/map.png?raw=true" 
-                        class="w-8 h-8" alt="Menu">
-                    <span>GALERIA</span>
+                        class="w-8 h-8" alt="Gallery">
+                    <span data-translation-key="gallery">GALERIA</span>
                 </a>
                 <a href="https://mhbestiary.github.io/home/wheel.html" 
                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/unknown.png?raw=true" 
-                         class="w-8 h-8" alt="Ruleta">
-                    <span>RULETA DE MONSTRUOS</span>
+                         class="w-8 h-8" alt="Wheel">
+                    <span data-translation-key="wheel">RULETA DE MONSTRUOS</span>
                 </a>
                 <a href="https://mhbestiary.github.io/home/GeneraMonstruos.html" 
                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/book_blue.png?raw=true" 
-                         class="w-8 h-8" alt="Ruleta">
-                    <span>GENERAR MONSTRUOS</span>
+                         class="w-8 h-8" alt="Generator">
+                    <span data-translation-key="generator">GENERAR MONSTRUOS</span>
                 </a>
                 <a href="https://mhbestiary.github.io/home/info.html" 
                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/question.png?raw=true" 
-                         class="w-8 h-8" alt="Ruleta">
-                    <span>PAGE INFO</span>
+                         class="w-8 h-8" alt="Info">
+                    <span data-translation-key="info">PAGE INFO</span>
                 </a>
             </div>
         </div>
@@ -137,7 +137,7 @@
                 
                 grid.innerHTML = ingredients.map(ing => `
                     <div class="ingredient-item" onclick="selectIngredient('${tipo}', ${menuData.indexOf(ing)})">
-                        <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/food/m_${ing.icon}.png?raw=true" alt="${ing.name}">
+                        <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/food/m_${ing.icon}${currentLanguage === 'en' ? '_en' : ''}.png?raw=true" alt="${ing.name}">
                     </div>
                 `).join('');
             });
@@ -154,6 +154,9 @@
             // Si el ingrediente ya está seleccionado, lo deseleccionamos
             if (selectedIngredients[tipo] && selectedIngredients[tipo] === ingredient) {
                 deselectIngredient(tipo);
+                updateEffects();
+                updateIngredientStates();
+                updateSlots();
             } else {
                 selectedIngredients[tipo] = ingredient;
                 updateSlots();
@@ -183,12 +186,17 @@
         function updateSlots() {
             Object.entries(selectedIngredients).forEach(([tipo, ing]) => {
                 const slot = document.getElementById(`${tipo}-slot`);
+                if (!slot) return;
+                
                 if (ing) {
+                    const imagePath = `https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/food/f_${ing.icon.replace(/\d+$/, '')}${currentLanguage === 'en' ? '_en' : ''}.png?raw=true`;
                     slot.innerHTML = `
-                        <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/food/f_${ing.icon.replace(/\d+$/, '')}.png?raw=true" alt="${ing.name}" onclick="deselectIngredient('${tipo}')">
+                        <img src="${imagePath}" 
+                             alt="${currentLanguage === 'en' ? ing.name_en : ing.name}" 
+                             onclick="deselectIngredient('${tipo}')">
                     `;
                 } else {
-                    slot.innerHTML = `<span>${tipo.charAt(0).toUpperCase() + tipo.slice(1)}</span>`;
+                    slot.innerHTML = `<span>${translations[currentLanguage].menu[tipo]}</span>`;
                 }
             });
         }
@@ -196,36 +204,43 @@
         function updateEffects() {
             const effectsList = document.getElementById('effects-list');
             const effectsTitle = document.getElementById('effects-title');
-            let effects = [];
             
+            if (!effectsList || !effectsTitle || !translations[currentLanguage]) return;
+            
+            let effects = [];
             const hasIngredients = Object.values(selectedIngredients).some(ing => ing !== null);
             
+            effectsTitle.textContent = translations[currentLanguage].menu.efectos;
             effectsTitle.style.display = hasIngredients ? 'block' : 'none';
             
-            if (selectedIngredients.racion) {
-                effects.push(translations[currentLanguage].menu.salud);
-                effects.push(translations[currentLanguage].menu.resistencia);
-            }
-            
-            if (selectedIngredients.adicional) {
-                effects.push(translations[currentLanguage].menu.duracion);
-            } else if (selectedIngredients.racion) {
-                effects.push(translations[currentLanguage].menu.duracion_extra);
-            }
-            
-            if (selectedIngredients.toque) {
-                effects.push(translations[currentLanguage].menu.defensa_elemental);
-            }
-            
-            if (selectedIngredients.racion) effects.push('<br>');
-            
-            Object.values(selectedIngredients).forEach(ing => {
-                if (ing) {
-                    effects.push(`${currentLanguage === 'es' ? ing.effect.toUpperCase() : ing.effect_en.toUpperCase()}`);
-                    effects.push(`${currentLanguage === 'es' ? ing.description : ing.description_en}`);
-                    effects.push('<br>');
+            if (hasIngredients) {
+                if (selectedIngredients.racion) {
+                    effects.push(translations[currentLanguage].menu.salud);
+                    effects.push(translations[currentLanguage].menu.resistencia);
                 }
-            });
+                
+                if (selectedIngredients.adicional) {
+                    effects.push(translations[currentLanguage].menu.duracion_extra);
+                } else if (selectedIngredients.racion) {
+                    effects.push(translations[currentLanguage].menu.duracion);
+                }
+                
+                if (selectedIngredients.toque) {
+                    effects.push(translations[currentLanguage].menu.defensa_elemental);
+                }
+                
+                if (selectedIngredients.racion) effects.push('<br>');
+                
+                Object.values(selectedIngredients).forEach(ing => {
+                    if (ing) {
+                        const effectText = currentLanguage === 'en' ? ing.effect_en : ing.effect;
+                        const descriptionText = currentLanguage === 'en' ? ing.description_en : ing.description;
+                        effects.push(`${effectText.toUpperCase()}`);
+                        effects.push(descriptionText);
+                        effects.push('<br>');
+                    }
+                });
+            }
             
             effectsList.innerHTML = effects.map(effect => `<div>${effect}</div>`).join('');
         }
@@ -300,15 +315,27 @@
                 const response = await fetch('https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/translations.json');
                 translations = await response.json();
                 applyTranslations();
+                updateEffects(); // Añadir actualización de efectos al cargar las traducciones
             } catch (error) {
                 console.error('Error loading translations:', error);
             }
         }
 
         function toggleLanguage() {
+            // Cambiar idioma
             currentLanguage = currentLanguage === 'es' ? 'en' : 'es';
             localStorage.setItem('language', currentLanguage);
+            
+            // Actualizar las traducciones base y elementos visuales
             applyTranslations();
+            renderIngredients();
+            updateSlots();
+            updateEffects();
+            updateIngredientStates();
+            
+            // Actualizar el icono del botón de idioma
+            const langButton = document.getElementById('languageIcon');
+            langButton.src = `https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/${currentLanguage}.png?raw=true`;
         }
 
         function applyTranslations() {
@@ -344,17 +371,20 @@
             const effectsTitle = document.getElementById('effects-title');
             if (effectsTitle) {
                 effectsTitle.textContent = translations[currentLanguage].menu.efectos;
+                // Actualizar visibilidad del título de efectos
+                const hasIngredients = Object.values(selectedIngredients).some(ing => ing !== null);
+                effectsTitle.style.display = hasIngredients ? 'block' : 'none';
             }
 
-            // Actualizar efectos si hay algún ingrediente seleccionado
-            if (typeof updateEffects === 'function') {
-                updateEffects();
-            }
+            // Forzar la actualización de los efectos
+            updateEffects();
         }
 
         // Cargar traducciones cuando se carga la página
         document.addEventListener('DOMContentLoaded', async () => {
+            await loadMenuData();
             await loadTranslations();
+            updateEffects(); // Asegurarnos de que los efectos se actualizan después de cargar todo
         });
     </script>
     <style>
