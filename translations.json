@@ -192,7 +192,7 @@
             "perforante": "Pierce",
             "probabilidad": "rate",
             "tipo": "Monster Type",
-            "peligro": "Danger Level",
+            "peligro": "Threat Level",
             "juegos": "Game appearance",
             "habitat": "Habitat Type",
             "todos": "All",
@@ -274,7 +274,7 @@
                 "id": "ID:",
                 "nombre": "Name:",
                 "tipo": "Type:",
-                "peligro": "Danger:",
+                "peligro": "Threat:",
                 "juegos": "Games:",
                 "habitat": "Habitat:",
                 "debilidades": "Weaknesses:",
@@ -304,7 +304,15 @@
                 },
                 "menu": {
                     "title": "Wilds Menu",
-                    "description": "Food and buffs system to prepare your hunts."
+                    "description": "Food and buffs system to prepare your hunts.",
+                    "defensa_elemental": "Elemental Defense +5",
+                    "defensa": "Defense +5",
+                    "ataque": "Attack +5",
+                    "salud": "Health +50",
+                    "resistencia": "Stamina +150",
+                    "duracion": "Duration +30:00",
+                    "duracion_extra": "Duration +50:00"
+                    
                 },
                 "galeria": {
                     "title": "Gallery",

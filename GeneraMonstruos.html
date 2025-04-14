@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
 	<link rel="icon" type="image/png" href="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/book_blue.png?raw=true">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>GENERADOR</title>
+    <title>GENERATOR</title>
     <style>
         @font-face {
             font-family: 'Albertus MT Std Regular';
@@ -656,7 +656,7 @@
             
             <div class="input-group">
                 <label>Imagen Principal:</label>
-                <input type="text" id="monsterImage" placeholder="URL de la imagen">
+                <input type="text" id="monsterImage" placeholder="URL">
             </div>
             
             <div class="input-group full-width">
@@ -726,7 +726,7 @@
                 <div class="custom-select-container">
                     <label>${currentLanguage === 'es' ? 'Icono:' : 'Icon:'}</label>
                     <div class="custom-select" onclick="toggleOptions(this)">
-                        <span class="selected-value">${currentLanguage === 'es' ? 'Selecciona un icono' : 'Select an icon'}</span>
+                        <span class="selected-value">${currentLanguage === 'es' ? 'N/D' : 'N/D'}</span>
                         <input type="hidden" class="selected-image-url" value="">
                         <span class="arrow"></span>
                     </div>
@@ -876,7 +876,7 @@
                     <div style="display: flex; align-items: center;">
                         <label style="color:red;">*${currentLanguage === 'es' ? 'SELECCIONA SOLO UNA DE LAS DOS' : 'SELECT ONLY ONE OF THE TWO'}*</label>
                     </div>
-                    <div style="display: flex; align-items: center;">
+                    <div class="damage-type-item" style="display: flex; align-items: center;">
                         <label>${t.monsters.cortable}:</label>
                         <input type="checkbox" class="part-cortable">
                         <label>${t.monsters.rompible}:</label>
@@ -1073,6 +1073,9 @@
             
             // Actualizar botones
             updateButtons(t);
+
+            // Actualizar sidebar
+            updateSidebar(t);
         }
 
         function updateLabels(t) {
@@ -1089,7 +1092,21 @@
                 'Variantes:': t.generador.secciones.variantes,
                 'Galería:': t.generador.secciones.galeria,
                 'Materiales:': t.generador.secciones.materiales,
-                'Partes:': t.generador.secciones.partes
+                'Partes:': t.generador.secciones.partes,
+                
+                'ID:': t.generador.secciones.id,
+                'Name:': t.generador.secciones.nombre,
+                'Type:': t.generador.secciones.tipo,
+                'Threat:': t.generador.secciones.peligro,
+                'Games:': t.generador.secciones.juegos,
+                'Habitat:': t.generador.secciones.habitat,
+                'Weaknesses:': t.generador.secciones.debilidades,
+                'Description:': t.generador.secciones.descripcion,
+                'Main Image:': t.generador.secciones.imagen_principal,
+                'Variants:': t.generador.secciones.variantes,
+                'Gallery:': t.generador.secciones.galeria,
+                'Materials:': t.generador.secciones.materiales,
+                'Parts:': t.generador.secciones.partes
             };
 
             document.querySelectorAll('label').forEach(label => {
@@ -1109,19 +1126,60 @@
             ).join('');
         }
 
+        function updateSidebar(t) {
+            // Actualizar textos del sidebar
+            const sidebarLinks = {
+                'MENU WILDS': t.nav.menu,
+                'GALERIA': t.nav.gallery,
+                'RULETA DE MONSTRUOS': t.nav.wheel,
+                'GENERAR MONSTRUOS': t.nav.generator,
+                'INFO GENERAL': t.nav.info,                
+                'WILDS MENU': t.nav.menu,
+                'GALLERY': t.nav.gallery,
+                'MONSTER ROULETTE': t.nav.wheel,
+                'GENERATE MONSTERS': t.nav.generator,
+                'PAGE INFO': t.nav.info
+            };
+
+            document.querySelectorAll('#sidebar a span').forEach(span => {
+                const text = span.textContent.trim();
+                if (sidebarLinks[text]) {
+                    span.textContent = sidebarLinks[text];
+                }
+            });
+        }
+
         function updateHabitatCheckboxes(t) {
+            const habitatTranslations = {
+                'normal': t.monsters.habitats.normal,
+                'water': t.monsters.habitats.agua,
+                'snow': t.monsters.habitats.nieve,
+                'desert': t.monsters.habitats.desierto,
+                'volcano': t.monsters.habitats.volcan,
+                'unknown': t.monsters.habitats.desconocido
+            };
+
             document.querySelectorAll('input[name="locale"]').forEach(input => {
                 const label = input.parentElement;
                 const value = input.value.toLowerCase();
                 
-                // Guardamos el checkbox
-                const checkbox = label.querySelector('input');
-                
-                // Actualizamos el texto del label
-                if (t.monsters.habitats[value]) {
-                    label.textContent = t.monsters.habitats[value];
-                    // Volvemos a insertar el checkbox
-                    label.insertBefore(checkbox, label.firstChild);
+                if (habitatTranslations[value]) {
+                    // Mantener el estado del checkbox
+                    const isChecked = input.checked;
+                    
+                    // Crear el nuevo contenido del label
+                    label.innerHTML = '';
+                    
+                    // Recrear el input con sus propiedades originales
+                    const newInput = document.createElement('input');
+                    newInput.type = 'checkbox';
+                    newInput.name = 'locale';
+                    newInput.value = input.value;
+                    newInput.checked = isChecked;
+                    
+                    // Añadir el input y el texto traducido
+                    label.appendChild(newInput);
+                    label.appendChild(document.createTextNode(habitatTranslations[value]));
                 }
             });
         }
@@ -1166,7 +1224,7 @@
                 if (deleteBtn) deleteBtn.textContent = currentLanguage === 'es' ? '-' : '-';
                 if (iconLabel) iconLabel.textContent = currentLanguage === 'es' ? 'Icono:' : 'Icon:';
                 if (selectedValue && selectedValue.textContent.includes('Selecciona')) {
-                    selectedValue.textContent = currentLanguage === 'es' ? 'Selecciona un icono' : 'Select an icon';
+                    selectedValue.textContent = currentLanguage === 'es' ? 'N/D' : 'N/D';
                 }
 
                 // Actualizar opciones del selector de iconos
@@ -1214,11 +1272,16 @@
                 // Actualizar labels de tipos de daño
                 const labels = item.querySelectorAll('.damage-type-item label');
                 labels.forEach(label => {
-                    if (label.textContent.includes('Cortar') || label.textContent.includes('Cut')) {
+                    const text = label.textContent.replace(':', '');
+                    if (text === 'Cortable' || text === 'Severable') {
+                        label.textContent = t.monsters.cortable + ':';
+                    } else if (text === 'Rompible' || text === 'Breakable') {
+                        label.textContent = t.monsters.rompible + ':';
+                    } else if (text.includes('Corte') || text.includes('Cut')) {
                         label.textContent = t.monsters.corte + ':';
-                    } else if (label.textContent.includes('Impacto') || label.textContent.includes('Stun')) {
+                    } else if (text.includes('Impacto') || text.includes('Stun')) {
                         label.textContent = t.monsters.impacto + ':';
-                    } else if (label.textContent.includes('Perforar') || label.textContent.includes('Pierce')) {
+                    } else if (text.includes('Perforar') || text.includes('Pierce')) {
                         label.textContent = t.monsters.perforante + ':';
                     }
                 });
