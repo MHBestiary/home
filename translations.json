@@ -84,7 +84,14 @@
             "toque_f": "TOQUE FINAL",
             "adicional": "Adicional",
             "ingredientes": "INGREDIENTES",
-            "efectos": "EFECTOS"
+            "efectos": "EFECTOS",
+            "defensa_elemental": "Defensa Elemental +5",
+            "defensa": "Defensa +5",
+            "ataque": "Ataque +5",
+            "salud": "Salud +50",
+            "resistencia": "Stamina +150",
+            "duracion": "Duración +30:00",
+            "duracion_extra": "Duración +50:00"    
 
         },
         "galeria":{
@@ -254,7 +261,14 @@
             "toque_f": "FINAL TOUCH",
             "adicional": "Additional",
             "ingredientes": "INGREDIENTS",
-            "efectos": "EFFECTS"
+            "efectos": "EFFECTS",
+            "defensa_elemental": "Elemental Defense +5",
+            "defensa": "Defense +5",
+            "ataque": "Attack +5",
+            "salud": "Health +50",
+            "resistencia": "Stamina +150",
+            "duracion": "Duration +30:00",
+            "duracion_extra": "Duration +50:00"
 
         },
         "galeria":{
@@ -304,15 +318,7 @@
                 },
                 "menu": {
                     "title": "Wilds Menu",
-                    "description": "Food and buffs system to prepare your hunts.",
-                    "defensa_elemental": "Elemental Defense +5",
-                    "defensa": "Defense +5",
-                    "ataque": "Attack +5",
-                    "salud": "Health +50",
-                    "resistencia": "Stamina +150",
-                    "duracion": "Duration +30:00",
-                    "duracion_extra": "Duration +50:00"
-                    
+                    "description": "Food and buffs system to prepare your hunts."               
                 },
                 "galeria": {
                     "title": "Gallery",
