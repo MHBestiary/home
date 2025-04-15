@@ -40,19 +40,19 @@
                 class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/map.png?raw=true" 
                         class="w-8 h-8" alt="Menu">
-                    <span data-translation-key="galeria">GALERIA</span>
+                    <span data-translation-key="gallery">GALERIA</span>
                 </a>
                 <a href="https://mhbestiary.github.io/home/wheel.html" 
                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/unknown.png?raw=true" 
                          class="w-8 h-8" alt="Ruleta">
-                    <span data-translation-key="ruleta">RULETA DE MONSTRUOS</span>
+                    <span data-translation-key="wheel">RULETA DE MONSTRUOS</span>
                 </a>
                 <a href="https://mhbestiary.github.io/home/GeneraMonstruos.html" 
                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/book_blue.png?raw=true" 
                          class="w-8 h-8" alt="Ruleta">
-                    <span data-translation-key="generar">GENERAR MONSTRUOS</span>
+                    <span data-translation-key="generator">GENERAR MONSTRUOS</span>
                 </a>
                 <a href="https://mhbestiary.github.io/home/info.html" 
                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
@@ -385,6 +385,13 @@
             if (contactSection) {
                 contactSection.querySelector('h2').textContent = t.contacto.title;
                 contactSection.querySelector('p').textContent = t.contacto.description;
+            }
+
+            // Actualizar sección de créditos
+            const creditosSection = document.querySelector('.credits');
+            if (creditosSection) {
+                creditosSection.querySelector('h2').textContent = t.creditos.title;
+                creditosSection.querySelector('.contact-content p').textContent = t.creditos.description;
             }
 
             // Actualizar enlaces del sidebar

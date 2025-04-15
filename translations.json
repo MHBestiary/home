@@ -176,6 +176,10 @@
             "contacto": {
                 "title": "Contacto",
                 "description": "¡¡Contacta para plantear cambios, funciones, mejoras o incluir datos nuevos!!"
+            },
+            "creditos": {
+                "title": "Creditos",
+                "description": "Gran parte de información y iconos han sido costumizados o creados de 0 para el contenido de esta pagina, basado o en referencias de diversas fuentes, también utilizandolas para ampliar el contenido:"
             }
         }
     },
@@ -355,7 +359,11 @@
             },
             "contacto": {
                 "title": "Contact",
-                "description": "!!Contact to propose changes, functions, improvements or include new data!!"
+                "description": "Contact to propose changes, functions, improvements or include new data!!"
+            },
+            "creditos": {
+                "title": "Credits",
+                "description": "Much of the information and icons have been customized or created from scratch for the content of this page, based on or referencing various sources, also using them to expand the content:"
             }
         }
     }
