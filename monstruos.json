@@ -952,6 +952,7 @@
     "locale": ["Normal", "Water"],
     "variants": [],
     "game": ["MH GENERATIONS", "MH RISE", "MH WILDS"],
+    "spoiler": true,
     "image": "https://github.com/MHBestiary/home/blob/main/MHImages/Mizutsune/Icon.png?raw=true",
     "gallery": [],
     "description": "Los Mizutsune, leviatanes evolucionados con cuerpos flexibles y alisados, segregan una peculiar espuma que cubre a sus enemigos con una especie de burbujas inmovilizadoras. Una vez que la víctima está incapacitada, se acercan a ella danzando.",
