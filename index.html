@@ -1105,7 +1105,7 @@
                         <div class="md:w-1/2">
                             <div class="space-y-2">
                                 ${translatedParts && translatedParts.length > 0 ? `
-                                    <h3 class="font-semibold">Partes del Monstruo</h3>
+                                    <h3 class="font-semibold">${t.partes}</h3>
                                         <div class="grid gap-1 columnitas">
                                             ${translatedParts.map(part => `
                                                 <div class="debilidadestilo p-2 rounded-lg bg-gray-50">
@@ -1144,7 +1144,7 @@
                                         </div>
                                 ` : ''}
                             </div>       
-                            <h3 class="font-semibold">Debilidades</h3>
+                            <h3 class="font-semibold">${t.debilidad}</h3>
                             <div class="grid gap-2 columnitas">
                                 ${Object.entries(monster.weaknesses).map(([element, value]) => `
                                     <div class="debilidadestilo flex justify-between items-center p-2 rounded-lg bg-gray-50">
@@ -1163,7 +1163,7 @@
                                 `).join('')}
                             </div>                     
                             ${translatedMaterials && translatedMaterials.length > 0 ? `
-                                <h3 class="font-semibold">Materiales</h3>
+                                <h3 class="font-semibold">${translations[currentLanguage].monsters.materiales}</h3>
                                 ${createMaterialsList(translatedMaterials)}
                             ` : ''}
                         </div>
@@ -1227,7 +1227,7 @@
             const materialsHtml = translatedMaterials && translatedMaterials.length > 0 ? `
                 <div class="collapsible-section">
                     <div class="collapsible-header" onclick="event.stopPropagation(); toggleSection(this)">
-                        <h3 class="font-semibold">Materiales</h3>
+                        <h3 class="font-semibold">${translations[currentLanguage].monsters.materiales}</h3>
                         <span class="collapsible-icon">+</span>
                     </div>
                     <div class="collapsible-content">
@@ -1246,29 +1246,29 @@
                                 <span class="font-medium">${part.name}</span>
                                 ${part.breakable ? `
                                     <span class="text-xs px-2 py-1 bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-200 rounded-full">
-                                        Rompible
+                                        ${translations[currentLanguage].monsters.rompible}
                                     </span>
                                 ` : ''}
                                 ${part.cortable ? `
                                     <span class="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-200 rounded-full">
-                                        Cortable
+                                        ${translations[currentLanguage].monsters.cortable}
                                     </span>
                                 ` : ''}
                             </div>
                             <div class="space-y-2">
                                 <div class="flex justify-between items-center">
                                     <span><img style="width:20px" alt="Cortante" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/slash.png?raw=true"></img></span>
-                                    <span class="text-xs">Cortar</span>                                                            
+                                    <span class="text-xs">${translations[currentLanguage].monsters.corte}</span>                                                            
                                     ${createWeaknessStars(part.weaknesses.slash)}
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span><img style="width:20px" alt="Stun" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/blunt.png?raw=true"></img></span>
-                                    <span class="text-xs">Impacto</span>                                                            
+                                    <span class="text-xs">${translations[currentLanguage].monsters.impacto}</span>                                                            
                                     ${createWeaknessStars(part.weaknesses.blunt)}
                                 </div>
                                 <div class="flex justify-between items-center">
                                     <span><img style="width:20px" alt="Perforante" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/m_pierce.png?raw=true"></img></span>
-                                    <span class="text-xs">Perforar</span>                                                            
+                                    <span class="text-xs">${translations[currentLanguage].monsters.perforante}</span>                                                            
                                     ${createWeaknessStars(part.weaknesses.pierce)}
                                 </div>
                             </div>
@@ -1340,7 +1340,7 @@
                                     ${isSpoiler ? '' : `
                                     <div class="collapsible-section">
                                         <div class="collapsible-header" onclick="event.stopPropagation(); toggleSection(this)">
-                                            <h3 class="font-semibold">Partes del Monstruo</h3>
+                                            <h3 class="font-semibold">${translations[currentLanguage].monsters.partes}</h3>
                                             <span class="collapsible-icon">+</span>
                                         </div>
                                         <div class="collapsible-content">
@@ -1355,7 +1355,7 @@
                                     ${isSpoiler ? '' : `
                                     <div class="collapsible-section">
                                         <div class="collapsible-header" onclick="event.stopPropagation(); toggleSection(this)">
-                                            <h3 class="font-semibold">Variantes</h3>
+                                            <h3 class="font-semibold">${translations[currentLanguage].monsters.variantes}</h3>
                                             <span class="collapsible-icon">+</span>
                                         </div>
                                         <div class="collapsible-content">
@@ -1377,7 +1377,7 @@
                                     ${isSpoiler ? '' : `
                                     <div class="collapsible-section">
                                         <div class="collapsible-header" onclick="event.stopPropagation(); toggleSection(this)">
-                                            <h3 class="font-semibold">Galería</h3>
+                                            <h3 class="font-semibold">${translations[currentLanguage].monsters.galeria}</h3>
                                             <span class="collapsible-icon">+</span>
                                         </div>
                                         <div class="collapsible-content">
