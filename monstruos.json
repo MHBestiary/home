@@ -947,7 +947,7 @@
   {
     "id": 104,
     "name": "Mizutsune",
-    "type": "leviathan",
+    "type": "Leviathan",
     "threat": 6,
     "locale": ["Normal", "Water"],
     "variants": [],
