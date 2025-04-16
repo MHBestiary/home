@@ -143,13 +143,13 @@
         }
         .material-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr 2fr;
+            grid-template-columns: 2fr 2fr;
             gap: 0.5rem;
             align-items: center;
         }
 		.parts-grid {
             display: grid;
-            grid-template-columns: 0.1fr 3fr 1fr;
+            grid-template-columns: 2fr 2fr;
             gap: 0.5rem;
             align-items: center;
         }
@@ -276,7 +276,7 @@
             }
 
             .parts-grid {
-                grid-template-columns: 250px;
+                grid-template-columns: 400px;
             }
 
             input, select, textarea {
@@ -651,7 +651,12 @@
             
             <div class="input-group">
                 <label>Descripción:</label>
-                <textarea id="monsterDescription"></textarea>
+                <textarea id="monsterDescription_es" placeholder="Descripcion en Español"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>Descripción:</label>
+                <textarea id="monsterDescription_en" placeholder="English Description"></textarea>
             </div>
             
             <div class="input-group">
@@ -719,14 +724,14 @@
             const materialDiv = document.createElement('div');
             materialDiv.className = 'item-container material-grid material-item';
             materialDiv.innerHTML = `
-                <input type="text" placeholder="${currentLanguage === 'es' ? 'Nombre' : 'Name'}" class="material-name">
+                <input type="text" placeholder="${currentLanguage === 'es' ? 'Nombre (ES)' : 'Name (ES)'}" class="material-name">
+                <input type="text" placeholder="${currentLanguage === 'es' ? 'Nombre (EN)' : 'Name (EN)'}" class="material-name">
                 <input type="number" placeholder="${currentLanguage === 'es' ? 'Rareza' : 'Rarity'} (1-7)" class="material-rarity" min="1" max="7">
                 <input type="number" placeholder="${currentLanguage === 'es' ? 'Drop (Sin %)' : 'Drop (No %)'}" class="material-droprate" min="0" max="100">
                 <input type="text" placeholder="${currentLanguage === 'es' ? 'Parte de monstruo' : 'Monster Part'}" class="material-source">
                 <div class="custom-select-container">
-                    <label>${currentLanguage === 'es' ? 'Icono:' : 'Icon:'}</label>
                     <div class="custom-select" onclick="toggleOptions(this)">
-                        <span class="selected-value">${currentLanguage === 'es' ? 'N/D' : 'N/D'}</span>
+                        <span class="selected-value">${currentLanguage === 'es' ? 'ICONO N/D' : 'N/D ICON'}</span>
                         <input type="hidden" class="selected-image-url" value="">
                         <span class="arrow"></span>
                     </div>
@@ -872,7 +877,8 @@
             partDiv.className = 'item-container part-item';
             partDiv.innerHTML = `
                 <div class="parts-grid">
-                    <input type="text" placeholder="${t.monsters.partes}" class="part-name">
+                    <input type="text" placeholder="${t.monsters.partes} (ES)" class="part-name">
+                    <input type="text" placeholder="${t.monsters.partes} (EN)" class="part-name">
                     <div style="display: flex; align-items: center;">
                         <label style="color:red;">*${currentLanguage === 'es' ? 'SELECCIONA SOLO UNA DE LAS DOS' : 'SELECT ONLY ONE OF THE TWO'}*</label>
                     </div>
