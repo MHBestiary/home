@@ -945,6 +945,29 @@
     "parts": [{"name": "Cabeza", "name_en": "Head", "breakable": true, "cortable": false, "weaknesses": {"slash": 2, "blunt": 2, "pierce": 2}}, {"name": "Alas", "name_en": "Wings", "breakable": true, "cortable": false, "weaknesses": {"slash": 2, "blunt": 2, "pierce": 2}}, {"name": "Cola", "name_en": "Tail", "breakable": false, "cortable": true, "weaknesses": {"slash": 2, "blunt": 2, "pierce": 2}}]
   },
   {
+    "id": 104,
+    "name": "Mizutsune",
+    "type": "leviathan",
+    "threat": 6,
+    "locale": ["Normal", "Water"],
+    "variants": [],
+    "game": ["MH GENERATIONS", "MH RISE", "MH WILDS"],
+    "image": "https://github.com/MHBestiary/home/blob/main/MHImages/Mizutsune/Icon.png?raw=true",
+    "gallery": [],
+    "description": "Los Mizutsune, leviatanes evolucionados con cuerpos flexibles y alisados, segregan una peculiar espuma que cubre a sus enemigos con una especie de burbujas inmovilizadoras. Una vez que la víctima está incapacitada, se acercan a ella danzando.",
+    "description_en": "The Mizutsune, leviathans evolved with flexible and smoothed bodies, secrete a peculiar foam that covers their enemies with a kind of immobilizing bubbles. Once the victim is incapacitated, they approach it dancing.",
+    "weaknesses": {"fuego":1,"agua":0,"rayo":3,"hielo":1,"dragon":3,"nitro":2,"veneno":2,"paralisis":2,"sueño":2,"stun":2},
+    "materials": [
+        {"name":"Orbe de Mizutsune","name_en":"Mizutsune Orbe" ,"rarity":6,"dropRate":5,"source":"Reward, Body Carv","icon":"https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/particons/m_gem.png?raw=true"},
+        {"name":"Certificado","name_en": "Certificate", "rarity":6,"dropRate":8,"source":"Reward","icon":"https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/ticket_white.png?raw=true"}
+    ],
+    "parts": [
+        {"name":"Cabeza","name_en":"Head", "breakable":true,"cortable":false,"weaknesses":{"slash":3,"blunt":3,"pierce":2}},
+        {"name":"Cola","name_en":"Tail", "breakable":false,"cortable":true,"weaknesses":{"slash":2,"blunt":1,"pierce":2}},
+        {"name":"Aletas Traseras","name_en":"Rear Fins", "breakable":true,"cortable":false,"weaknesses":{"slash":2,"blunt":2,"pierce":2}}
+    ]
+  },
+  {
     "id": 43,
     "name": "Namielle",
     "type": "Elder Dragon",
@@ -1655,9 +1678,11 @@
     "gallery": [],
     "description": "Zoh Shia es un monstruo guardián y el jefe final de Monster Hunter Wilds.",
     "description_en": "Zoh Shia is a guardian monster and the final boss of Monster Hunter Wilds.",
-    "weaknesses": {"fuego":1,"agua":1,"rayo":1,"hielo":1,"dragon":3,"nitro":0,"veneno":0,"paralisis":0,"sueño":0,"stun":0},
-    "materials": [{"name": "Piel de Guardian", "name_en": "Guardin Skin", "rarity":5,"dropRate":15,"source":"Reward, Carv","icon":"https://github.com/MHBestiary/home/blob/main/MHImages/0_Icons/particons/m_skin.png?raw=true"},{"name":"Escama de Guardian","name_en": "Guardian Scale", "rarity":5,"dropRate":15,"source":"Reward, Carv","icon":"https://github.com/MHBestiary/home/blob/main/MHImages/0_Icons/particons/m_scale.png?raw=true?raw=true"}],
-    "parts": [{"name":"Cabeza", "name_en": "Head","breakable":true,"cortable":false,"weaknesses":{"slash":3,"blunt":3,"pierce":3}},{"name":"Alas", "name_en": "Wings","breakable":true,"cortable":false,"weaknesses":{"slash":3,"blunt":3,"pierce":2}}]
+    "weaknesses": {"fuego":1,"agua":1,"rayo":1,"hielo":1,"dragon":3,"nitro":2,"veneno":2,"paralisis":2,"sueño":2,"stun":1},
+    "materials": [{"name": "Orbe Brilloblanco Falso", "name_en": "Faux Whitegleam Orb", "rarity":6,"dropRate":5,"source":"Carv, Reward","icon":"https://github.com/MHBestiary/home/blob/main/MHImages/0_Icons/particons/m_gem.png?raw=true"},{"name":"Certificado","name_en": "Certificate", "rarity":6,"dropRate":8,"source":"Reward","icon":"https://github.com/MHBestiary/home/blob/main/MHImages/0_Icons/particons/m_ticket_white.png?raw=true"}],
+    "parts": [{"name":"Cabeza", "name_en": "Head","breakable":true,"cortable":false,"weaknesses":{"slash":3,"blunt":3,"pierce":3}},{"name":"Alas", "name_en": "Wings","breakable":true,"cortable":false,"weaknesses":{"slash":3,"blunt":3,"pierce":2}},
+    {"name":"Cola", "name_en": "Tail","breakable":false,"cortable":true,"weaknesses":{"slash":2,"blunt":2,"pierce":1}},
+    {"name":"Torso", "name_en": "Body","breakable":true,"cortable":false,"weaknesses":{"slash":2,"blunt":2,"pierce":3}}]
   },
   {
     "id": 75,
