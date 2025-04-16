@@ -959,7 +959,7 @@
     "description_en": "The Mizutsune, leviathans evolved with flexible and smoothed bodies, secrete a peculiar foam that covers their enemies with a kind of immobilizing bubbles. Once the victim is incapacitated, they approach it dancing.",
     "weaknesses": {"fuego":1,"agua":0,"rayo":3,"hielo":1,"dragon":3,"nitro":2,"veneno":2,"paralisis":2,"sueño":2,"stun":2},
     "materials": [
-        {"name":"Orbe de Mizutsune","name_en":"Mizutsune Orbe" ,"rarity":6,"dropRate":5,"source":"Reward, Body Carv","icon":"https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/particons/m_gem.png?raw=true"},
+        {"name":"Orbe de Mizutsune","name_en":"Mizutsune Orb" ,"rarity":6,"dropRate":5,"source":"Reward, Body Carv","icon":"https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/particons/m_gem.png?raw=true"},
         {"name":"Certificado","name_en": "Certificate", "rarity":6,"dropRate":8,"source":"Reward","icon":"https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/ticket_white.png?raw=true"}
     ],
     "parts": [
