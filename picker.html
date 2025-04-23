@@ -160,12 +160,31 @@
         function applyTranslations() {
             if (!translations || !translations[currentLanguage]) return;
             
+            // Traducciones para el sidebar
             document.querySelectorAll('#sidebar .sidebar-content a span').forEach(span => {
                 const key = span.getAttribute('data-translation-key');
                 if (key && translations[currentLanguage].nav[key]) {
                     span.textContent = translations[currentLanguage].nav[key];
                 }
             });
+
+            // Traducciones para el picker
+            const t = translations[currentLanguage].picker;
+            
+            // Botones de filtro
+            document.getElementById('allMonstersBtn').textContent = t.allMonsters;
+            document.getElementById('loading-status').querySelector('span').textContent = t.loading;
+            
+            // Textos durante la batalla
+            document.getElementById('progress-text').textContent = t.remaining.replace('{n}', remainingMonsters.length);
+            
+            // Botones de selección
+            document.querySelectorAll('.select-button').forEach(btn => {
+                btn.textContent = t.choose;
+            });
+            
+            // Pantalla de ganador
+            document.querySelector('.reset-button').textContent = t.playAgain;
         }
 
         function toggleSidebar() {

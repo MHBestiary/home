@@ -182,6 +182,13 @@
                 "title": "Creditos",
                 "description": "Gran parte de información y iconos han sido costumizados o creados de 0 para el contenido de esta pagina, basado o en referencias de diversas fuentes, también utilizandolas para ampliar el contenido:"
             }
+        },
+        "picker": {
+            "allMonsters": "TODOS LOS MONSTRUOS",
+            "loading": "Cargando monstruos...",
+            "remaining": "Monstruos restantes: {n}",
+            "choose": "ELEGIR",
+            "playAgain": "JUGAR DE NUEVO"
         }
     },
     "en": {
@@ -367,6 +374,13 @@
                 "title": "Credits",
                 "description": "Much of the information and icons have been customized or created from scratch for the content of this page, based on or referencing various sources, also using them to expand the content:"
             }
+        },
+        "picker": {
+            "allMonsters": "ALL MONSTERS",
+            "loading": "Loading monsters...",
+            "remaining": "Remaining monsters: {n}",
+            "choose": "CHOOSE",
+            "playAgain": "PLAY AGAIN"
         }
     }
-  }
+}
