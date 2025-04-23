@@ -24,8 +24,11 @@
                     </button>
                     <button 
                         onclick="toggleLanguage()"
-                        class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
-                        <img id="languageIcon" style="width:35px;height:35px;" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/es.png?raw=true" class="h-6 w-6" alt="Translate">
+                        class="botonDark px-1.5 py-1.5 rounded-lg transition-colors language-button">
+                        <span id="languageText" class="language-text">ES</span>
+                        <img id="languageIcon" style="width:35px;height:35px;" 
+                            src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/es.png?raw=true" 
+                            class="h-6 w-6 language-icon" alt="Language">
                     </button>
                                         
                 </div>
@@ -321,15 +324,19 @@
                 console.error('Error loading translations:', error);
             }
         }
-
-        function toggleLanguage() {
-            // Cambiar idioma
-            currentLanguage = currentLanguage === 'es' ? 'en' : 'es';
-            localStorage.setItem('language', currentLanguage);
-            
-            // Recargar la página
-            window.location.reload();
-        }
+		
+		function toggleLanguage() {
+			currentLanguage = currentLanguage === 'es' ? 'en' : 'es';
+			localStorage.setItem('language', currentLanguage);
+			
+			// Cambiar icono y texto
+			const icon = document.getElementById('languageIcon');
+			const text = document.getElementById('languageText');
+			icon.src = `https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/${currentLanguage}.png?raw=true`;
+			text.textContent = currentLanguage.toUpperCase();
+			
+			applyTranslations();
+		}
 
         function applyTranslations() {
             if (!translations || !translations[currentLanguage]) return;
@@ -385,6 +392,32 @@
             background-image: url('https://github.com/mhbestiary/home/blob/main/MHImages/background 1024.jpg?raw=true');
             background-size: cover;
             background-repeat: repeat;
+        }
+        
+        .language-button {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+        }
+
+        .language-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            z-index: 2;
+            text-shadow: 1px 1px 2px rgba(0,0,0,1);
+        }
+
+        .language-icon {
+            filter: blur(1px) opacity(0.7);
+            z-index: 1;
         }
 
         h1{
