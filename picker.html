@@ -79,7 +79,7 @@
     <div class="main-container">
         <!-- Filtros iniciales -->
         <div id="filter-menu" class="filter-section">
-            <h2 class="title">Monster Hunter Picker</h2>
+            <h2 class="title">MONSTER PICKER</h2>
             <div id="loading-status" class="loading-status">
                 <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/unknown.png?raw=true" alt="Loading">
                 <span>Cargando monstruos...</span>
@@ -96,6 +96,10 @@
 
         <!-- Contenedor de la batalla -->
         <div id="battle-container" class="battle-container" style="display: none;">
+            <button onclick="returnToMenu()" class="return-button">
+                <span>VOLVER</span>
+            </button>
+            
             <div class="progress-container">
                 <div class="progress-bar-outer">
                     <div id="progress-bar" class="progress-bar-inner"></div>
@@ -354,6 +358,13 @@
             currentMonsters = [];
         }
 
+        function returnToMenu() {
+            document.getElementById('battle-container').style.display = 'none';
+            document.getElementById('filter-menu').style.display = 'block';
+            remainingMonsters = [];
+            currentMonsters = [];
+        }
+
         document.addEventListener('DOMContentLoaded', loadMonstersData);
     </script>
 
@@ -521,9 +532,10 @@
 
         .title {
             text-align: center;
-            color: #ffc800;
             font-size: 4em;
             margin-bottom: 2em;
+            text-shadow: 0px 0px 10px #000000;
+            color:white;
         }
 
         .filter-section {
@@ -804,26 +816,62 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-50px); }
-            to { opacity: 1; transform: translateX(0); }
+        .return-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5em 1em;
+            background: linear-gradient(45deg, #ebce65, #ffd700);
+            border: 2px solid #b39700;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Albertus MT Std Regular';
+            font-weight: bold;
+            color: #2e1a0b;
+            transition: all 0.3s ease;
+            z-index: 10;
         }
 
-        @keyframes slideOut {
-            from { opacity: 1; transform: translateX(0); }
-            to { opacity: 0; transform: translateX(50px); }
+        .return-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        .slide-in {
-            animation: slideIn 0.5s ease-out;
-        }
-
-        .slide-out {
-            animation: slideOut 0.5s ease-out;
-        }
-
-        /* Añadir estos estilos responsivos */
         @media (max-width: 768px) {
+            .return-button {
+                position: fixed;
+                top: 5px;
+                left: 5px;
+                padding: 0.4em 0.8em;
+                font-size: 0.8em;
+                background: rgba(255, 215, 0, 0.9);
+                backdrop-filter: blur(5px);
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            }
+
+            .battle-container {
+                margin-top: 40px;
+            }
+
+            .progress-container {
+                margin: 0.5em;
+                padding: 0.5em;
+                margin-top: 1em;
+            }
+
+            .progress-text {
+                font-size: 1em;
+            }
+
+            .monster-card {
+                width: 80%;
+                margin: 0 auto;
+                padding: 1em;
+            }
+
             .monsters-container {
                 flex-direction: column;
                 gap: 1em;
