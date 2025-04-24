@@ -843,13 +843,23 @@
         @media (max-width: 768px) {
             .return-button {
                 position: fixed;
-                top: 5px;
-                left: 5px;
-                padding: 0.4em 0.8em;
-                font-size: 0.8em;
-                background: rgba(255, 215, 0, 0.9);
+                top: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 0.5em 1.2em;
+                font-size: 0.9em;
+                background: rgba(255, 215, 0, 0.95);
                 backdrop-filter: blur(5px);
-                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                z-index: 1000;
+            }
+
+            .return-button:hover {
+                transform: translateX(-50%) translateY(-2px);
+            }
+
+            .battle-container {
+                padding-top: 50px; /* Aumentado para dar espacio al botón fijo */
             }
 
             .battle-container {
