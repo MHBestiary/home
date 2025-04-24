@@ -88,8 +88,12 @@
             </div>
         </div>
         <div class="fixed top-0 left-0 right-0 pr-7 pl-7 pt-5 pb-2 shadow-lg z-50 topcoso" style="padding-top: 65px;">
-            <div class="relative flex justify-between items-center mb-2 w-full" style="pointer-events: none;">
-                <h1 style="text-shadow: 0px 0px 10px #000000;color:white;width:100%;" class="titulo font-semibold absolute left-1/2 transform -translate-x-1/2 text-center text-3xl sm:text-2xl md:text-4xl lg:text-6xl">MONSTER HUNTER</h1>
+            <div class="relative flex justify-between items-center mb-2 w-full">
+                <h1 style="text-shadow: 0px 0px 10px #000000;color:white;width:100%;cursor:pointer;" 
+                    class="titulo font-semibold absolute left-1/2 transform -translate-x-1/2 text-center text-3xl sm:text-2xl md:text-4xl lg:text-6xl" 
+                    onclick="handleTitleClick()">
+                    MONSTER HUNTER
+                </h1>
             </div>
             
             <div class="flex flex-wrap sm:gap-2 gap-1 items-center mb-1">                          
@@ -1441,11 +1445,93 @@
                 sidebar.style.left = '0px';
             }
         }
+        let titleClicks = 0;
+        let titleClickTimeout;
+        let retroEffectActive = false; // Nueva variable para controlar si el efecto está activo
+
+        function handleTitleClick() {
+            // Si el efecto está activo, no hacer nada
+            if (retroEffectActive) return;
+
+            titleClicks++;
+            
+            // Reiniciar el contador después de 2 segundos sin clicks
+            clearTimeout(titleClickTimeout);
+            titleClickTimeout = setTimeout(() => {
+                titleClicks = 0;
+            }, 2000);
+
+            // Efecto al hacer click
+            const title = document.querySelector('.titulo');
+            title.style.transform = 'translate(-50%, 2px)';
+            setTimeout(() => {
+                title.style.transform = 'translate(-50%, 0)';
+            }, 100);
+
+            if (titleClicks === 5) {
+                retroEffectActive = true; // Marcar el efecto como activo
+                
+                // Activar modo retro
+                document.body.style.filter = 'grayscale(100%) sepia(50%)';
+                
+                // Añadir efecto de scan lines
+                const scanlines = document.createElement('div');
+                scanlines.id = 'retroEffect';
+                scanlines.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: repeating-linear-gradient(
+                        0deg,
+                        rgba(0, 0, 0, 0.15),
+                        rgba(0, 0, 0, 0.15) 1px,
+                        transparent 1px,
+                        transparent 2px
+                    );
+                    background-size: 100% 4px;
+                    pointer-events: none;
+                    z-index: 9999;
+                    animation: scanline 0.5s linear infinite;
+                `;
+                document.body.appendChild(scanlines);
+
+                // Añadir sonido de efecto retro
+                const audio = new Audio('https://github.com/mhbestiary/home/blob/main/MHSounds/Item.mp3?raw=true');
+                audio.play();
+                
+                // Volver a normal después de 10 segundos
+                setTimeout(() => {
+                    document.body.style.filter = '';
+                    const effect = document.getElementById('retroEffect');
+                    if (effect) effect.remove();
+                    titleClicks = 0;
+                    retroEffectActive = false; // Marcar el efecto como inactivo
+                }, 10000);
+            }
+        }
     </script>
 </body>
 <style>
 .titulo{
     padding-bottom: 50px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.1s ease;
+}
+
+.titulo:hover {
+    text-shadow: 0px 0px 15px #000000;
+}
+
+@keyframes scanline {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 0 100vh;
+    }
 }
 
 .language-button {
@@ -2233,3 +2319,4 @@
 }
 </style>
 </html>
+`
