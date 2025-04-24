@@ -1450,102 +1450,102 @@
         let retroEffectActive = false; // Nueva variable para controlar si el efecto está activo
 
         function handleTitleClick() {
-    if (retroEffectActive) return;
+            if (retroEffectActive) return;
 
-    titleClicks++;
-    
-    clearTimeout(titleClickTimeout);
-    titleClickTimeout = setTimeout(() => {
-        titleClicks = 0;
-    }, 2000);
+            titleClicks++;
+            
+            clearTimeout(titleClickTimeout);
+            titleClickTimeout = setTimeout(() => {
+                titleClicks = 0;
+            }, 2000);
 
-    const title = document.querySelector('.titulo');
-    title.style.transform = 'translate(-50%, 2px)';
-    setTimeout(() => {
-        title.style.transform = 'translate(-50%, 0)';
-    }, 100);
+            const title = document.querySelector('.titulo');
+            title.style.transform = 'translate(-50%, 2px)';
+            setTimeout(() => {
+                title.style.transform = 'translate(-50%, 0)';
+            }, 100);
 
-    if (titleClicks === 5) {
-        retroEffectActive = true;
-        
-        // Crear el elemento de scanlines
-        const scanlines = document.createElement('div');
-        scanlines.id = 'retroEffect';
-        scanlines.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 0, 0, 0.15),
-                rgba(0, 0, 0, 0.15) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            background-size: 100% 4px;
-            pointer-events: none;
-            z-index: 999999;
-            animation: scanline 0.5s linear infinite;
-            will-change: background-position;
-        `;
+            if (titleClicks === 5) {
+                retroEffectActive = true;
+                
+                // Crear el elemento de scanlines
+                const scanlines = document.createElement('div');
+                scanlines.id = 'retroEffect';
+                scanlines.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: repeating-linear-gradient(
+                        0deg,
+                        rgba(0, 0, 0, 0.15),
+                        rgba(0, 0, 0, 0.15) 1px,
+                        transparent 1px,
+                        transparent 2px
+                    );
+                    background-size: 100% 4px;
+                    pointer-events: none;
+                    z-index: 999999;
+                    animation: scanline 0.5s linear infinite;
+                    will-change: background-position;
+                `;
 
-        // Añadir estilo al body en lugar de filter para mantener el scroll
-        const overlay = document.createElement('div');
-        overlay.id = 'retroOverlay';
-        overlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 999998;
-            background: rgba(255, 255, 200, 0.2);
-            mix-blend-mode: color;
-        `;
+                // Añadir estilo al body en lugar de filter para mantener el scroll
+                const overlay = document.createElement('div');
+                overlay.id = 'retroOverlay';
+                overlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    width: 100%;
+                    height: 100%;
+                    pointer-events: none;
+                    z-index: 999998;
+                    background: rgba(255, 255, 200, 1);
+                    mix-blend-mode: color;
+                `;
 
-        // Añadir otro overlay para el efecto grayscale
-        const grayOverlay = document.createElement('div');
-        grayOverlay.id = 'grayOverlay';
-        grayOverlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 999997;
-            backdrop-filter: grayscale(50%);
-            -webkit-backdrop-filter: grayscale(50%);
-        `;
+                // Añadir otro overlay para el efecto grayscale
+                const grayOverlay = document.createElement('div');
+                grayOverlay.id = 'grayOverlay';
+                grayOverlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    width: 100%;
+                    height: 100%;
+                    pointer-events: none;
+                    z-index: 999997;
+                    backdrop-filter: grayscale(100%);
+                    -webkit-backdrop-filter: grayscale(100%);
+                `;
 
-        // Añadir los elementos
-        document.body.appendChild(grayOverlay);
-        document.body.appendChild(overlay);
-        document.body.appendChild(scanlines);
+                // Añadir los elementos
+                document.body.appendChild(grayOverlay);
+                document.body.appendChild(overlay);
+                document.body.appendChild(scanlines);
 
-        // Reproducir sonido
-        const audio = new Audio('https://github.com/mhbestiary/home/blob/main/MHSounds/Item.mp3?raw=true');
-        audio.play();
-        
-        // Limpiar después de 60 segundos
-        setTimeout(() => {
-            scanlines.remove();
-            overlay.remove();
-            grayOverlay.remove();
-            titleClicks = 0;
-            retroEffectActive = false;
-        }, 60000);
-    }
-}
+                // Reproducir sonido
+                const audio = new Audio('https://github.com/mhbestiary/home/blob/main/MHSounds/Item.mp3?raw=true');
+                audio.play();
+                
+                // Limpiar después de 60 segundos
+                setTimeout(() => {
+                    scanlines.remove();
+                    overlay.remove();
+                    grayOverlay.remove();
+                    titleClicks = 0;
+                    retroEffectActive = false;
+                }, 60000);
+            }
+        }
     </script>
 </body>
 <style>
