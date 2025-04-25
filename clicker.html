@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monster Hunter Clicker</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Permanent+Marker">
+    <style>
+        @font-face {
+            font-family: 'Albertus MT Std Regular';
+            font-style: normal;
+            font-weight: normal;
+            src: local('Albertus MT Std Regular'), url('fonts/FuenteMH.woff') format('woff');
+        }
+
+        body {
+            font-family: 'Albertus MT Std Regular';
+            background-image: url('https://github.com/mhbestiary/home/blob/main/MHImages/background%201024.jpg?raw=true');
+            background-size: contain;
+            background-repeat: repeat;
+        }
+
+        .dark {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .title {
+            font-family: 'Permanent Marker', cursive;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .stat-up{
+            color: #ff3b3b;
+            text-shadow: black 1px 1px 4px;
+        }
+
+        .stat-down{
+            color: #ff7b00;
+            text-shadow: black 1px 1px 4px;
+        }
+
+        .upgrade-btn {
+            color: black;
+            background: linear-gradient(45deg, #ebce65, #ffd700);
+            border: 2px solid #b39700;
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .upgrade-btn.disabled {
+            background: linear-gradient(45deg, #808080, #a0a0a0);
+            border-color: #606060;
+            cursor: not-allowed;
+            opacity: 0.7;
+            transform: none !important;
+            box-shadow: none;
+        }
+
+        .upgrade-btn:hover:not(.disabled) {
+            transform: translateY(-2px);
+            background: linear-gradient(45deg, #ffd700, #ebce65);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .monster-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 1rem;
+            padding-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark .monster-container {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        #monsterImage {
+            filter: drop-shadow(0 0 7px rgba(0, 0, 0, 1));
+            transition: all 0.3s ease;
+        }
+
+        #monsterImage:hover {
+            filter: drop-shadow(0 0 7px rgba(255, 0, 0, 1));
+            transform: scale(1.1);
+        }
+
+        #monsterName {
+            font-family: 'Permanent Marker', cursive;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .stats-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .dark .stats-container {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 3px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 8px;
+            min-height: 30px;
+        }
+
+        .progress-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: #666;
+        }
+
+        .progress-dot.active {
+            background-color: #ffd700;
+        }
+
+        .progress-skull {
+            width: 30px;
+            height: 20px;
+            filter: brightness(0.5);
+            object-fit: contain;
+        }
+
+        .progress-skull.active {
+            filter: brightness(1);
+        }
+
+        .progress-skull.final {
+            width: 45px;
+            height: 30px;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Stats Bar -->
+        <div class="flex justify-center mb-8">
+            <div class="stats-container px-8 py-4 flex gap-12">
+                <div>
+                    <h2 class="text-4xl title">Zenny: <span id="zenny" class="text-yellow-400">0</span></h2>
+                </div>
+                <div>
+                    <p class="stat-up text-2xl">Click Damage: <span id="clickDamage">1</span></p>
+                    <p class="stat-down text-2xl">DPS: <span id="dps">0</span></p>
+                </div>
+                <div>
+                    <p class="stat-up text-2xl">Threat Level: <span id="threatLevel">1</span></p>
+                    <p class="stat-down text-2xl">Monster Level: <span id="monsterLevel">1</span></p>
+                </div>
+                <div>
+                    <p class="stat-up text-2xl">MULTIPLIER: <span id="multiplier">1.00</span>x</p>
+                    <button onclick="prestige()" id="prestigeButton" class="upgrade-btn p-4 rounded-lg text-lg font-bold disabled:opacity-50" disabled>
+                        PRESTIGE + <span id="prestigeBonus">0.00</span>x
+                    </button>
+                    <p class="stat-up text-1xl">UNLOCKS AT THREAT 3</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div class="flex justify-between gap-6">
+            <!-- Inventory -->
+            <div class="w-1/4">
+                <div class="stats-container p-6 rounded-lg">
+                    <h3 class="title text-4xl mb-4">Inventory</h3>
+                    <div class="space-y-3">
+                        <p class="flex items-center gap-3 text-3xl">
+                            <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/particons/m_scale.png?raw=true" class="w-12 h-12">
+                            Scale: <span id="scaleCount" class="font-bold">0</span>
+                        </p>
+                        <p class="flex items-center gap-3 text-3xl">
+                            <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/particons/m_cortex.png?raw=true" class="w-12 h-12">
+                            Cortex: <span id="cortexCount" class="font-bold">0</span>
+                        </p>
+                        <p class="flex items-center gap-3 text-3xl">
+                            <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/particons/m_sac.png?raw=true" class="w-12 h-12">
+                            Sac: <span id="sacCount" class="font-bold">0</span>
+                        </p>
+                        <p class="flex items-center gap-3 text-3xl">
+                            <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/particons/m_plate.png?raw=true" class="w-12 h-12">
+                            Plate: <span id="plateCount" class="font-bold">0</span>
+                        </p>
+                        <p class="flex items-center gap-3 text-3xl">
+                            <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/particons/m_mantle.png?raw=true" class="w-12 h-12">
+                            Mantle: <span id="mantleCount" class="font-bold">0</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monster Display -->
+            <div class="flex-1">
+                <div class="flex flex-col items-center monster-container">
+                    <h2 id="monsterName" class="text-5xl mb-4 font-bold title"></h2>
+                    <div class="progress-dots" id="progressBar"></div>
+                    <div class="relative w-full max-w-xl mb-4">
+                        <div class="bg-gray-800 h-8 rounded-full p-1">
+                            <div id="healthBar" class="bg-gradient-to-r from-red-600 to-red-400 h-6 rounded-full transition-all duration-200" style="width: 100%"></div>
+                        </div>
+                        <div class="text-center stat-down mt-2 text-2xl">
+                            <span id="currentHealth">100</span>/<span id="maxHealth">100</span>
+                        </div>
+                    </div>
+                    <img id="monsterImage" src="" alt="Monster" 
+                        class="w-80 h-80 object-contain cursor-pointer"
+                        onclick="clickMonster()">                        
+                    <p id="monsterReward" class="text-3xl mt-6 title"></p>
+                </div>
+            </div>
+
+            <!-- Upgrades -->
+            <div class="w-1/4 flex flex-col gap-4">
+                <button onclick="upgradeClick()" class="upgrade-btn p-4 rounded-lg text-lg font-bold">
+                    WEAPON UPGRADE <span id="clickPrice">10</span> Zenny
+                </button>
+                <button onclick="buyItem('scale')" class="text-lg upgrade-btn p-3 rounded-lg flex items-center gap-2 text-base">
+                    <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/particons/m_scale.png?raw=true" class="w-12 h-12">
+                    <span class="flex-1 ">+2 DPS</span>
+                    <span><span id="scalePrice">10</span> Zenny</span>                    
+                </button>
+                <button onclick="buyItem('cortex')" class="text-lg upgrade-btn p-3 rounded-lg flex items-center gap-2 text-base">
+                    <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/particons/m_cortex.png?raw=true" class="w-12 h-12">
+                    <span class="flex-1">+5 DPS</span>
+                    <span><span id="cortexPrice">50</span> Zenny</span>     
+                </button>
+                <button onclick="buyItem('sac')" class="text-lg upgrade-btn p-3 rounded-lg flex items-center gap-2 text-base">
+                    <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/particons/m_sac.png?raw=true" class="w-12 h-12">
+                    <span class="flex-1">+10 DPS</span>
+                    <span><span id="sacPrice">100</span> Zenny</span>     
+                </button>
+                <button onclick="buyItem('plate')" class="text-lg upgrade-btn p-3 rounded-lg flex items-center gap-2 text-base">
+                    <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/particons/m_plate.png?raw=true" class="w-12 h-12">
+                    <span class="flex-1">+25 DPS</span>
+                    <span><span id="platePrice">500</span> Zenny</span>     
+                </button>
+                <button onclick="buyItem('mantle')" class="text-lg upgrade-btn p-3 rounded-lg flex items-center gap-2 text-base">
+                    <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/particons/m_mantle.png?raw=true" class="w-12 h-12">
+                    <span class="flex-1">+100 DPS</span>
+                    <span><span id="mantlePrice">1000</span> Zenny</span>     
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let monsters = [];
+        let currentMonster = null;
+        let reward = 0;
+        let gameState = {
+            zenny: 0,
+            dps: 0,
+            clickDamage: 1,
+            clickPrice: 10,
+            monsterLevel: 1,
+            multiplier: 1.0,
+            inventory: {
+                scale: 0,    // +2 DPS
+                cortex: 0,   // +5 DPS
+                sac: 0,      // +10 DPS
+                plate: 0,    // +25 DPS
+                mantle: 0    // +100 DPS
+            },
+            prices: {
+                scale: 10,
+                cortex: 50,
+                sac: 100,
+                plate: 500,
+                mantle: 1000
+            }
+        };
+
+        async function loadMonsters() {
+            const response = await fetch('https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/monstruos.json');
+            monsters = await response.json();
+            monsters.sort((a, b) => a.threat - b.threat);
+            spawnNewMonster();
+        }
+
+        function spawnNewMonster() {
+            const threatLevel = Math.min(Math.floor(gameState.monsterLevel / 5) + 1, 10);
+            const possibleMonsters = monsters.filter(m => m.threat === threatLevel);
+            currentMonster = {
+                ...possibleMonsters[Math.floor(Math.random() * possibleMonsters.length)],
+                maxHealth: threatLevel * 50 + gameState.monsterLevel * 10 - 10,
+                currentHealth: threatLevel * 50 + gameState.monsterLevel * 10 - 10
+            };
+
+            // Double health for last monster before next threat level
+            if (gameState.monsterLevel % 5 === 0 && gameState.monsterLevel < 45) {
+                currentMonster.maxHealth *= 2;
+                currentMonster.currentHealth *= 2;
+            }
+
+            reward = Math.floor((currentMonster.threat * 10 + gameState.monsterLevel) * gameState.multiplier);
+            
+            // Update UI elements
+            document.getElementById('monsterName').textContent = currentMonster.name;
+            const monsterImg = document.getElementById('monsterImage');
+            monsterImg.onerror = () => {
+                // If image fails to load, try again
+                monsterImg.src = currentMonster.image + '?t=' + new Date().getTime();
+            };
+            monsterImg.src = currentMonster.image + '?t=' + new Date().getTime();
+            document.getElementById('maxHealth').textContent = currentMonster.maxHealth;
+            document.getElementById('currentHealth').textContent = currentMonster.currentHealth;
+            document.getElementById('threatLevel').textContent = currentMonster.threat;
+            document.getElementById('monsterReward').textContent = "Reward: " + reward + " Zenny";
+            updateHealthBar();
+            updateProgressBar();
+        }
+
+        function clickMonster() {
+            if (!currentMonster) return;
+            dealDamage(gameState.clickDamage);
+        }
+
+        function dealDamage(amount) {
+            currentMonster.currentHealth -= amount;
+            if (currentMonster.currentHealth <= 0) {
+                gameState.zenny += reward;
+                gameState.monsterLevel++;
+                spawnNewMonster();
+            }
+            document.getElementById('currentHealth').textContent = Math.max(0, currentMonster.currentHealth);
+            updateHealthBar();
+            updateUI();
+        }
+
+        function updateHealthBar() {
+            const percentage = (currentMonster.currentHealth / currentMonster.maxHealth) * 100;
+            const healthBar = document.getElementById('healthBar');
+            healthBar.style.transition = 'width 100ms linear';
+            document.getElementById('currentHealth').textContent = Math.ceil(currentMonster.currentHealth);
+            healthBar.style.width = `${Math.max(0, percentage)}%`;
+        }
+
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progressBar');
+            progressBar.innerHTML = '';
+            
+            const totalDots = 45;
+            const currentProgress = gameState.monsterLevel;
+            
+            for (let i = 1; i <= totalDots; i++) {
+                if (i % 5 === 0) {
+                    // Create skull marker
+                    const skull = document.createElement('img');
+                    skull.src = 'https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/particons/m_head.png?raw=true';
+                    skull.classList.add('progress-skull');
+                    
+                    if (i === 45) {
+                        skull.classList.add('final');
+                    }
+                    
+                    if (currentProgress >= i) {
+                        skull.classList.add('active');
+                    }
+                    
+                    progressBar.appendChild(skull);
+                } else {
+                    // Create normal dot
+                    const dot = document.createElement('div');
+                    dot.classList.add('progress-dot');
+                    if (currentProgress >= i) {
+                        dot.classList.add('active');
+                    }
+                    progressBar.appendChild(dot);
+                }
+            }
+        }
+
+        function upgradeClick() {
+            if (gameState.zenny >= gameState.clickPrice) {
+                gameState.zenny -= gameState.clickPrice;
+                gameState.clickDamage += 1;
+                gameState.clickPrice = Math.floor(gameState.clickPrice * 2.75);
+                updateUI();
+            }
+        }
+
+        function buyItem(type) {
+            const price = gameState.prices[type];
+            if (gameState.zenny >= price) {
+                gameState.zenny -= price;
+                gameState.inventory[type]++;
+                
+                // Actualizar DPS total según el tipo
+                switch(type) {
+                    case 'scale':
+                        gameState.dps += 2;
+                        gameState.prices.scale = Math.floor(gameState.prices.scale * 1.75);
+                        break;
+                    case 'cortex':
+                        gameState.dps += 5;
+                        gameState.prices.cortex = Math.floor(gameState.prices.cortex * 1.75);
+                        break;
+                    case 'sac':
+                        gameState.dps += 10;
+                        gameState.prices.sac = Math.floor(gameState.prices.sac * 1.75);
+                        break;
+                    case 'plate':
+                        gameState.dps += 25;
+                        gameState.prices.plate = Math.floor(gameState.prices.plate * 1.75);
+                        break;
+                    case 'mantle':
+                        gameState.dps += 100;
+                        gameState.prices.mantle = Math.floor(gameState.prices.mantle * 1.75);
+                        break;
+                }
+                updateUI();
+            }
+        }
+
+        function prestige() {
+            if (currentMonster.threat < 3) return;
+            
+            // Calcular el bonus basado en el threat level actual
+            const bonus = currentMonster.threat * 0.35;
+            
+            // Actualizar el multiplicador
+            gameState.multiplier += bonus;
+            
+            // Resetear el estado del juego pero mantener el multiplicador
+            gameState = {
+                ...gameState,
+                zenny: 0,
+                dps: 0,
+                clickDamage: 1,
+                clickPrice: 10,
+                monsterLevel: 1,
+                inventory: {
+                    scale: 0,
+                    cortex: 0,
+                    sac: 0,
+                    plate: 0,
+                    mantle: 0
+                },
+                prices: {
+                    scale: 10,
+                    cortex: 50,
+                    sac: 100,
+                    plate: 500,
+                    mantle: 1000
+                }
+            };
+
+            // Reiniciar el monstruo actual
+            spawnNewMonster();
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('zenny').textContent = Math.floor(gameState.zenny);
+            document.getElementById('dps').textContent = gameState.dps;
+            document.getElementById('clickDamage').textContent = gameState.clickDamage;
+            document.getElementById('clickPrice').textContent = gameState.clickPrice;
+            document.getElementById('monsterLevel').textContent = gameState.monsterLevel;
+
+            // Actualizar multiplicador
+            document.getElementById('multiplier').textContent = gameState.multiplier.toFixed(2);
+
+            // Actualizar contadores del inventario
+            document.getElementById('scaleCount').textContent = gameState.inventory.scale;
+            document.getElementById('cortexCount').textContent = gameState.inventory.cortex;
+            document.getElementById('sacCount').textContent = gameState.inventory.sac;
+            document.getElementById('plateCount').textContent = gameState.inventory.plate;
+            document.getElementById('mantleCount').textContent = gameState.inventory.mantle;
+
+            // Actualizar precios
+            document.getElementById('scalePrice').textContent = gameState.prices.scale;
+            document.getElementById('cortexPrice').textContent = gameState.prices.cortex;
+            document.getElementById('sacPrice').textContent = gameState.prices.sac;
+            document.getElementById('platePrice').textContent = gameState.prices.plate;
+            document.getElementById('mantlePrice').textContent = gameState.prices.mantle;
+
+            // Actualizar estado de los botones
+            const buttons = {
+                'scale': document.querySelector('button[onclick="buyItem(\'scale\')"]'),
+                'cortex': document.querySelector('button[onclick="buyItem(\'cortex\')"]'),
+                'sac': document.querySelector('button[onclick="buyItem(\'sac\')"]'),
+                'plate': document.querySelector('button[onclick="buyItem(\'plate\')"]'),
+                'mantle': document.querySelector('button[onclick="buyItem(\'mantle\')"]')
+            };
+
+            // Añadir el botón de upgrade al click al sistema de disabled
+            const clickUpgradeButton = document.querySelector('button[onclick="upgradeClick()"]');
+            clickUpgradeButton.classList.toggle('disabled', gameState.zenny < gameState.clickPrice);
+
+            for (const [type, button] of Object.entries(buttons)) {
+                button.classList.toggle('disabled', gameState.zenny < gameState.prices[type]);
+            }
+
+            // Actualizar botón de prestige
+            const prestigeButton = document.getElementById('prestigeButton');
+            const prestigeBonus = document.getElementById('prestigeBonus');
+            
+            if (currentMonster && currentMonster.threat >= 3) {
+                prestigeButton.disabled = false;
+                prestigeButton.classList.remove('disabled');
+                prestigeBonus.textContent = (currentMonster.threat * 0.35).toFixed(2);
+            } else {
+                prestigeButton.disabled = true;
+                prestigeButton.classList.add('disabled');
+                prestigeBonus.textContent = '0.00';
+            }
+        }
+
+        // DPS Loop - update 10 times per second instead of once
+        setInterval(() => {
+            if (currentMonster && gameState.dps > 0) {
+                dealDamage(gameState.dps / 10);
+            }
+        }, 100);
+
+        // Initialize game
+        loadMonsters();
+        updateUI();
+    </script>
+</body>
+</html>
