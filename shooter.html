@@ -209,7 +209,7 @@
             if (threat <= 3) return 1; // Muere de un golpe
             if (threat <= 6) return 2; // Muere de dos golpes
             if (threat <= 9) return 3; // Muere de tres golpes
-            return 5; // Nivel 10 muere de 5 golpes
+            return 4; // Nivel 10 muere de 5 golpes
         }
 
         // Efectos de sonido
@@ -311,12 +311,12 @@
         function drawPowerUpTimers() {
             const now = Date.now();
             const margin = 10;
-            const size = 30;
-            let y = margin;
+            const size = 40; // Aumentado el espaciado vertical
 
             ctx.save();
-            ctx.font = '12px Arial';
+            ctx.font = '20px Arial'; // Aumentado el tamaño de la fuente
             ctx.textAlign = 'left';
+            let y = margin + 20; // Ajustado la posición inicial para el texto más grande
 
             // Spread shot timer
             if (player.powerUps.spread.active) {
@@ -580,7 +580,7 @@
                             }
 
                             // Chance de soltar power-up basado en amenaza
-                            if (monster.threat > 3 && Math.random() < 1) {
+                            if (monster.threat > 3 && Math.random() < 0.25) {
                                 const types = ['spread', 'rapid', 'damage', 'heal'];
                                 powerups.push(new PowerUp(monster.x, monster.y, 
                                     types[Math.floor(Math.random() * types.length)]));
