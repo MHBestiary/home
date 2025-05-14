@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GALLERY</title>    
-    <link rel="icon" type="image/png" href="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/map.png?raw=true">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/map.png">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script>
         let currentLanguage = localStorage.getItem('language') || 'es';
@@ -25,7 +25,7 @@
                     <button 
                         onclick="window.location.href='https://mhbestiary.github.io/home/'"
                         class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
-                        <img style="width:35px;height:35px;" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/home.png?raw=true" class="h-6 w-6" alt="Alternar Modo Oscuro">
+                        <img style="width:35px;height:35px;" src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/home.png" class="h-6 w-6" alt="Alternar Modo Oscuro">
                     </button>
 		
                     <button 
@@ -33,42 +33,42 @@
                         class="botonDark px-1.5 py-1.5 rounded-lg transition-colors language-button">
                         <span id="languageText" class="language-text">ES</span>
                         <img id="languageIcon" style="width:35px;height:35px;" 
-                            src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/es.png?raw=true" 
+                            src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/es.png" 
                             class="h-6 w-6 language-icon" alt="Language">
                     </button>                 
                 </div><a href="https://mhbestiary.github.io/home/menu.html" 
                 class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                 <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/bbq.png?raw=true" 
+                 <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/bbq.png" 
                      class="w-8 h-8" alt="Menu">
                  <span data-translation-key="menu">MENU WILDS</span>
              </a>
              <a href="https://mhbestiary.github.io/home/galeria.html"
                 class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                 <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/map.png?raw=true" 
+                 <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/map.png" 
                      class="w-8 h-8" alt="Menu">
                  <span data-translation-key="gallery">GALERIA</span>
              </a>
              <a href="https://mhbestiary.github.io/home/picker.html" 
                 class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                 <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/coin.png?raw=true" 
+                 <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/coin.png" 
                       class="w-8 h-8" alt="picker">
                  <span data-translation-key="picker">MONSTER PICKER</span>
              </a>
              <a href="https://mhbestiary.github.io/home/wheel.html" 
                 class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                 <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/unknown.png?raw=true" 
+                 <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/unknown.png" 
                       class="w-8 h-8" alt="Ruleta">
                  <span data-translation-key="wheel">Ruleta de Monstruos</span>
              </a>
              <a href="https://mhbestiary.github.io/home/GeneraMonstruos.html" 
                 class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                 <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/book_blue.png?raw=true" 
+                 <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/book_blue.png" 
                       class="w-8 h-8" alt="Ruleta">
                  <span data-translation-key="generator">GENERAR MONSTRUOS</span>
              </a>
              <a href="https://mhbestiary.github.io/home/info.html" 
                 class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                 <img src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/question.png?raw=true" 
+                 <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/question.png" 
                       class="w-8 h-8" alt="Ruleta">
                  <span data-translation-key="info">PAGE INFO</span>
              </a>
@@ -115,7 +115,7 @@
 			// Cambiar icono y texto
 			const icon = document.getElementById('languageIcon');
 			const text = document.getElementById('languageText');
-			icon.src = `https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/${currentLanguage}.png?raw=true`;
+			icon.src = `https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/${currentLanguage}.png`;
 			text.textContent = currentLanguage.toUpperCase();
 			
 			applyTranslations();
@@ -142,7 +142,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             await loadTranslations();
             const icon = document.getElementById('languageIcon');
-            icon.src = `https://github.com/mhbestiary/home/blob/main/MHImages/0_Icons/${currentLanguage}.png?raw=true`;
+            icon.src = `https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/${currentLanguage}.png`;
         });
         async function loadGallery() {
             try {
@@ -156,9 +156,9 @@
                     document.querySelector('.featured-image').innerHTML = `
                         <div style="position: relative; display: inline-block;">
                             <img src="${featuredImage.imagen}" alt="${featuredImage.pj}" onclick="openModal('${featuredImage.imagen}', '${featuredImage.pj}')">
-                            <img class="frame" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Galeria/0_marco_G.png?raw=true" alt="marco">
+                            <img class="frame" src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Galeria/0_marco_G.png" alt="marco">
                             <div class="pj-name linear-wipe"><span>${featuredImage.pj}</span></div>
-                            <img class="adorno-featured" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Galeria/0_adorno.png?raw=true" alt="adorno">
+                            <img class="adorno-featured" src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Galeria/0_adorno.png" alt="adorno">
                         </div>
                     `;
                 }
@@ -166,7 +166,7 @@
                 const galleryHTML = regularImages.map(item => `
                     <div class="gallery-item">
                         <img src="${item.imagen}" alt="${item.pj}" onclick="openModal('${item.imagen}', '${item.pj}')">
-                        <img class="frame" src="https://github.com/mhbestiary/home/blob/main/MHImages/0_Galeria/0_marco_P.png?raw=true" alt="marco">
+                        <img class="frame" src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Galeria/0_marco_P.png" alt="marco">
                         <div class="pj-name">${item.pj}</div>
                     </div>
                 `).join('');
@@ -278,7 +278,7 @@
             src: local('Albertus MT Std Regular'), url('fonts/FuenteMH.woff') format('woff');
         }
         body {
-            background-image: url('https://github.com/mhbestiary/home/blob/main/MHImages/background 1024.jpg?raw=true');
+            background-image: url('https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/background 1024.jpg');
             background-attachment: fixed;
             background-size: cover;
             margin: 0;
