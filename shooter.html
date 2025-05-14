@@ -13,12 +13,16 @@
             border: 4px solid #f83;
             box-shadow: 0 0 20px #f83;
             image-rendering: pixelated;
+            position: relative;
+            z-index: 1;
         }
         #game-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            position: relative;
+            overflow: hidden;
         }
         #hud {
             width: 800px;
@@ -46,6 +50,63 @@
             font-size: 48px;
             text-align: center;
         }
+        @media (max-width: 768px) {
+            #game-container {
+                transform: none;
+                padding: 0;
+                height: 100vh;
+                display: flex;
+                align-items: center;
+            }
+            canvas {
+                width: 100%;
+                height: auto;
+            }
+            #hud {
+                width: 100%;
+                padding: 10px;
+                box-sizing: border-box;
+            }
+            body {
+                touch-action: none;
+            }
+        }
+
+        .restart-btn {
+            background: #f83;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .restart-btn:hover {
+            background: #f94;
+        }
+
+        /* Efecto CRT */
+        #game-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%,
+                rgba(0, 0, 0, 0.25) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 2;
+            pointer-events: none;
+            animation: flicker 0.15s infinite;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 0.9; }
+            100% { opacity: 1; }
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
@@ -59,7 +120,7 @@
         <canvas id="gameCanvas" width="800" height="600"></canvas>
         <div id="game-over">
             GAME OVER<br>
-            <span style="font-size: 24px">PRESS SPACE TO CONTINUE</span>
+            <button class="restart-btn">CONTINUE</button>
         </div>
     </div>
 
@@ -84,7 +145,12 @@
             rapidFire: false,
             damageUp: false,
             weapon: new Image(),
-            weaponScale: 1
+            weaponScale: 1,
+            powerUps: {
+                spread: { active: false, endTime: 0 },
+                rapid: { active: false, endTime: 0 },
+                damage: { active: false, endTime: 0 }
+            }
         };
 
         // Cargar imágenes de armas
@@ -178,8 +244,8 @@
 
             getColor() {
                 switch(this.type) {
-                    case 'spread': return '#ff0';
-                    case 'rapid': return '#fff';
+                    case 'spread': return '#fff';
+                    case 'rapid': return '#ff0';
                     case 'damage': return '#f00';
                     case 'heal': return '#0f0';
                     default: return '#000';
@@ -188,30 +254,94 @@
         }
 
         function applyPowerUp(type) {
+            const duration = 10000; // 10 segundos
+            const now = Date.now();
+            
             switch(type) {
                 case 'spread':
                     player.spreadShot = true;
                     player.weapon.src = weaponImages.hbg;
-                    setTimeout(() => {
-                        player.spreadShot = false;
-                        player.weapon.src = weaponImages.lbg;
-                    }, 10000);
+                    player.powerUps.spread.active = true;
+                    player.powerUps.spread.endTime = now + duration;
                     break;
                 case 'rapid':
+                    player.rapidFire = true;
                     player.shootDelay = 100;
-                    setTimeout(() => player.shootDelay = 250, 10000);
+                    player.powerUps.rapid.active = true;
+                    player.powerUps.rapid.endTime = now + duration;
                     break;
                 case 'damage':
                     player.damageUp = true;
-                    setTimeout(() => player.damageUp = false, 10000);
+                    player.powerUps.damage.active = true;
+                    player.powerUps.damage.endTime = now + duration;
                     break;
                 case 'heal':
-                    if (lives < 3) { // Usamos la variable global lives
+                    if (lives < 3) {
                         lives++;
                         document.getElementById('lives').textContent = lives;
                     }
                     break;
             }
+        }
+
+        function updatePowerUps() {
+            const now = Date.now();
+            
+            // Spread shot
+            if (player.powerUps.spread.active && now >= player.powerUps.spread.endTime) {
+                player.spreadShot = false;
+                player.weapon.src = weaponImages.lbg;
+                player.powerUps.spread.active = false;
+            }
+            
+            // Rapid fire
+            if (player.powerUps.rapid.active && now >= player.powerUps.rapid.endTime) {
+                player.rapidFire = false;
+                player.shootDelay = 250;
+                player.powerUps.rapid.active = false;
+            }
+            
+            // Damage up
+            if (player.powerUps.damage.active && now >= player.powerUps.damage.endTime) {
+                player.damageUp = false;
+                player.powerUps.damage.active = false;
+            }
+        }
+
+        function drawPowerUpTimers() {
+            const now = Date.now();
+            const margin = 10;
+            const size = 30;
+            let y = margin;
+
+            ctx.save();
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'left';
+
+            // Spread shot timer
+            if (player.powerUps.spread.active) {
+                const timeLeft = Math.ceil((player.powerUps.spread.endTime - now) / 1000);
+                ctx.fillStyle = '#fff';
+                ctx.fillText(`SPREAD ${timeLeft}s`, margin, y);
+                y += size;
+            }
+
+            // Rapid fire timer
+            if (player.powerUps.rapid.active) {
+                const timeLeft = Math.ceil((player.powerUps.rapid.endTime - now) / 1000);
+                ctx.fillStyle = '#ff0';
+                ctx.fillText(`RAPID ${timeLeft}s`, margin, y);
+                y += size;
+            }
+
+            // Damage up timer
+            if (player.powerUps.damage.active) {
+                const timeLeft = Math.ceil((player.powerUps.damage.endTime - now) / 1000);
+                ctx.fillStyle = '#f00';
+                ctx.fillText(`DAMAGE ${timeLeft}s`, margin, y);
+            }
+
+            ctx.restore();
         }
 
         // Modificar la clase Monster para usar el nivel de amenaza
@@ -302,6 +432,42 @@
         document.addEventListener('keydown', (e) => keys[e.key] = true);
         document.addEventListener('keyup', (e) => keys[e.key] = false);
 
+        // Control táctil para móviles
+        let touchActive = false;
+        let autoShootInterval = null;
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            const y = (touch.clientY - rect.top) * (canvas.height / rect.height);
+            player.y = Math.max(0, Math.min(canvas.height - player.height, y - player.height/2));
+            
+            if (!autoShootInterval) {
+                shoot();
+                autoShootInterval = setInterval(() => {
+                    if (!gameOver) shoot();
+                }, player.shootDelay);
+            }
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            const y = (touch.clientY - rect.top) * (canvas.height / rect.height);
+            player.y = Math.max(0, Math.min(canvas.height - player.height, y - player.height/2));
+        });
+
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            touchActive = false;
+            if (autoShootInterval) {
+                clearInterval(autoShootInterval);
+                autoShootInterval = null;
+            }
+        });
+
         // Mejorar el sistema de disparo
         function shoot() {
             const now = Date.now();
@@ -349,14 +515,15 @@
         });
 
         document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                if (gameOver) {
-                    resetGame();
-                } else {
-                    shoot();
-                }
+            if (e.code === 'Space' && gameOver) {
+                resetGame();
+            } else if (e.code === 'Space') {
+                shoot();
             }
         });
+
+        // Agregar el event listener para el botón
+        document.querySelector('.restart-btn').addEventListener('click', resetGame);
 
         function updatePlayer() {
             if (keys.ArrowUp && player.y > 0) player.y -= player.speed;
@@ -374,7 +541,6 @@
                 ctx.rotate(Math.PI/2);
 
                 if (player.damageUp) {
-                    // Aplicar tinte rojo más intenso
                     ctx.filter = 'brightness(120%) sepia(1) saturate(10000%) hue-rotate(320deg)';
                 }
                 
@@ -386,13 +552,6 @@
                 );
                 
                 ctx.restore();
-
-                // Dibujar indicador de rapidfire
-                if (player.rapidFire) {
-                    ctx.fillStyle = '#fff';
-                    ctx.font = 'bold 24px Arial';
-                    ctx.fillText('⇈', player.x + player.width/4, player.y - 10);
-                }
             }
         }
 
@@ -469,6 +628,20 @@
             document.getElementById('score').textContent = score;
             document.getElementById('lives').textContent = lives;
             document.getElementById('game-over').style.display = 'none';
+            
+            // Resetear power-ups
+            player.spreadShot = false;
+            player.rapidFire = false;
+            player.damageUp = false;
+            player.shootDelay = 250;
+            player.weapon.src = weaponImages.lbg;
+            
+            // Limpiar timers de power-ups
+            player.powerUps = {
+                spread: { active: false, endTime: 0 },
+                rapid: { active: false, endTime: 0 },
+                damage: { active: false, endTime: 0 }
+            };
         }
 
         function gameLoop() {
@@ -485,7 +658,7 @@
                 bullets.forEach(bullet => {
                     bullet.x += bullet.dx;
                     bullet.y += bullet.dy;
-                    ctx.fillStyle = '#fff';
+                    ctx.fillStyle = player.rapidFire ? '#ff0' : '#fff'; // Balas amarillas con rapid fire
                     ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
                 });
                 
@@ -501,6 +674,9 @@
                     powerup.update();
                     powerup.draw();
                 });
+                
+                updatePowerUps();
+                drawPowerUpTimers();
                 
                 checkCollisions();
             }
