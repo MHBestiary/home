@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monster Hunter Arcade</title>
+    <style>
+        body {
+            margin: 0;
+            background: #111;
+            font-family: 'Press Start 2P', cursive;
+            overflow: hidden;
+        }
+        canvas {
+            border: 4px solid #f83;
+            box-shadow: 0 0 20px #f83;
+            image-rendering: pixelated;
+        }
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        #hud {
+            width: 800px;
+            display: flex;
+            justify-content: space-between;
+            color: #f83;
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px #000;
+        }
+        .flash {
+            animation: flash 0.1s;
+        }
+        @keyframes flash {
+            0% { background: white; }
+            100% { background: transparent; }
+        }
+        #game-over {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #f83;
+            font-size: 48px;
+            text-align: center;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="game-container">
+        <div id="hud">
+            <div>SCORE: <span id="score">0</span></div>
+            <div>HIGH: <span id="highscore">0</span></div>
+            <div>LIVES: <span id="lives">3</span></div>
+        </div>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="game-over">
+            GAME OVER<br>
+            <span style="font-size: 24px">PRESS SPACE TO CONTINUE</span>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let score = 0;
+        let lives = 3;
+        let highscore = localStorage.getItem('highscore') || 0;
+        let gameOver = false;
+        let player = {
+            x: 50,
+            y: canvas.height/2,
+            width: 40,
+            height: 40,
+            speed: 5,
+            shooting: false,
+            lastShot: 0,
+            shootDelay: 250,
+            powerLevel: 1,
+            spreadShot: false,
+            rapidFire: false,
+            damageUp: false,
+            weapon: new Image(),
+            weaponScale: 1
+        };
+
+        // Cargar imágenes de armas
+        const weaponImages = {
+            lbg: 'https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/0_Icons/weapons/LBG.png',
+            hbg: 'https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/0_Icons/weapons/HBG.png'
+        };
+
+        player.weapon.src = weaponImages.lbg;
+
+        let bullets = [];
+        let monsters = [];
+        let powerups = [];
+
+        // Array para almacenar los monstruos disponibles
+        let availableMonsters = [];
+        let monstersLoaded = false;
+
+        // Cargar monstruos desde el JSON
+        async function loadMonsters() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/monstruos.json');
+                const data = await response.json();
+                availableMonsters = data
+                    .filter(m => m.image && !m.spoiler) // Solo monstruos con imagen y no spoiler
+                    .map(m => ({
+                        name: m.name,
+                        image: m.image,
+                        speed: 1 + (m.threat * 0.2), // Velocidad más balanceada
+                        points: m.threat * 100, // Más puntos por monstruos más difíciles
+                        size: 40 + (m.threat * 3),
+                        health: getMonsterHealth(m.threat), // Nueva función para calcular la vida
+                        threat: m.threat || 1
+                    }));
+                
+                // Precarga de imágenes
+                const preloadImages = availableMonsters.map(monster => {
+                    return new Promise((resolve, reject) => {
+                        const img = new Image();
+                        img.onload = resolve;
+                        img.onerror = reject;
+                        img.src = monster.image;
+                    });
+                });
+
+                await Promise.all(preloadImages);
+                monstersLoaded = true;
+                console.log('Monstruos cargados:', availableMonsters.length);
+            } catch (error) {
+                console.error('Error cargando monstruos:', error);
+            }
+        }
+
+        // Función para calcular la vida basada en el nivel de amenaza
+        function getMonsterHealth(threat) {
+            if (threat <= 3) return 1; // Muere de un golpe
+            if (threat <= 6) return 2; // Muere de dos golpes
+            if (threat <= 9) return 3; // Muere de tres golpes
+            return 5; // Nivel 10 muere de 5 golpes
+        }
+
+        // Efectos de sonido
+        const sounds = {
+            shoot: new Audio('data:audio/wav;base64,UklGRhwDAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQgDAACA'),
+            explode: new Audio('data:audio/wav;base64,UklGRhwDAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQgDAACA')
+        };
+
+        class PowerUp {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.width = 20;
+                this.height = 20;
+                this.type = type;
+                this.speed = 2;
+            }
+
+            update() {
+                this.x -= this.speed;
+            }
+
+            draw() {
+                ctx.fillStyle = this.getColor();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 10, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = 'white';
+                ctx.font = '12px Arial';
+                ctx.fillText(this.type[0], this.x - 4, this.y + 4);
+            }
+
+            getColor() {
+                switch(this.type) {
+                    case 'spread': return '#ff0';
+                    case 'rapid': return '#fff';
+                    case 'damage': return '#f00';
+                    case 'heal': return '#0f0';
+                    default: return '#000';
+                }
+            }
+        }
+
+        function applyPowerUp(type) {
+            switch(type) {
+                case 'spread':
+                    player.spreadShot = true;
+                    player.weapon.src = weaponImages.hbg;
+                    setTimeout(() => {
+                        player.spreadShot = false;
+                        player.weapon.src = weaponImages.lbg;
+                    }, 10000);
+                    break;
+                case 'rapid':
+                    player.shootDelay = 100;
+                    setTimeout(() => player.shootDelay = 250, 10000);
+                    break;
+                case 'damage':
+                    player.damageUp = true;
+                    setTimeout(() => player.damageUp = false, 10000);
+                    break;
+                case 'heal':
+                    if (lives < 3) { // Usamos la variable global lives
+                        lives++;
+                        document.getElementById('lives').textContent = lives;
+                    }
+                    break;
+            }
+        }
+
+        // Modificar la clase Monster para usar el nivel de amenaza
+        class Monster {
+            constructor() {
+                if (!availableMonsters.length) return null;
+                
+                const type = availableMonsters[Math.floor(Math.random() * availableMonsters.length)];
+                this.type = type;
+                this.threat = type.threat || 1;
+                this.width = 30 + (this.threat * 5); // Tamaño basado en amenaza
+                this.height = 30 + (this.threat * 5);
+                this.x = canvas.width;
+                this.y = Math.random() * (canvas.height - this.height);
+                this.speed = 1 + (this.threat * 0.3); // Velocidad basada en amenaza
+                this.points = this.threat * 100;
+                this.health = getMonsterHealth(this.threat);
+                this.maxHealth = this.health;
+                this.image = new Image();
+                this.image.src = type.image;
+
+                // Añadir retraso basado en amenaza
+                this.spawnDelay = this.threat > 7 ? 3000 : 
+                                 this.threat > 5 ? 2000 : 
+                                 this.threat > 3 ? 1000 : 0;
+                setTimeout(() => this.active = true, this.spawnDelay);
+            }
+
+            update() {
+                if (this.active) {
+                    this.x -= this.speed;
+                }
+            }
+
+            draw() {
+                if (!this.active) return;
+                
+                if (this.image.complete) {
+                    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+                    
+                    // Barra de vida
+                    const healthBarWidth = this.width;
+                    const healthBarHeight = 5;
+                    ctx.fillStyle = 'red';
+                    ctx.fillRect(this.x, this.y - 10, healthBarWidth, healthBarHeight);
+                    ctx.fillStyle = 'green';
+                    ctx.fillRect(this.x, this.y - 10, (this.health / this.maxHealth) * healthBarWidth, healthBarHeight);
+
+                    // Indicador de amenaza
+                    ctx.fillStyle = this.threat >= 7 ? '#ff0000' : 
+                                  this.threat >= 4 ? '#ff8800' : '#00ff00';
+                    ctx.font = '16px Arial';
+                    ctx.fillText(`★${this.threat}`, this.x, this.y - 15);
+                }
+            }
+        }
+
+        // Función mejorada para generar monstruos
+        function spawnMonster() {
+            if (!monstersLoaded || gameOver) return;
+
+            const threatLevel = Math.floor(score / 1000); // Aumenta cada 1000 puntos
+            const baseSpawnRate = 0.01;
+            const maxMonsters = 3 + Math.floor(threatLevel / 2);
+
+            if (monsters.length < maxMonsters && Math.random() < baseSpawnRate + (threatLevel * 0.002)) {
+                // Filtrar monstruos por nivel de amenaza
+                const availableForLevel = availableMonsters.filter(m => {
+                    const monsterThreat = m.threat || 1;
+                    return monsterThreat <= Math.max(1, threatLevel);
+                });
+
+                if (availableForLevel.length > 0) {
+                    monsters.push(new Monster());
+                }
+            }
+        }
+
+        // Control del jugador con ratón
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseY = e.clientY - rect.top;
+            player.y = Math.max(0, Math.min(canvas.height - player.height, mouseY - player.height/2));
+        });
+
+        // Control del jugador con teclado
+        const keys = {};
+        document.addEventListener('keydown', (e) => keys[e.key] = true);
+        document.addEventListener('keyup', (e) => keys[e.key] = false);
+
+        // Mejorar el sistema de disparo
+        function shoot() {
+            const now = Date.now();
+            if (now - player.lastShot >= player.shootDelay && !gameOver) {
+                sounds.shoot.currentTime = 0;
+                sounds.shoot.play();
+
+                const damage = player.damageUp ? 2 : 1;
+
+                if (player.spreadShot) {
+                    // Disparo triple en abanico
+                    for (let angle = -15; angle <= 15; angle += 15) {
+                        const rad = angle * Math.PI / 180;
+                        bullets.push({
+                            x: player.x + player.width,
+                            y: player.y + player.height/2,
+                            speed: 10,
+                            width: 15,
+                            height: 4,
+                            damage: damage,
+                            dx: Math.cos(rad) * 10,
+                            dy: Math.sin(rad) * 10
+                        });
+                    }
+                } else {
+                    // Disparo normal
+                    bullets.push({
+                        x: player.x + player.width,
+                        y: player.y + player.height/2,
+                        speed: 10,
+                        width: 15,
+                        height: 4,
+                        damage: damage,
+                        dx: 10,
+                        dy: 0
+                    });
+                }
+                player.lastShot = now;
+            }
+        }
+
+        // Asegurarse de que el disparo funcione con ratón y teclado
+        canvas.addEventListener('mousedown', (e) => {
+            if (!gameOver) shoot();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                if (gameOver) {
+                    resetGame();
+                } else {
+                    shoot();
+                }
+            }
+        });
+
+        function updatePlayer() {
+            if (keys.ArrowUp && player.y > 0) player.y -= player.speed;
+            if (keys.ArrowDown && player.y < canvas.height - player.height) player.y += player.speed;
+        }
+
+        function drawPlayer() {
+            // Dibujar arma
+            if (player.weapon.complete) {
+                const weaponWidth = player.width * 1.5;
+                const weaponHeight = player.height * 1.5;
+                
+                ctx.save();
+                ctx.translate(player.x + player.width/2, player.y + player.height/2);
+                ctx.rotate(Math.PI/2);
+
+                if (player.damageUp) {
+                    // Aplicar tinte rojo más intenso
+                    ctx.filter = 'brightness(120%) sepia(1) saturate(10000%) hue-rotate(320deg)';
+                }
+                
+                ctx.drawImage(player.weapon, 
+                    -weaponWidth/2, 
+                    -weaponHeight/2, 
+                    weaponWidth, 
+                    weaponHeight
+                );
+                
+                ctx.restore();
+
+                // Dibujar indicador de rapidfire
+                if (player.rapidFire) {
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 24px Arial';
+                    ctx.fillText('⇈', player.x + player.width/4, player.y - 10);
+                }
+            }
+        }
+
+        function checkCollisions() {
+            bullets.forEach((bullet, bulletIndex) => {
+                monsters.forEach((monster, monsterIndex) => {
+                    if (bullet.x < monster.x + monster.width &&
+                        bullet.x + bullet.width > monster.x &&
+                        bullet.y < monster.y + monster.height &&
+                        bullet.y + bullet.height > monster.y) {
+                        
+                        bullets.splice(bulletIndex, 1);
+                        monster.health -= bullet.damage;
+                        
+                        if (monster.health <= 0) {
+                            monsters.splice(monsterIndex, 1);
+                            score += monster.points;
+                            document.getElementById('score').textContent = score;
+                            sounds.explode.currentTime = 0;
+                            sounds.explode.play();
+                            
+                            if (score > highscore) {
+                                highscore = score;
+                                localStorage.setItem('highscore', highscore);
+                                document.getElementById('highscore').textContent = highscore;
+                            }
+
+                            // Chance de soltar power-up basado en amenaza
+                            if (monster.threat > 3 && Math.random() < 1) {
+                                const types = ['spread', 'rapid', 'damage', 'heal'];
+                                powerups.push(new PowerUp(monster.x, monster.y, 
+                                    types[Math.floor(Math.random() * types.length)]));
+                            }
+                        }
+                    }
+                });
+            });
+
+            monsters.forEach((monster, index) => {
+                if (monster.x <= 0) {
+                    monsters.splice(index, 1);
+                    lives--;
+                    document.getElementById('lives').textContent = lives;
+                    canvas.classList.add('flash');
+                    setTimeout(() => canvas.classList.remove('flash'), 100);
+                    
+                    if (lives <= 0) {
+                        gameOver = true;
+                        document.getElementById('game-over').style.display = 'block';
+                    }
+                }
+            });
+
+            // Colisión con power-ups
+            powerups.forEach((powerup, index) => {
+                if (powerup.x < player.x + player.width &&
+                    powerup.x + powerup.width > player.x &&
+                    powerup.y < player.y + player.height &&
+                    powerup.y + powerup.height > player.y) {
+                    applyPowerUp(powerup.type);
+                    powerups.splice(index, 1);
+                }
+            });
+        }
+
+        function resetGame() {
+            score = 0;
+            lives = 3;
+            gameOver = false;
+            monsters = [];
+            bullets = [];
+            powerups = [];
+            player.y = canvas.height/2;
+            document.getElementById('score').textContent = score;
+            document.getElementById('lives').textContent = lives;
+            document.getElementById('game-over').style.display = 'none';
+        }
+
+        function gameLoop() {
+            if (!gameOver) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                updatePlayer();
+                spawnMonster();
+                
+                drawPlayer();
+                
+                // Actualizar y dibujar balas
+                bullets = bullets.filter(bullet => bullet.x < canvas.width);
+                bullets.forEach(bullet => {
+                    bullet.x += bullet.dx;
+                    bullet.y += bullet.dy;
+                    ctx.fillStyle = '#fff';
+                    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+                });
+                
+                // Actualizar y dibujar monstruos
+                monsters.forEach(monster => {
+                    monster.update();
+                    monster.draw();
+                });
+
+                // Actualizar y dibujar power-ups
+                powerups = powerups.filter(p => p.x > 0);
+                powerups.forEach(powerup => {
+                    powerup.update();
+                    powerup.draw();
+                });
+                
+                checkCollisions();
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Iniciar el juego después de cargar los monstruos
+        loadMonsters().then(() => {
+            document.getElementById('highscore').textContent = highscore;
+            gameLoop();
+        });
+    </script>
+</body>
+</html>
