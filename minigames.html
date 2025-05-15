@@ -3,56 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MH MINIGAMES</title>
+    <title>MINIGAMES</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/game.png">
 </head>
 <body>
     <!-- SideBar -->
     <div id="sidebar" class="fixed -left-64 h-full w-64 shadow-lg transition-all duration-300 z-40">
-        <div class="toggle-sidebar-button" onclick="toggleSidebar()">
+        <div class="toggle-sidebar-button" onclick="toggleSidebar()" style="padding-top: 10px; padding-bottom: 10px;">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
             </svg>
         </div>
         <div class="sidebar-content">
-            <div class="space-y-4">  
+            <div class="space-y-4 flex items-center justify-between" style="margin-bottom: 20px;">  
                 <div class="flex items-center justify-between gap-2">                    
                     <button 
                         onclick="window.location.href='https://mhbestiary.github.io/home/'"
-                        class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
-                        <img style="width:35px;height:35px;" src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/home.png" class="h-6 w-6" alt="Alternar Modo Oscuro">
+                        class="botonDark px-1.5 py-1.5 rounded-lg transition-colors" style="padding: 8px !important; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 10%;">
+                        <img style="width:32px;height:32px;" src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/home.png" class="h-6 w-6" alt="Alternar Modo Oscuro">
                     </button>        
                     <button 
                         onclick="toggleLanguage()"
-                        class="botonDark px-1.5 py-1.5 rounded-lg transition-colors language-button">
-                        <span id="languageText" class="language-text">ES</span>
-                        <img id="languageIcon" style="width:35px;height:35px;" 
+                        class="botonDark px-1.5 py-1.5 rounded-lg transition-colors language-button" style="padding: 8px !important; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 10%;">
+                        <span id="languageText" class="language-text" style="font-size: 14px;">ES</span>
+                        <img id="languageIcon" style="width:36px;height:36px;" 
                             src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/es.png" 
                             class="h-6 w-6 language-icon" alt="Language">
                     </button>           
                 </div>
                 <a href="https://mhbestiary.github.io/home/menu.html" 
-                class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" style="padding: 12px; font-size: 0.9em; margin-bottom: 15px; margin-top: 15px;">
                     <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/bbq.png" 
-                        class="w-6 h-6" alt="Menu">
+                        class="w-8 h-8" alt="Menu" style="width: 32px; height: 32px;">
                     <span data-translation-key="menu">MENU WILDS</span>
                 </a>
                 <a href="https://mhbestiary.github.io/home/galeria.html" 
-                class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" style="padding: 12px; font-size: 0.9em; margin-bottom: 15px; margin-top: 15px;">
                     <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/map.png" 
-                        class="w-6 h-6" alt="Menu">
+                        class="w-8 h-8" alt="Menu" style="width: 32px; height: 32px;">
                     <span data-translation-key="gallery">GALERIA</span>
                 </a>
                 <a href="https://mhbestiary.github.io/home/minigames.html" 
-                   class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                   class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" style="padding: 12px; font-size: 0.9em; margin-bottom: 15px; margin-top: 15px;">
                     <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/game.png" 
-                         class="w-6 h-6" alt="Games">
+                         class="w-8 h-8" alt="Games" style="width: 32px; height: 32px;">
                     <span data-translation-key="games">MINIGAMES</span>
                 </a>
+                <a href="https://mhbestiary.github.io/home/GeneraMonstruos.html" 
+                   class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" style="padding: 12px; font-size: 0.9em; margin-bottom: 15px; margin-top: 15px;">
+                    <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/book_blue.png" 
+                         class="w-8 h-8" alt="Ruleta" style="width: 32px; height: 32px;">
+                    <span data-translation-key="generator">GENERAR MONSTRUOS</span>
+                </a>
                 <a href="https://mhbestiary.github.io/home/info.html" 
-                   class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                   class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" style="padding: 12px; font-size: 0.9em; margin-bottom: 15px; margin-top: 15px;">
                     <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/question.png" 
-                         class="w-6 h-6" alt="Info">
+                         class="w-8 h-8" alt="Info" style="width: 32px; height: 32px;">
                     <span data-translation-key="info">PAGE INFO</span>
                 </a>
             </div>
@@ -335,17 +341,29 @@
             flex: 1;
             overflow-y: auto;
             padding: 1rem;
-            padding-top: 50px;
+            padding-top: 20px;
             padding-bottom: 180px;
+        }
+
+        #sidebar .sidebar-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #sidebar .sidebar-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #sidebar .sidebar-content::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
         }
 
         #sidebar .toggle-sidebar-button {
             position: absolute;
             right: -40px;
-            top: 10%;
-            transform: translateY(-50%);
+            top: 100px;
             width: 40px;
-            height: 60px;
+            height: 40px;
             background-color: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(50px);
             border-radius: 0 8px 8px 0;
@@ -364,14 +382,13 @@
             font-family: 'Albertus MT Std Regular';
             display: flex;
             align-items: center;
-            padding: 0.75rem;
+            padding: 8px;
             border-radius: 0.5rem;
             transition: all 0.2s ease;
             backdrop-filter: blur(5px);
             text-decoration: none;
             color: #000000;
-            margin-top: 10px;
-            margin-bottom: 10px;
+            margin: 5px 0;
         }
 
         #sidebar a:hover {
@@ -379,8 +396,6 @@
             color: #000000;
             box-shadow: 0 10px 10px rgba(0,0,0,0.2);
         }
-
-        
 
         #sidebar img {
             transition: transform 0.2s ease;
@@ -404,7 +419,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             color: #ffffff;
             z-index: 2;
@@ -420,11 +435,18 @@
             border: none;
             background-color: #939aa8;
             transition: background-color 0.2s ease;
+            padding: 8px !important;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .botonDark:hover {
             background-color: #666a74;
         }
+
 
         @media (max-width: 768px) {
             .games-grid {
@@ -500,34 +522,50 @@
         }
 
         function applyTranslations() {
-            if (!translations || !translations[currentLanguage]) return;
+            if (!translations || !translations[currentLanguage]) {
+                console.log('No translations found');
+                return;
+            }
 
-            const t = translations[currentLanguage].minigames;
+            console.log('Current language:', currentLanguage);
+            console.log('Full translations:', translations[currentLanguage]);
+
+            // Actualizar título y textos
+            const t = translations[currentLanguage];
             
             // Actualizar título
-            document.querySelector('h1').textContent = t.title;
+            document.querySelector('h1').textContent = t.minigames.title;
 
-            // Actualizar las cartas de juego
-            const gameCards = {
-                wheel: { title: 'Monster Wheel', description: t.wheel },
-                picker: { title: 'Monster Picker', description: t.picker },
-                shooter: { title: 'Monster Shooter', description: t.shooter },
-                clicker: { title: 'Monster Clicker', description: t.clicker }
+            // Definir los textos de las tarjetas de juego
+            const gameTranslations = {
+                wheel: t.minigames.wheel,
+                picker: t.minigames.picker,
+                shooter: t.minigames.shooter,
+                clicker: t.minigames.clicker
             };
 
-            Object.entries(gameCards).forEach(([game, content]) => {
-                const card = document.querySelector(`[data-game="${game}"]`);
-                if (card) {
-                    card.querySelector('h2').textContent = content.title;
-                    card.querySelector('p').textContent = content.description;
+            // Actualizar cada tarjeta de juego
+            document.querySelectorAll('.game-card').forEach(card => {
+                const gameType = card.getAttribute('data-game');
+                const gameText = gameTranslations[gameType];
+                
+                if (gameText) {
+                    const content = card.querySelector('.game-content');
+                    if (content) {
+                        const title = content.querySelector('h2');
+                        const desc = content.querySelector('p');
+                        
+                        if (title) title.textContent = gameText.title;
+                        if (desc) desc.textContent = gameText.description;
+                    }
                 }
             });
 
-            // Actualizar enlaces del sidebar
+            // Actualizar sidebar
             document.querySelectorAll('#sidebar .sidebar-content a span').forEach(span => {
                 const key = span.getAttribute('data-translation-key');
-                if (key && translations[currentLanguage].nav[key]) {
-                    span.textContent = translations[currentLanguage].nav[key];
+                if (key && t.nav && t.nav[key]) {
+                    span.textContent = t.nav[key];
                 }
             });
         }
