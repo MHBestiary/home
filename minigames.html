@@ -507,19 +507,19 @@
             // Actualizar título
             document.querySelector('h1').textContent = t.title;
 
-            // Actualizar textos de los juegos
-            const games = {
-                wheel: ['Monster Wheel', '¡Gira la ruleta para seleccionar un monstruo aleatorio!'],
-                picker: ['Monster Picker', '¡Escoge entre dos monstruos aleatorios!'],
-                shooter: ['Monster Shooter', '¡Derrota monstruos en este minijuego de disparos!'],
-                clicker: ['Monster Clicker', '¡Mejora tu equipo y derrota monstruos haciendo click!']
+            // Actualizar las cartas de juego
+            const gameCards = {
+                wheel: { title: 'Monster Wheel', description: t.wheel },
+                picker: { title: 'Monster Picker', description: t.picker },
+                shooter: { title: 'Monster Shooter', description: t.shooter },
+                clicker: { title: 'Monster Clicker', description: t.clicker }
             };
 
-            Object.entries(games).forEach(([game, [title, description]]) => {
+            Object.entries(gameCards).forEach(([game, content]) => {
                 const card = document.querySelector(`[data-game="${game}"]`);
-                if (card && t[game]) {
-                    card.querySelector('h2').textContent = t[game].title;
-                    card.querySelector('p').textContent = t[game].description;
+                if (card) {
+                    card.querySelector('h2').textContent = content.title;
+                    card.querySelector('p').textContent = content.description;
                 }
             });
 

@@ -189,6 +189,13 @@
             "remaining": "Monstruos restantes: {n}",
             "choose": "ELEGIR",
             "playAgain": "JUGAR DE NUEVO"
+        },        
+        "minigames": {
+            "title": "MONSTER HUNTER MINIGAMES",
+            "wheel": "¡Gira la ruleta para seleccionar un monstruo aleatorio!",
+            "picker": "¡Escoge entre dos monstruos aleatorios!",
+            "shooter": "¡Derrota monstruos en este minijuego de disparos!",
+            "clicker": "¡Mejora tu equipo y derrota monstruos haciendo click!"
         }
     },
     "en": {
@@ -381,6 +388,13 @@
             "remaining": "Remaining monsters: {n}",
             "choose": "CHOOSE",
             "playAgain": "PLAY AGAIN"
+        },
+        "minigames": {
+            "title": "MONSTER HUNTER MINIGAMES",
+            "wheel": "Spin the wheel to select a random monster!",
+            "picker": "Choose between two random monsters!",
+            "shooter": "Defeat monsters in this shooting minigame!",
+            "clicker": "Upgrade your equipment and defeat monsters by clicking!"
         }
     }
 }
