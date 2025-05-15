@@ -175,7 +175,7 @@
                 const response = await fetch('https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/monstruos.json');
                 const data = await response.json();
                 availableMonsters = data
-                    .filter(m => m.image && !m.spoiler) // Solo monstruos con imagen y no spoiler
+                    .filter(m => m.image) // Solo monstruos con imagen y no spoiler
                     .map(m => ({
                         name: m.name,
                         image: m.image,
