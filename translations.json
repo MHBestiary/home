@@ -192,7 +192,7 @@
             "playAgain": "JUGAR DE NUEVO"
         },
         "minigames": {
-            "title": "MONSTER HUNTER MINIGAMES",
+            "title": "MINIJUEGOS",
             "wheel": {
                 "title": "Monster Wheel",
                 "description": "¡Gira la ruleta para seleccionar un monstruo aleatorio!"
@@ -404,7 +404,7 @@
             "playAgain": "PLAY AGAIN"
         },
         "minigames": {
-            "title": "MONSTER HUNTER MINIGAMES",
+            "title": "MINIGAMES",
             "wheel": {
                 "title": "Monster Wheel",
                 "description": "Spin the wheel to select a random monster!"
