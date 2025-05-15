@@ -150,8 +150,8 @@
                     "description": "Colección de imágenes y arte conceptual de monstruos."
                 },
                 "ruleta": {
-                    "title": "Ruleta de Monstruos",
-                    "description": "Selección aleatoria de monstruos y armas para tus cacerías."
+                    "title": "Minijuegos",
+                    "description": "Variedad de minijuegos, pelea, gana o juega con tus monstruos favoritos!"
                 },
                 "generador": {
                     "title": "Generador de Monstruos",
@@ -362,8 +362,8 @@
                     "description": "Collection of images and concept art of monsters."
                 },
                 "ruleta": {
-                    "title": "Monster Roulette",
-                    "description": "Random selection of monsters and weapons for your hunts."
+                    "title": "Minigames", 
+                    "description": "Variety of minigames, fight, win or play with your favorite monsters!"
                 },
                 "generador": {
                     "title": "Monster Generator",
