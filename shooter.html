@@ -1,45 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Monster Hunter Arcade</title>
+    <title>SHOOTER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
+            padding: 0;
             background: #111;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             font-family: 'Press Start 2P', cursive;
             overflow: hidden;
         }
-        canvas {
-            border: 4px solid #f83;
-            box-shadow: 0 0 20px #f83;
-            image-rendering: pixelated;
-            position: relative;
-            z-index: 1;
-        }
+
         #game-container {
+            position: relative;
+            width: min(800px, 95vw);
+            height: min(1200px, 95vh);
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
+            margin: auto;
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+            animation-play-state: paused;
         }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            border: 4px solid #f83;
+            box-shadow: 0 0 20px #f83;
+            image-rendering: pixelated;
+            background: #000;
+            filter: brightness(1.2) contrast(1.1) saturate(1.2);
+        }
+
         #hud {
-            width: 800px;
+            position: absolute;
+            top: 10px;
+            left: 0;
+            right: 0;
             display: flex;
             justify-content: space-between;
+            padding: 0 40px;
             color: #f83;
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: min(4vh, 32px);
             text-shadow: 2px 2px #000;
+            z-index: 99;
         }
-        .flash {
-            animation: flash 0.1s;
-        }
-        @keyframes flash {
-            0% { background: white; }
-            100% { background: transparent; }
-        }
+
         #game-over {
             display: none;
             position: absolute;
@@ -47,29 +59,12 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: #f83;
-            font-size: 48px;
+            font-size: 24px;
             text-align: center;
-        }
-        @media (max-width: 768px) {
-            #game-container {
-                transform: none;
-                padding: 0;
-                height: 100vh;
-                display: flex;
-                align-items: center;
-            }
-            canvas {
-                width: 100%;
-                height: auto;
-            }
-            #hud {
-                width: 100%;
-                padding: 10px;
-                box-sizing: border-box;
-            }
-            body {
-                touch-action: none;
-            }
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 99;
         }
 
         .restart-btn {
@@ -81,46 +76,105 @@
             font-size: 16px;
             margin-top: 20px;
             cursor: pointer;
+            border-radius: 5px;
         }
+
         .restart-btn:hover {
             background: #f94;
         }
 
-        /* Efecto CRT */
-        #game-container::before {
-            content: "";
+        @media (max-width: 480px) {
+            #game-container {
+                width: 100vw;
+                height: 100vh;
+            }
+
+            canvas {
+                border: none;
+            }
+
+            #hud {
+                font-size: 14px;
+                padding: 10px;
+                background: rgba(0, 0, 0, 0.8);
+            }
+        }
+
+        /* Efectos CRT */
+        .crt {
             position: absolute;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .crt::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: linear-gradient(
                 rgba(18, 16, 16, 0) 50%,
                 rgba(0, 0, 0, 0.25) 50%
             );
             background-size: 100% 4px;
-            z-index: 2;
             pointer-events: none;
-            animation: flicker 0.15s infinite;
+            z-index: 100;
         }
 
-        @keyframes flicker {
-            0% { opacity: 0.9; }
-            100% { opacity: 1; }
+        .crt::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 106, 0, 0.1) 0%,
+                rgba(255, 212, 212, 0.3) 100%
+            );
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .flash {
+            animation: flash 0.1s;
+        }
+
+        @keyframes flash {
+            0% { filter: brightness(1); }
+            50% { filter: brightness(3); }
+            100% { filter: brightness(1); }
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="crt"></div>
     <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
         <div id="hud">
-            <div>SCORE: <span id="score">0</span></div>
-            <div>HIGH: <span id="highscore">0</span></div>
-            <div>LIVES: <span id="lives">3</span></div>
+            <div style="margin:0 30px">SCORE: <span id="score">0</span></div>
+            <div style="margin:0 30px">HIGH: <span id="highscore">0</span></div>
+            <div style="margin:0 30px">LIVES: <span id="lives">3</span></div>
         </div>
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
         <div id="game-over">
             GAME OVER<br>
             <button class="restart-btn">CONTINUE</button>
+            <a href="minigames.html" class="restart-btn">EXIT</a>
         </div>
     </div>
 
@@ -132,10 +186,10 @@
         let highscore = localStorage.getItem('highscore') || 0;
         let gameOver = false;
         let player = {
-            x: 50,
-            y: canvas.height/2,
-            width: 40,
-            height: 40,
+            x: canvas.width / 2,
+            y: canvas.height - 60,
+            width: 80,  // Duplicado el tamaño
+            height: 80, // Duplicado el tamaño
             speed: 5,
             shooting: false,
             lastShot: 0,
@@ -206,10 +260,10 @@
 
         // Función para calcular la vida basada en el nivel de amenaza
         function getMonsterHealth(threat) {
-            if (threat <= 3) return 1; // Muere de un golpe
-            if (threat <= 6) return 2; // Muere de dos golpes
-            if (threat <= 9) return 3; // Muere de tres golpes
-            return 4; // Nivel 10 muere de 5 golpes
+            if (threat <= 3) return 2; // Más resistentes
+            if (threat <= 6) return 3; // Más resistentes
+            if (threat <= 9) return 4; // Más resistentes
+            return 5; // Más resistentes
         }
 
         // Efectos de sonido
@@ -229,7 +283,7 @@
             }
 
             update() {
-                this.x -= this.speed;
+                this.y += this.speed;
             }
 
             draw() {
@@ -352,10 +406,10 @@
                 const type = availableMonsters[Math.floor(Math.random() * availableMonsters.length)];
                 this.type = type;
                 this.threat = type.threat || 1;
-                this.width = 30 + (this.threat * 5); // Tamaño basado en amenaza
-                this.height = 30 + (this.threat * 5);
-                this.x = canvas.width;
-                this.y = Math.random() * (canvas.height - this.height);
+                this.width = 60 + (this.threat * 10);  // Aumentado tamaño base
+                this.height = 60 + (this.threat * 10); // Aumentado tamaño base
+                this.x = Math.random() * (canvas.width - this.width);
+                this.y = -this.height;
                 this.speed = 1 + (this.threat * 0.3); // Velocidad basada en amenaza
                 this.points = this.threat * 100;
                 this.health = getMonsterHealth(this.threat);
@@ -372,7 +426,7 @@
 
             update() {
                 if (this.active) {
-                    this.x -= this.speed;
+                    this.y += this.speed;
                 }
             }
 
@@ -384,7 +438,7 @@
                     
                     // Barra de vida
                     const healthBarWidth = this.width;
-                    const healthBarHeight = 5;
+                    const healthBarHeight = 10;
                     ctx.fillStyle = 'red';
                     ctx.fillRect(this.x, this.y - 10, healthBarWidth, healthBarHeight);
                     ctx.fillStyle = 'green';
@@ -393,7 +447,7 @@
                     // Indicador de amenaza
                     ctx.fillStyle = this.threat >= 7 ? '#ff0000' : 
                                   this.threat >= 4 ? '#ff8800' : '#00ff00';
-                    ctx.font = '16px Arial';
+                    ctx.font = '32px Arial';
                     ctx.fillText(`★${this.threat}`, this.x, this.y - 15);
                 }
             }
@@ -423,8 +477,8 @@
         // Control del jugador con ratón
         canvas.addEventListener('mousemove', (e) => {
             const rect = canvas.getBoundingClientRect();
-            const mouseY = e.clientY - rect.top;
-            player.y = Math.max(0, Math.min(canvas.height - player.height, mouseY - player.height/2));
+            const mouseX = e.clientX - rect.left;
+            player.x = Math.max(0, Math.min(canvas.width - player.width, mouseX - player.width/2));
         });
 
         // Control del jugador con teclado
@@ -437,12 +491,7 @@
         let autoShootInterval = null;
 
         canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const rect = canvas.getBoundingClientRect();
-            const touch = e.touches[0];
-            const y = (touch.clientY - rect.top) * (canvas.height / rect.height);
-            player.y = Math.max(0, Math.min(canvas.height - player.height, y - player.height/2));
-            
+            handleTouch(e);
             if (!autoShootInterval) {
                 shoot();
                 autoShootInterval = setInterval(() => {
@@ -451,13 +500,7 @@
             }
         });
 
-        canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            const rect = canvas.getBoundingClientRect();
-            const touch = e.touches[0];
-            const y = (touch.clientY - rect.top) * (canvas.height / rect.height);
-            player.y = Math.max(0, Math.min(canvas.height - player.height, y - player.height/2));
-        });
+        canvas.addEventListener('touchmove', handleTouch);
 
         canvas.addEventListener('touchend', (e) => {
             e.preventDefault();
@@ -467,6 +510,15 @@
                 autoShootInterval = null;
             }
         });
+
+        // Modificar la función de control táctil
+        function handleTouch(e) {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches ? e.touches[0] : e;
+            const x = (touch.clientX - rect.left) * (canvas.width / rect.width);
+            player.x = Math.max(0, Math.min(canvas.width - player.width, x - player.width/2));
+        }
 
         // Mejorar el sistema de disparo
         function shoot() {
@@ -478,31 +530,31 @@
                 const damage = player.damageUp ? 2 : 1;
 
                 if (player.spreadShot) {
-                    // Disparo triple en abanico
+                    // Disparo triple hacia arriba
                     for (let angle = -15; angle <= 15; angle += 15) {
                         const rad = angle * Math.PI / 180;
                         bullets.push({
-                            x: player.x + player.width,
-                            y: player.y + player.height/2,
+                            x: player.x + player.width/2,
+                            y: player.y,
                             speed: 10,
-                            width: 15,
-                            height: 4,
+                            width: 8,    // Balas más grandes
+                            height: 20,  // Balas más grandes
                             damage: damage,
-                            dx: Math.cos(rad) * 10,
-                            dy: Math.sin(rad) * 10
+                            dx: Math.sin(rad) * 10,
+                            dy: -10
                         });
                     }
                 } else {
                     // Disparo normal
                     bullets.push({
-                        x: player.x + player.width,
-                        y: player.y + player.height/2,
+                        x: player.x + player.width/2,
+                        y: player.y,
                         speed: 10,
-                        width: 15,
-                        height: 4,
+                        width: 8,    // Balas más grandes
+                        height: 20,  // Balas más grandes
                         damage: damage,
-                        dx: 10,
-                        dy: 0
+                        dx: 0,
+                        dy: -10
                     });
                 }
                 player.lastShot = now;
@@ -526,19 +578,19 @@
         document.querySelector('.restart-btn').addEventListener('click', resetGame);
 
         function updatePlayer() {
-            if (keys.ArrowUp && player.y > 0) player.y -= player.speed;
-            if (keys.ArrowDown && player.y < canvas.height - player.height) player.y += player.speed;
+            if (keys.ArrowLeft && player.x > 0) player.x -= player.speed;
+            if (keys.ArrowRight && player.x < canvas.width - player.width) player.x += player.speed;
         }
 
         function drawPlayer() {
             // Dibujar arma
             if (player.weapon.complete) {
-                const weaponWidth = player.width * 1.5;
-                const weaponHeight = player.height * 1.5;
+                const weaponWidth = player.width * 1.2;   // Ajustado la proporción
+                const weaponHeight = player.height * 1.2; // Ajustado la proporción
                 
                 ctx.save();
                 ctx.translate(player.x + player.width/2, player.y + player.height/2);
-                ctx.rotate(Math.PI/2);
+                ctx.rotate(0); // Rotar 90 grados para que apunte hacia arriba
 
                 if (player.damageUp) {
                     ctx.filter = 'brightness(120%) sepia(1) saturate(10000%) hue-rotate(320deg)';
@@ -552,6 +604,27 @@
                 );
                 
                 ctx.restore();
+            }
+        }
+
+        function takeDamage() {
+            lives--;
+            document.getElementById('lives').textContent = lives;
+            
+            // Efecto de flash
+            canvas.classList.remove('flash');
+            void canvas.offsetWidth; // Forzar reflow
+            canvas.classList.add('flash');
+            
+            // Efecto de temblor
+            const container = document.getElementById('game-container');
+            container.style.animation = 'none';
+            void container.offsetWidth; // Forzar reflow
+            container.style.animation = 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both';
+            
+            if (lives <= 0) {
+                gameOver = true;
+                document.getElementById('game-over').style.display = 'block';
             }
         }
 
@@ -580,7 +653,7 @@
                             }
 
                             // Chance de soltar power-up basado en amenaza
-                            if (monster.threat > 3 && Math.random() < 0.25) {
+                            if (monster.threat > 3 && Math.random() < 1) {
                                 const types = ['spread', 'rapid', 'damage', 'heal'];
                                 powerups.push(new PowerUp(monster.x, monster.y, 
                                     types[Math.floor(Math.random() * types.length)]));
@@ -591,17 +664,9 @@
             });
 
             monsters.forEach((monster, index) => {
-                if (monster.x <= 0) {
+                if (monster.y >= canvas.height) {
                     monsters.splice(index, 1);
-                    lives--;
-                    document.getElementById('lives').textContent = lives;
-                    canvas.classList.add('flash');
-                    setTimeout(() => canvas.classList.remove('flash'), 100);
-                    
-                    if (lives <= 0) {
-                        gameOver = true;
-                        document.getElementById('game-over').style.display = 'block';
-                    }
+                    takeDamage();
                 }
             });
 
@@ -624,7 +689,8 @@
             monsters = [];
             bullets = [];
             powerups = [];
-            player.y = canvas.height/2;
+            player.x = canvas.width / 2 - player.width / 2;
+            player.y = canvas.height - player.height - 40; // Usar la misma posición que en resizeCanvas
             document.getElementById('score').textContent = score;
             document.getElementById('lives').textContent = lives;
             document.getElementById('game-over').style.display = 'none';
@@ -644,6 +710,7 @@
             };
         }
 
+        // Modificar gameLoop para orientación vertical
         function gameLoop() {
             if (!gameOver) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -654,7 +721,7 @@
                 drawPlayer();
                 
                 // Actualizar y dibujar balas
-                bullets = bullets.filter(bullet => bullet.x < canvas.width);
+                bullets = bullets.filter(bullet => bullet.y > 0);
                 bullets.forEach(bullet => {
                     bullet.x += bullet.dx;
                     bullet.y += bullet.dy;
@@ -669,7 +736,7 @@
                 });
 
                 // Actualizar y dibujar power-ups
-                powerups = powerups.filter(p => p.x > 0);
+                powerups = powerups.filter(p => p.y < canvas.height);
                 powerups.forEach(powerup => {
                     powerup.update();
                     powerup.draw();
@@ -680,9 +747,34 @@
                 
                 checkCollisions();
             }
-            
             requestAnimationFrame(gameLoop);
         }
+
+        // Ajustar el canvas al redimensionar
+        function resizeCanvas() {
+            canvas.width = 800;   // Resolución base más adecuada
+            canvas.height = 1200; // Mantiene ratio 2:3
+            
+            // Actualizar posición inicial del jugador
+            player.x = canvas.width / 2 - player.width / 2;
+            player.y = canvas.height - player.height - 40; // Más separación del borde
+            
+            // Ajustamos el tamaño real para mantener el ratio de aspecto
+            const container = document.getElementById('game-container');
+            const containerRatio = container.clientWidth / container.clientHeight;
+            const canvasRatio = canvas.width / canvas.height;
+            
+            if (containerRatio > canvasRatio) {
+                canvas.style.height = '100%';
+                canvas.style.width = 'auto';
+            } else {
+                canvas.style.width = '100%';
+                canvas.style.height = 'auto';
+            }
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('load', resizeCanvas);
 
         // Iniciar el juego después de cargar los monstruos
         loadMonsters().then(() => {
