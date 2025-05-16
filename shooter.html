@@ -92,10 +92,10 @@
             }
 
             canvas {
-                width: 100% !important;
-                height: 100% !important;
+                width: 90% !important;
+                height: 90% !important;
                 border: none;
-                margin: 0;
+                margin-top: 55px;
                 padding: 0;
             }
 
@@ -277,9 +277,9 @@
 
         // Función para calcular la vida basada en el nivel de amenaza
         function getMonsterHealth(threat) {
-            if (threat <= 3) return 2; // Más resistentes
-            if (threat <= 6) return 3; // Más resistentes
-            if (threat <= 9) return 4; // Más resistentes
+            if (threat <= 3) return 1; // Más resistentes
+            if (threat <= 6) return 2; // Más resistentes
+            if (threat <= 9) return 3; // Más resistentes
             return 5; // Más resistentes
         }
 
@@ -423,11 +423,25 @@
                 const type = availableMonsters[Math.floor(Math.random() * availableMonsters.length)];
                 this.type = type;
                 this.threat = type.threat || 1;
-                this.width = 60 + (this.threat * 10);  // Aumentado tamaño base
-                this.height = 60 + (this.threat * 10); // Aumentado tamaño base
+                
+                // Detectar si es móvil
+                const isMobile = window.innerWidth <= 480;
+                
+                // Ajustar tamaño base según dispositivo
+                const baseSize = isMobile ? 30 : 60;
+                const growthFactor = isMobile ? 5 : 10;
+                
+                this.width = baseSize + (this.threat * growthFactor);
+                this.height = baseSize + (this.threat * growthFactor);
+                
                 this.x = Math.random() * (canvas.width - this.width);
                 this.y = -this.height;
-                this.speed = 1 + (this.threat * 0.3); // Velocidad basada en amenaza
+                
+                // Ajustar velocidad según dispositivo
+                const baseSpeed = isMobile ? 0.5 : 1;
+                const speedGrowth = isMobile ? 0.15 : 0.3;
+                this.speed = baseSpeed + (this.threat * speedGrowth);
+                
                 this.points = this.threat * 100;
                 this.health = getMonsterHealth(this.threat);
                 this.maxHealth = this.health;
@@ -453,19 +467,19 @@
                 if (this.image.complete) {
                     ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
                     
-                    // Barra de vida
-                    const healthBarWidth = this.width;
-                    const healthBarHeight = 10;
+                    // Ajustar tamaño de la barra de vida
+                    const healthBarHeight = window.innerWidth <= 480 ? 5 : 10;
                     ctx.fillStyle = 'red';
-                    ctx.fillRect(this.x, this.y - 10, healthBarWidth, healthBarHeight);
+                    ctx.fillRect(this.x, this.y - healthBarHeight, this.width, healthBarHeight);
                     ctx.fillStyle = 'green';
-                    ctx.fillRect(this.x, this.y - 10, (this.health / this.maxHealth) * healthBarWidth, healthBarHeight);
+                    ctx.fillRect(this.x, this.y - healthBarHeight, (this.health / this.maxHealth) * this.width, healthBarHeight);
 
-                    // Indicador de amenaza
+                    // Ajustar tamaño del indicador de amenaza
+                    const fontSize = window.innerWidth <= 480 ? '16px' : '32px';
                     ctx.fillStyle = this.threat >= 7 ? '#ff0000' : 
-                                  this.threat >= 4 ? '#ff8800' : '#00ff00';
-                    ctx.font = '32px Arial';
-                    ctx.fillText(`★${this.threat}`, this.x, this.y - 15);
+                                this.threat >= 4 ? '#ff8800' : '#00ff00';
+                    ctx.font = `${fontSize} Arial`;
+                    ctx.fillText(`★${this.threat}`, this.x, this.y - (healthBarHeight + 5));
                 }
             }
         }
@@ -769,32 +783,26 @@
 
         // Ajustar el canvas al redimensionar
         function resizeCanvas() {
-            // Detectar si es móvil
-            const isMobile = window.innerWidth <= 480;
             
-            if (isMobile) {
-                // En móviles usar el ancho y alto de la ventana
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
-            } else {
-                // En desktop mantener las dimensiones originales
-                canvas.width = 700;
-                canvas.height = 1000;
-            }
             
             // Actualizar posición inicial del jugador
             player.x = canvas.width / 2 - player.width / 2;
-            player.y = canvas.height - player.height - 40;
+            player.y = canvas.height - player.height - 40; // Más separación del borde
             
-            // Ajustar escala de elementos según el tamaño de pantalla
-            const scale = Math.min(canvas.width / 700, canvas.height / 1000);
-            player.width = 80 * scale;
-            player.height = 80 * scale;
+            // Ajustamos el tamaño real para mantener el ratio de aspecto
+            const container = document.getElementById('game-container');
+            const containerRatio = container.clientWidth / container.clientHeight;
+            const canvasRatio = canvas.width / canvas.height;
             
-            // Prevenir que el canvas se estire
-            canvas.style.width = '100%';
-            canvas.style.height = '100%';
-            canvas.style.objectFit = 'contain';
+            if (containerRatio > canvasRatio) {
+                canvas.style.height = '100%';
+                canvas.style.width = 'auto';
+            } else {
+                canvas.style.width = '100%';
+                canvas.style.height = 'auto';
+            }
         }
 
         window.addEventListener('resize', resizeCanvas);
