@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHARPENER</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/question.png">
+</head>
+<body>
+    <!-- SideBar -->
+    <div id="sidebar" class="fixed -left-64 h-full w-64 shadow-lg transition-all duration-300 z-40">
+        <div class="toggle-sidebar-button" onclick="toggleSidebar()">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+        </div>
+        <div class="sidebar-content">
+            <div class="space-y-4">  
+                <div class="flex items-center justify-between gap-2">                    
+                    <button 
+                        onclick="window.location.href='https://mhbestiary.github.io/home/'"
+                        class="botonDark px-1.5 py-1.5 rounded-lg transition-colors">
+                        <img style="width:35px;height:35px;" src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/home.png" class="h-6 w-6" alt="Alternar Modo Oscuro">
+                    </button>        
+                    <button 
+                        onclick="toggleLanguage()"
+                        class="botonDark px-1.5 py-1.5 rounded-lg transition-colors language-button">
+                        <span id="languageText" class="language-text">ES</span>
+                        <img id="languageIcon" style="width:35px;height:35px;" 
+                            src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/es.png" 
+                            class="h-6 w-6 language-icon" alt="Language">
+                    </button>           
+                </div>
+                <a href="https://mhbestiary.github.io/home/menu.html" 
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/bbq.png" 
+                        style="width:25px;height:25px;" alt="Menu">
+                    <span data-translation-key="menu" style="margin-left: 10px;">MENU WILDS</span>
+                </a>
+                <a href="https://mhbestiary.github.io/home/galeria.html" 
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/map.png" 
+                        style="width:25px;height:25px;" alt="Gallery">
+                    <span data-translation-key="gallery" style="margin-left: 10px;">GALERIA</span>
+                </a>
+                <a href="https://mhbestiary.github.io/home/minigames.html" 
+                   class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/game.png" 
+                         style="width:25px;height:25px;" alt="Games">
+                    <span data-translation-key="games" style="margin-left: 10px;">MINIGAMES</span>
+                </a>
+                <a href="https://mhbestiary.github.io/home/GeneraMonstruos.html" 
+                   class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/book_blue.png" 
+                         style="width:25px;height:25px;" alt="Generator">
+                    <span data-translation-key="generator" style="margin-left: 10px;">GENERAR MONSTRUOS</span>
+                </a>
+                <a href="https://mhbestiary.github.io/home/info.html" 
+                   class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/question.png" 
+                         style="width:25px;height:25px;" alt="Info">
+                    <span data-translation-key="info" style="margin-left: 10px;">PAGE INFO</span>
+                </a>
+            </div>
+        </div>
+        <div style="margin-top: auto; padding: 1rem; text-align: center;">
+            <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
+            <script type='text/javascript'>
+                kofiwidget2.init('Support me on Ko-fi', '#ebce65', 'S6S41D5TNA');kofiwidget2.draw();
+            </script> 
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = localStorage.getItem('language') || 'es';
+        let translations = {};
+
+        async function loadTranslations() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/translations.json');
+                translations = await response.json();
+                applyTranslations();
+            } catch (error) {
+                console.error('Error loading translations:', error);
+            }
+        }
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'es' ? 'en' : 'es';
+            localStorage.setItem('language', currentLanguage);
+            
+            const icon = document.getElementById('languageIcon');
+            const text = document.getElementById('languageText');
+            icon.src = `https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/${currentLanguage}.png`;
+            text.textContent = currentLanguage.toUpperCase();
+            
+            applyTranslations();
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-264px';
+            } else {
+                sidebar.style.left = '0px';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadTranslations);
+    </script>
+
+    <style>
+        @font-face {
+            font-family: 'Albertus MT Std Regular';
+            font-style: normal;
+            font-weight: normal;
+            src: local('Albertus MT Std Regular'), url('fonts/FuenteMH.woff') format('woff');
+        }
+
+        body {
+            background-image: url('https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/background 1024.jpg');
+            background-size: cover;
+            background-repeat: repeat;
+            font-family: 'Albertus MT Std Regular';
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Sidebar styles */
+        #sidebar {
+            position: fixed;
+            left: -264px;
+            height: 100vh;
+            top: 0px;
+            width: 264px;
+            background-color: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(50px);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: left 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #sidebar .sidebar-header {
+            position: sticky;
+            top: 175px;
+            padding: 1rem;
+            z-index: 2;
+        }
+
+        #sidebar .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            padding-top: 50px;
+            padding-bottom: 180px;
+        }
+
+        #sidebar .sidebar-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #sidebar .sidebar-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #sidebar .sidebar-content::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        #sidebar .toggle-sidebar-button {
+            position: absolute;
+            right: -40px;
+            top: 10%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(50px);
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #sidebar .toggle-sidebar-button:hover {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+
+        #sidebar a {
+            font-family: 'Albertus MT Std Regular';
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(5px);
+            text-decoration: none;
+            color: #000000;
+        }
+
+        #sidebar a:hover {
+            transform: translateX(4px);
+            color: #000000;
+            box-shadow: 0 10px 10px rgba(0,0,0,0.2);
+        }
+
+        #sidebar img {
+            transition: transform 0.2s ease;
+        }
+
+        #sidebar a:hover img {
+            transform: scale(1.1);
+        }
+
+        .language-button {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+        }
+
+        .language-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            z-index: 2;
+            text-shadow: 1px 1px 2px rgba(0,0,0,1);
+        }
+
+        .language-icon {
+            filter: blur(1px) opacity(0.7);
+            z-index: 1;
+        }
+
+        /* Utility classes */
+        .botonDark {
+            border: none;
+            background-color: #939aa8;
+            transition: background-color 0.2s ease;
+        }
+        .botonDark:hover {
+            background-color: #666a74;
+        }
+        .px-1\.5 { padding-left: 0.375rem; padding-right: 0.375rem; }
+        .py-1\.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .transition-colors { transition-property: background-color, border-color, color, fill, stroke; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .gap-2 { gap: 0.5rem; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            font-family: 'Albertus MT Std Regular';
+            font-size: 1rem;
+            font-weight: 600;
+            border: 2px solid #2e1a0b;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(45deg, #995a29, #e28c46);
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            filter: brightness(1.1);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            filter: brightness(0.95);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+        }
+
+        .btn-icon {
+            padding: 0.5rem;
+            border-radius: 50%;
+        }
+
+        .btn-icon img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #995a29;
+            color: #995a29;
+        }
+
+        .btn-outline:hover {
+            background: linear-gradient(45deg, #995a29, #e28c46);
+            color: white;
+        }
+
+        .btn-disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-group .btn {
+            border-radius: 0;
+        }
+
+        .btn-group .btn:first-child {
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        .btn-group .btn:last-child {
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+    </style>
+</body>
+</html>
