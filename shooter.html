@@ -618,10 +618,11 @@
 
         function drawPlayer() {
             // Dibujar arma
+            const isMobile = window.innerWidth <= 480;
             if (player.weapon.complete) {
-                const weaponWidth = player.width * 1.2;   // Ajustado la proporción
-                const weaponHeight = player.height * 1.2; // Ajustado la proporción
-                
+                const weaponWidth = isMobile? player.width * 0.8 : player.width * 1.2;   // Ajustado la proporción
+                const weaponHeight = isMobile? player.height * 0.8 : player.height * 1.2; // Ajustado la proporción
+
                 ctx.save();
                 ctx.translate(player.x + player.width/2, player.y + player.height/2);
                 ctx.rotate(0); // Rotar 90 grados para que apunte hacia arriba
@@ -724,7 +725,7 @@
             bullets = [];
             powerups = [];
             player.x = canvas.width / 2 - player.width / 2;
-            player.y = canvas.height - player.height - 40; // Usar la misma posición que en resizeCanvas
+            player.y = canvas.height - player.height - 0; // Usar la misma posición que en resizeCanvas
             document.getElementById('score').textContent = score;
             document.getElementById('lives').textContent = lives;
             document.getElementById('game-over').style.display = 'none';
@@ -792,7 +793,7 @@
             
             // Actualizar posición inicial del jugador
             player.x = canvas.width / 2 - player.width / 2;
-            player.y = canvas.height - player.height - 40; // Más separación del borde
+            player.y = canvas.height - player.height - 0;
             
             // Ajustamos el tamaño real para mantener el ratio de aspecto
             const container = document.getElementById('game-container');
