@@ -87,16 +87,33 @@
             #game-container {
                 width: 100vw;
                 height: 100vh;
+                margin: 0;
+                padding: 0;
             }
 
             canvas {
+                width: 100% !important;
+                height: 100% !important;
                 border: none;
+                margin: 0;
+                padding: 0;
             }
 
             #hud {
-                font-size: 14px;
-                padding: 10px;
+                font-size: 12px;
+                padding: 5px;
                 background: rgba(0, 0, 0, 0.8);
+                margin: 0;
+            }
+
+            .restart-btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            #game-over {
+                width: 80%;
+                font-size: 18px;
             }
         }
 
@@ -752,25 +769,32 @@
 
         // Ajustar el canvas al redimensionar
         function resizeCanvas() {
-            canvas.width = 700;   // Resolución base más adecuada
-            canvas.height = 1000; // Mantiene ratio 2:3
+            // Detectar si es móvil
+            const isMobile = window.innerWidth <= 480;
+            
+            if (isMobile) {
+                // En móviles usar el ancho y alto de la ventana
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            } else {
+                // En desktop mantener las dimensiones originales
+                canvas.width = 700;
+                canvas.height = 1000;
+            }
             
             // Actualizar posición inicial del jugador
             player.x = canvas.width / 2 - player.width / 2;
-            player.y = canvas.height - player.height - 40; // Más separación del borde
+            player.y = canvas.height - player.height - 40;
             
-            // Ajustamos el tamaño real para mantener el ratio de aspecto
-            const container = document.getElementById('game-container');
-            const containerRatio = container.clientWidth / container.clientHeight;
-            const canvasRatio = canvas.width / canvas.height;
+            // Ajustar escala de elementos según el tamaño de pantalla
+            const scale = Math.min(canvas.width / 700, canvas.height / 1000);
+            player.width = 80 * scale;
+            player.height = 80 * scale;
             
-            if (containerRatio > canvasRatio) {
-                canvas.style.height = '100%';
-                canvas.style.width = 'auto';
-            } else {
-                canvas.style.width = '100%';
-                canvas.style.height = 'auto';
-            }
+            // Prevenir que el canvas se estire
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.style.objectFit = 'contain';
         }
 
         window.addEventListener('resize', resizeCanvas);
