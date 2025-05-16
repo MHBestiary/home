@@ -29,8 +29,8 @@
         }
 
         canvas {
-            width: 100%;
-            height: 100%;
+            width: 90%;
+            height: 90%;
             border: 4px solid #f83;
             box-shadow: 0 0 20px #f83;
             image-rendering: pixelated;
@@ -653,7 +653,7 @@
                             }
 
                             // Chance de soltar power-up basado en amenaza
-                            if (monster.threat > 3 && Math.random() < 1) {
+                            if (monster.threat > 3 && Math.random() < 0.1) {
                                 const types = ['spread', 'rapid', 'damage', 'heal'];
                                 powerups.push(new PowerUp(monster.x, monster.y, 
                                     types[Math.floor(Math.random() * types.length)]));
@@ -752,8 +752,8 @@
 
         // Ajustar el canvas al redimensionar
         function resizeCanvas() {
-            canvas.width = 800;   // Resolución base más adecuada
-            canvas.height = 1200; // Mantiene ratio 2:3
+            canvas.width = 700;   // Resolución base más adecuada
+            canvas.height = 1000; // Mantiene ratio 2:3
             
             // Actualizar posición inicial del jugador
             player.x = canvas.width / 2 - player.width / 2;
