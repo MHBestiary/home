@@ -7,16 +7,23 @@
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/question.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 </head>
-<body>
+<body>    
     <div id="game-container">
         <canvas id="game-canvas"></canvas>
-        <button id="add-weapon" class="add-button">+</button>
-        <div id="weapon-selector" class="weapon-selector">
-            <img src="https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/weapons/GS.png" alt="Great Sword" data-weapon="GS">
-            <img src="https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/weapons/LS.png" alt="Long Sword" data-weapon="LS">
-            <img src="https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/weapons/SNS.png" alt="Sword and Shield" data-weapon="SNS">
-            <img src="https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/weapons/DB.png" alt="Dual Blades" data-weapon="DB">
-            <img src="https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/weapons/Lance.png" alt="Lance" data-weapon="Lance">
+        <button id="add-item" class="add-button">+</button>
+        <div id="item-selector" class="item-selector">
+            <div class="item-category">
+                <h3></h3>
+                <div class="item-grid" id="weapons-grid"></div>
+            </div>
+            <div class="item-category">
+                <h3></h3>
+                <div class="item-grid" id="food-grid"></div>
+            </div>
+            <div class="item-category">
+                <h3></h3>
+                <div class="item-grid" id="materials-grid"></div>
+            </div>
         </div>
     </div>
 
@@ -120,23 +127,19 @@
         }
 
         document.addEventListener('DOMContentLoaded', loadTranslations);
-    </script>
-
-    <script>
-        // Sonido de afilado
-        const sharpenSound = new Audio('https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/SOUNDS/sharpening.mp3');
-
+    </script>    <script>
         document.addEventListener('DOMContentLoaded', () => {
             const Engine = Matter.Engine,
                   Render = Matter.Render,
                   World = Matter.World,
                   Bodies = Matter.Bodies,
                   Body = Matter.Body,
-                  Events = Matter.Events;
-
-            // Crear motor y mundo
+                  Events = Matter.Events;            // Crear motor y mundo con física optimizada
             const engine = Engine.create({
-                gravity: { x: 0, y: 1 }
+                gravity: { x: 0, y: 0.5 },
+                constraintIterations: 2,
+                positionIterations: 6,
+                velocityIterations: 4
             });
             
             const canvas = document.getElementById('game-canvas');
@@ -149,9 +152,7 @@
                     wireframes: false,
                     background: 'transparent'
                 }
-            });
-
-            // Crear paredes
+            });            // Crear paredes con mejores propiedades físicas
             const walls = [
                 Bodies.rectangle(400, 610, 810, 60, { isStatic: true }), // suelo
                 Bodies.rectangle(-10, 300, 60, 620, { isStatic: true }), // izquierda
@@ -161,129 +162,158 @@
 
             walls.forEach(wall => {
                 wall.render.fillStyle = '#995a29';
-                wall.friction = 0.1;
-                wall.restitution = 0.6;
-            });
+                wall.friction = 0.05;
+                wall.restitution = 0.4;
+                wall.chamfer = { radius: 2 };
+            });// Añadir paredes al mundo
+            World.add(engine.world, walls);
 
-            // Crear piedra de afilado con sprite
-            const whetstone = Bodies.rectangle(400, 300, 50, 50, {
-                render: {
-                    sprite: {
-                        texture: 'https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/stone.png',
-                        xScale: 0.8,
-                        yScale: 0.8
-                    }
-                },
-                frictionAir: 0.001,
-                friction: 0.1,
-                restitution: 0.6,
-                mass: 1
-            });
-
-            // Añadir cuerpos al mundo
-            World.add(engine.world, [...walls, whetstone]);
+            // Cargar imágenes
+            loadImages();
 
             // Iniciar el motor y el renderizado
             Engine.run(engine);
-            Render.run(render);
+            Render.run(render);            // Cargar imágenes dinámicamente
+            async function loadImages() {
+                // Cargar armas
+                const weapons = ['BOW', 'CB', 'DB', 'GL', 'GS', 'HAMMER', 'HBG', 'HH', 'IG', 'LANCE', 'LBG', 'LS', 'SA', 'SNS', 'whetstone'];
+                const weaponsGrid = document.getElementById('weapons-grid');
+                weapons.forEach(weapon => {
+                    const img = document.createElement('img');
+                    img.src = `https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/weapons/${weapon}.png`;
+                    img.alt = weapon;
+                    img.dataset.type = 'weapon';
+                    img.dataset.item = weapon;
+                    weaponsGrid.appendChild(img);
+                });
 
-            // Toggle del selector de armas
-            const addButton = document.getElementById('add-weapon');
-            const weaponSelector = document.getElementById('weapon-selector');
+                // Cargar comidas
+                const foods = ['f_aceite', 'f_ajo', 'f_carne', 'f_chile', 'f_gamba', 'f_hierba', 'f_huevas', 'f_huevo', 'f_miel', 'f_pescado', 'f_queso', 'f_seta', 'f_trufa', 'f_verduras'];
+                const foodGrid = document.getElementById('food-grid');
+                foods.forEach(food => {
+                    const img = document.createElement('img');
+                    img.src = `https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/food/${food}.png`;
+                    img.alt = food;
+                    img.dataset.type = 'food';
+                    img.dataset.item = food;
+                    foodGrid.appendChild(img);
+                });
+
+                // Cargar materiales básicos
+                const materials = ['m_body', 'm_horn', 'm_tail', 'm_wing', 'm_scale', 'm_skin', 'm_bone', 'm_body', 'm_cortex', 'm_drink', 'm_gem', 'm_head', 'm_mantle', 'm_plate', 'm_sac', 'm_scrap', 'm_webbing'];
+                const materialsGrid = document.getElementById('materials-grid');
+                materials.forEach(material => {
+                    const img = document.createElement('img');
+                    img.src = `https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/particons/${material}.png`;
+                    img.alt = material;
+                    img.dataset.type = 'material';
+                    img.dataset.item = material;
+                    materialsGrid.appendChild(img);
+                });
+            }
+
+            // Toggle del selector de items
+            const addButton = document.getElementById('add-item');
+            const itemSelector = document.getElementById('item-selector');
             
             addButton.addEventListener('click', () => {
-                weaponSelector.classList.toggle('visible');
+                itemSelector.classList.toggle('visible');
             });
 
-            // Crear arma cuando se selecciona
-            weaponSelector.addEventListener('click', (e) => {
+            // Crear item cuando se selecciona
+            itemSelector.addEventListener('click', (e) => {
                 if (e.target.tagName === 'IMG') {
-                    const weaponType = e.target.dataset.weapon;
-                    createWeapon(weaponType, e.clientX, e.clientY);
-                    weaponSelector.classList.remove('visible');
+                    const itemType = e.target.dataset.type;
+                    const itemName = e.target.dataset.item;
+                    createItem(itemType, itemName, e.clientX, e.clientY);
                 }
-            });
+            });            function createItem(type, name, x, y) {
+                let size = type === 'food' ? 30 : 50;
+                let texturePath;
+                  switch(type) {
+                    case 'weapon':
+                        texturePath = `https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/weapons/${name}.png`;
+                        break;
+                    case 'food':
+                        texturePath = `https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/food/${name}.png`;
+                        break;
+                    case 'material':
+                        texturePath = `https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/particons/${name}.png`;
+                        break;
+                }
 
-            function createWeapon(type, x, y) {
-                const weapon = Bodies.rectangle(
+                const item = Bodies.rectangle(
                     Math.random() * 600 + 100,
                     100,
-                    80,
-                    30,
+                    size,
+                    size,
                     {
                         render: {
                             sprite: {
-                                texture: `https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/weapons/${type}.png`,
-                                xScale: 1,
-                                yScale: 1
+                                texture: texturePath,
+                                xScale: type === 'weapon' ? 1.5 : 1,
+                                yScale: type === 'weapon' ? 1.5 : 1
                             }
                         },
                         angle: Math.random() * Math.PI,
-                        friction: 0.1,
-                        restitution: 0.6
+                        friction: 0.03,
+                        frictionAir: 0.002,
+                        restitution: 0.7,
+                        mass: type === 'weapon' ? 3 : 1,
+                        chamfer: { radius: 5 },
+                        label: `${type}-${name}`
                     }
-                );
-
-                World.add(engine.world, weapon);
-            }
-
-            // Detectar colisiones entre la piedra y las armas
+                );                World.add(engine.world, item);
+            }            // Detectar colisiones entre objetos para efectos de físicas
             Events.on(engine, 'collisionStart', (event) => {
                 event.pairs.forEach((pair) => {
                     const bodyA = pair.bodyA;
                     const bodyB = pair.bodyB;
                     
-                    if ((bodyA === whetstone || bodyB === whetstone) &&
-                        (bodyA !== whetstone || bodyB !== whetstone)) {
-                        const weapon = bodyA === whetstone ? bodyB : bodyA;
-                        
-                        if (weapon.render.sprite) {
-                            // Efecto de brillo
-                            weapon.render.sprite.filter = 'drop-shadow(0 0 5px #ffd700) brightness(1.5)';
-                            
-                            // Sonido
-                            const sound = sharpenSound.cloneNode();
-                            sound.volume = 0.3;
-                            sound.playbackRate = 0.8 + Math.random() * 0.4;
-                            sound.play().catch(() => {});
-                            
-                            // Quitar el brillo después de un momento
-                            setTimeout(() => {
-                                if (weapon.render.sprite) {
-                                    weapon.render.sprite.filter = '';
-                                }
-                            }, 500);
-                        }
-                    }
+                    // Aquí puedes añadir lógica de colisiones si es necesario
                 });
-            });
-
-            // Control de la piedra de afilado con el mouse
+            });// Control de objetos con el mouse
             let isDragging = false;
             let dragBody = null;
-            let mouseConstraint = null;
-
-            canvas.addEventListener('mousedown', (e) => {
+            let previousPosition = null;
+            let dragSpeed = { x: 0, y: 0 };            canvas.addEventListener('mousedown', (e) => {
                 const mousePosition = getMousePosition(e);
-                const bodiesAtPoint = Matter.Query.point([whetstone], mousePosition);
+                const bodiesAtPoint = Matter.Query.point(
+                    Matter.Composite.allBodies(engine.world).filter(body => !body.isStatic),
+                    mousePosition
+                );
                 
                 if (bodiesAtPoint.length > 0) {
                     isDragging = true;
                     dragBody = bodiesAtPoint[0];
+                    previousPosition = mousePosition;
+                    dragSpeed = { x: 0, y: 0 };
                 }
-            });
-
-            canvas.addEventListener('mousemove', (e) => {
+            });            canvas.addEventListener('mousemove', (e) => {
                 if (isDragging && dragBody) {
                     const mousePosition = getMousePosition(e);
+                    
+                    if (previousPosition) {
+                        dragSpeed = {
+                            x: (mousePosition.x - previousPosition.x) * 2,
+                            y: (mousePosition.y - previousPosition.y) * 2
+                        };
+                    }
+                    
                     Body.setPosition(dragBody, mousePosition);
                     Body.setVelocity(dragBody, { x: 0, y: 0 });
+                    previousPosition = mousePosition;
                 }
             });
 
             canvas.addEventListener('mouseup', () => {
+                if (dragBody) {
+                    // Aplicar momentum al soltar
+                    Body.setVelocity(dragBody, dragSpeed);
+                }
                 isDragging = false;
                 dragBody = null;
+                previousPosition = null;
             });
 
             function getMousePosition(e) {
@@ -561,55 +591,98 @@
 
         .add-button {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
+            top: -5px;
+            right: -5px;
+            width: 50px;
+            height: 50px;
             background: linear-gradient(45deg, #995a29, #e28c46);
             border: none;
             border-radius: 50%;
             color: white;
             font-size: 24px;
             cursor: pointer;
-            z-index: 10;
+            z-index: 11;
             transition: all 0.3s ease;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-size: 40px;
         }
 
         .add-button:hover {
             transform: scale(1.1);
             box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-        }
-
-        .weapon-selector {
+        }        
+        .item-selector {
             position: absolute;
-            top: 70px;
+            top: 20px;
             right: 20px;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             border-radius: 10px;
-            padding: 10px;
+            padding: 20px;
             display: none;
             flex-direction: column;
-            gap: 10px;
+            gap: 20px;
             z-index: 10;
             border: 2px solid #995a29;
+            overflow-y: auto;
+            width: 320px;
+            height: 600px;
+            scrollbar-width: thin;
+            scrollbar-color: #995a29 rgba(0, 0, 0, 0.3);
+        }
+        
+        .item-selector::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .item-selector::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+        
+        .item-selector::-webkit-scrollbar-thumb {
+            background-color: #995a29;
+            border-radius: 4px;
         }
 
-        .weapon-selector.visible {
+        .item-selector.visible {
             display: flex;
         }
 
-        .weapon-selector img {
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-            filter: brightness(0.8);
+        .item-category {
+            margin-bottom: 10px;
         }
 
-        .weapon-selector img:hover {
+        .item-category h3 {
+            color: #ebce65;
+            margin: 0 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #995a29;
+            font-size: 1.1em;
+        }
+
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .item-grid img {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            filter: brightness(0.8);
+            padding: 5px;
+            background: rgba(153, 90, 41, 0.2);
+            border-radius: 8px;
+            border: 1px solid transparent;
+        }
+
+        .item-grid img:hover {
             transform: scale(1.1);
             filter: brightness(1);
+            border-color: #ebce65;
+            background: rgba(153, 90, 41, 0.4);
         }
 
         .glow {
