@@ -5,8 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SHARPENER</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/question.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 </head>
 <body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        <button id="add-weapon" class="add-button">+</button>
+        <div id="weapon-selector" class="weapon-selector">
+            <img src="https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/weapons/GS.png" alt="Great Sword" data-weapon="GS">
+            <img src="https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/weapons/LS.png" alt="Long Sword" data-weapon="LS">
+            <img src="https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/weapons/SNS.png" alt="Sword and Shield" data-weapon="SNS">
+            <img src="https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/weapons/DB.png" alt="Dual Blades" data-weapon="DB">
+            <img src="https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/weapons/Lance.png" alt="Lance" data-weapon="Lance">
+        </div>
+    </div>
+
     <!-- SideBar -->
     <div id="sidebar" class="fixed -left-64 h-full w-64 shadow-lg transition-all duration-300 z-40">
         <div class="toggle-sidebar-button" onclick="toggleSidebar()">
@@ -107,6 +120,182 @@
         }
 
         document.addEventListener('DOMContentLoaded', loadTranslations);
+    </script>
+
+    <script>
+        // Sonido de afilado
+        const sharpenSound = new Audio('https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/SOUNDS/sharpening.mp3');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const Engine = Matter.Engine,
+                  Render = Matter.Render,
+                  World = Matter.World,
+                  Bodies = Matter.Bodies,
+                  Body = Matter.Body,
+                  Events = Matter.Events;
+
+            // Crear motor y mundo
+            const engine = Engine.create({
+                gravity: { x: 0, y: 1 }
+            });
+            
+            const canvas = document.getElementById('game-canvas');
+            const render = Render.create({
+                canvas: canvas,
+                engine: engine,
+                options: {
+                    width: 800,
+                    height: 600,
+                    wireframes: false,
+                    background: 'transparent'
+                }
+            });
+
+            // Crear paredes
+            const walls = [
+                Bodies.rectangle(400, 610, 810, 60, { isStatic: true }), // suelo
+                Bodies.rectangle(-10, 300, 60, 620, { isStatic: true }), // izquierda
+                Bodies.rectangle(810, 300, 60, 620, { isStatic: true }), // derecha
+                Bodies.rectangle(400, -10, 810, 60, { isStatic: true }) // techo
+            ];
+
+            walls.forEach(wall => {
+                wall.render.fillStyle = '#995a29';
+                wall.friction = 0.1;
+                wall.restitution = 0.6;
+            });
+
+            // Crear piedra de afilado con sprite
+            const whetstone = Bodies.rectangle(400, 300, 50, 50, {
+                render: {
+                    sprite: {
+                        texture: 'https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/stone.png',
+                        xScale: 0.8,
+                        yScale: 0.8
+                    }
+                },
+                frictionAir: 0.001,
+                friction: 0.1,
+                restitution: 0.6,
+                mass: 1
+            });
+
+            // Añadir cuerpos al mundo
+            World.add(engine.world, [...walls, whetstone]);
+
+            // Iniciar el motor y el renderizado
+            Engine.run(engine);
+            Render.run(render);
+
+            // Toggle del selector de armas
+            const addButton = document.getElementById('add-weapon');
+            const weaponSelector = document.getElementById('weapon-selector');
+            
+            addButton.addEventListener('click', () => {
+                weaponSelector.classList.toggle('visible');
+            });
+
+            // Crear arma cuando se selecciona
+            weaponSelector.addEventListener('click', (e) => {
+                if (e.target.tagName === 'IMG') {
+                    const weaponType = e.target.dataset.weapon;
+                    createWeapon(weaponType, e.clientX, e.clientY);
+                    weaponSelector.classList.remove('visible');
+                }
+            });
+
+            function createWeapon(type, x, y) {
+                const weapon = Bodies.rectangle(
+                    Math.random() * 600 + 100,
+                    100,
+                    80,
+                    30,
+                    {
+                        render: {
+                            sprite: {
+                                texture: `https://raw.githubusercontent.com/mhbestiary/home/main/MHImages/0_Icons/weapons/${type}.png`,
+                                xScale: 1,
+                                yScale: 1
+                            }
+                        },
+                        angle: Math.random() * Math.PI,
+                        friction: 0.1,
+                        restitution: 0.6
+                    }
+                );
+
+                World.add(engine.world, weapon);
+            }
+
+            // Detectar colisiones entre la piedra y las armas
+            Events.on(engine, 'collisionStart', (event) => {
+                event.pairs.forEach((pair) => {
+                    const bodyA = pair.bodyA;
+                    const bodyB = pair.bodyB;
+                    
+                    if ((bodyA === whetstone || bodyB === whetstone) &&
+                        (bodyA !== whetstone || bodyB !== whetstone)) {
+                        const weapon = bodyA === whetstone ? bodyB : bodyA;
+                        
+                        if (weapon.render.sprite) {
+                            // Efecto de brillo
+                            weapon.render.sprite.filter = 'drop-shadow(0 0 5px #ffd700) brightness(1.5)';
+                            
+                            // Sonido
+                            const sound = sharpenSound.cloneNode();
+                            sound.volume = 0.3;
+                            sound.playbackRate = 0.8 + Math.random() * 0.4;
+                            sound.play().catch(() => {});
+                            
+                            // Quitar el brillo después de un momento
+                            setTimeout(() => {
+                                if (weapon.render.sprite) {
+                                    weapon.render.sprite.filter = '';
+                                }
+                            }, 500);
+                        }
+                    }
+                });
+            });
+
+            // Control de la piedra de afilado con el mouse
+            let isDragging = false;
+            let dragBody = null;
+            let mouseConstraint = null;
+
+            canvas.addEventListener('mousedown', (e) => {
+                const mousePosition = getMousePosition(e);
+                const bodiesAtPoint = Matter.Query.point([whetstone], mousePosition);
+                
+                if (bodiesAtPoint.length > 0) {
+                    isDragging = true;
+                    dragBody = bodiesAtPoint[0];
+                }
+            });
+
+            canvas.addEventListener('mousemove', (e) => {
+                if (isDragging && dragBody) {
+                    const mousePosition = getMousePosition(e);
+                    Body.setPosition(dragBody, mousePosition);
+                    Body.setVelocity(dragBody, { x: 0, y: 0 });
+                }
+            });
+
+            canvas.addEventListener('mouseup', () => {
+                isDragging = false;
+                dragBody = null;
+            });
+
+            function getMousePosition(e) {
+                const rect = canvas.getBoundingClientRect();
+                return {
+                    x: e.clientX - rect.left,
+                    y: e.clientY - rect.top
+                };
+            }
+        });
+
+        // ... existing translation code ...
     </script>
 
     <style>
@@ -347,6 +536,85 @@
         .btn-group .btn:last-child {
             border-top-right-radius: 8px;
             border-bottom-right-radius: 8px;
+        }
+
+        /* Game specific styles */
+        #game-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 600px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            border: 2px solid #995a29;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        #game-canvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        .add-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #995a29, #e28c46);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .add-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+        }
+
+        .weapon-selector {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            padding: 10px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 10;
+            border: 2px solid #995a29;
+        }
+
+        .weapon-selector.visible {
+            display: flex;
+        }
+
+        .weapon-selector img {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            filter: brightness(0.8);
+        }
+
+        .weapon-selector img:hover {
+            transform: scale(1.1);
+            filter: brightness(1);
+        }
+
+        .glow {
+            filter: drop-shadow(0 0 5px #ffd700) brightness(1.5);
+            transition: filter 0.3s ease;
         }
     </style>
 </body>
