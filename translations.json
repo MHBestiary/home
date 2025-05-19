@@ -208,6 +208,10 @@
             "clicker": {
                 "title": "Monster Clicker",
                 "description": "¡Mejora tu equipo y derrota monstruos haciendo click!"
+            },            
+            "chest": {
+                "title": "Monster Chest",
+                "description": "¡Gestiona tu inventario!"
             }
         }
     },
@@ -420,6 +424,10 @@
             "clicker": {
                 "title": "Monster Clicker",
                 "description": "Upgrade your equipment and defeat monsters by clicking!"
+            },
+            "chest": {
+                "title": "Monster Chest",
+                "description": "Manage your inventory!"
             }
         }
     }

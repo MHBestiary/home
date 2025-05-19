@@ -97,6 +97,16 @@
                     <h2>Monster Picker</h2>
                     <p>¡Escoge entre dos monstruos aleatorios!</p>
                 </div>
+            </a>                <a href="chest.html" class="game-card" data-game="chest">
+                <div class="game-content">                    <div class="game-icon">
+                        <img src="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/chest.png" alt="Chest">
+                        <div class="chest-glow"></div>
+                        <div class="chest-sparkle"></div>
+                        <div class="chest-treasure"></div>
+                    </div>
+                    <h2>Monster Chest</h2>
+                    <p>¡Gestiona tu inventario!</p>
+                </div>
             </a>
 
             <a href="shooter.html" class="game-card" data-game="shooter">
@@ -309,12 +319,103 @@
             0% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
             50% { transform: translate(60px, -50%) scale(1.5); opacity: 1; }
             100% { transform: translate(125px, -50%) scale(1.5); opacity: 0; }
-        }
-
-        @keyframes click {
+        }        @keyframes click {
             0% { transform: translate(-50%, -50%) scale(0.8); opacity: 1; }
             75% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
             100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+        }
+
+        /* Chest Animation */
+        .chest-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+            animation: chest-pulse 2s ease-in-out infinite;
+            z-index: 1;
+        }        
+        .chest-sparkle {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: #FFD700;
+            border-radius: 50%;
+            box-shadow: 
+                0 0 4px #FFD700,
+                0 0 8px #FFD700;
+            animation: sparkle 3s ease-in-out infinite;
+            z-index: 3;
+        }        
+        .game-card[data-game="chest"] .game-icon::after {
+            content: '';
+            position: absolute;
+            top: 35%;
+            left: 45%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 40px;
+            height: 40px;
+            background-image: url('https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/particons/m_mantle.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 0 5px #FFD700) brightness(1.2);
+            opacity: 0;
+            scale: 0;
+            transition: all 0.4s ease-out;
+            animation: float 2s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        .game-card[data-game="chest"]:hover .game-icon::after {
+            scale: 1;
+            transform: translate(-50%, -80%) scale(1.2);
+            opacity: 1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -80%) scale(1.2); }
+            50% { transform: translate(-50%, -90%) scale(1.2); }
+        }
+
+        .chest-sparkle::before,
+        .chest-sparkle::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: inherit;
+            box-shadow: inherit;
+            animation: inherit;
+            animation-delay: -1s;
+        }
+
+        .chest-sparkle::before {
+            left: 20px;
+            top: 10px;
+        }
+
+        .chest-sparkle::after {
+            left: -20px;
+            top: -10px;
+        }
+
+        @keyframes chest-pulse {
+            0% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); }
+            100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0; }
+            25% { transform: translate(-10px, -15px) scale(1.2); opacity: 1; }
+            50% { transform: translate(10px, -25px) scale(0.8); opacity: 0.5; }
+            75% { transform: translate(5px, -5px) scale(1.1); opacity: 0.8; }
         }
 
         /* Sidebar styles */
@@ -545,6 +646,9 @@
                     case 'shooter':
                         card.style.backgroundColor = 'rgba(0, 200, 255, 0.7)';
                         break;
+                    case 'chest':
+                        card.style.backgroundColor = 'rgba(200, 0, 255, 0.7)';
+                        break;
                     case 'clicker':
                         card.style.backgroundColor = 'rgba(0, 255, 200, 0.7)';
                         break;
@@ -591,6 +695,7 @@
                 wheel: t.minigames.wheel,
                 picker: t.minigames.picker,
                 shooter: t.minigames.shooter,
+                chest: t.minigames.chest,
                 clicker: t.minigames.clicker
             };
 
