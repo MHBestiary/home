@@ -1,27 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHARPENER</title>
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/question.png">
+<head>    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>INVENTARIO</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/chest.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
 </head>
-<body>    
-    <div id="game-container">
+<body>      <div id="game-container">
         <canvas id="game-canvas"></canvas>
-        <button id="add-item" class="add-button">+</button>
+        <button id="add-item" class="add-button" title="Añadir items">+</button>
+        <button id="clear-items" class="clear-button" title="Borrar todos los items">−</button>
         <div id="item-selector" class="item-selector">
             <div class="item-category">
-                <h3></h3>
+                <h3>Armas</h3>
                 <div class="item-grid" id="weapons-grid"></div>
             </div>
             <div class="item-category">
-                <h3></h3>
+                <h3>Comida</h3>
                 <div class="item-grid" id="food-grid"></div>
             </div>
             <div class="item-category">
-                <h3></h3>
+                <h3>Materiales</h3>
                 <div class="item-grid" id="materials-grid"></div>
             </div>
         </div>
@@ -176,7 +175,7 @@
             Render.run(render);            // Cargar imágenes dinámicamente
             async function loadImages() {
                 // Cargar armas
-                const weapons = ['BOW', 'CB', 'DB', 'GL', 'GS', 'HAMMER', 'HBG', 'HH', 'IG', 'LANCE', 'LBG', 'LS', 'SA', 'SNS', 'whetstone'];
+                const weapons = ['BOW', 'CB', 'DB', 'GL', 'GS', 'HAMMER', 'HBG', 'HH', 'IG', 'LANCE', 'LBG', 'LS', 'SA', 'SNS'];
                 const weaponsGrid = document.getElementById('weapons-grid');
                 weapons.forEach(weapon => {
                     const img = document.createElement('img');
@@ -210,24 +209,33 @@
                     img.dataset.item = material;
                     materialsGrid.appendChild(img);
                 });
-            }
-
-            // Toggle del selector de items
+            }            // Toggle del selector de items y botón de borrado
             const addButton = document.getElementById('add-item');
+            const clearButton = document.getElementById('clear-items');
             const itemSelector = document.getElementById('item-selector');
             
             addButton.addEventListener('click', () => {
                 itemSelector.classList.toggle('visible');
             });
 
-            // Crear item cuando se selecciona
+            clearButton.addEventListener('click', () => {
+                const bodies = Matter.Composite.allBodies(engine.world);
+                bodies.forEach(body => {
+                    if (!body.isStatic) {
+                        World.remove(engine.world, body);
+                    }
+                });
+            });            // Crear item cuando se selecciona
             itemSelector.addEventListener('click', (e) => {
                 if (e.target.tagName === 'IMG') {
                     const itemType = e.target.dataset.type;
                     const itemName = e.target.dataset.item;
-                    createItem(itemType, itemName, e.clientX, e.clientY);
+                    const rect = canvas.getBoundingClientRect();
+                    const x = Math.min(Math.max(e.clientX - rect.left, 100), rect.width - 100);
+                    const y = 100;
+                    createItem(itemType, itemName, x, y);
                 }
-            });            function createItem(type, name, x, y) {
+            });function createItem(type, name, x, y) {
                 let size = type === 'food' ? 30 : 50;
                 let texturePath;
                   switch(type) {
@@ -242,9 +250,12 @@
                         break;
                 }
 
+                const scaleX = canvas.width / canvas.getBoundingClientRect().width;
+                const adjustedX = x * scaleX;
+
                 const item = Bodies.rectangle(
-                    Math.random() * 600 + 100,
-                    100,
+                    adjustedX,
+                    y,
                     size,
                     size,
                     {
@@ -263,7 +274,7 @@
                         chamfer: { radius: 5 },
                         label: `${type}-${name}`
                     }
-                );                World.add(engine.world, item);
+                );World.add(engine.world, item);
             }            // Detectar colisiones entre objetos para efectos de físicas
             Events.on(engine, 'collisionStart', (event) => {
                 event.pairs.forEach((pair) => {
@@ -276,8 +287,8 @@
             let isDragging = false;
             let dragBody = null;
             let previousPosition = null;
-            let dragSpeed = { x: 0, y: 0 };            canvas.addEventListener('mousedown', (e) => {
-                const mousePosition = getMousePosition(e);
+            let dragSpeed = { x: 0, y: 0 };            function handleStart(e) {
+                const mousePosition = getMousePosition(e.type.startsWith('mouse') ? e : e.touches[0]);
                 const bodiesAtPoint = Matter.Query.point(
                     Matter.Composite.allBodies(engine.world).filter(body => !body.isStatic),
                     mousePosition
@@ -289,9 +300,13 @@
                     previousPosition = mousePosition;
                     dragSpeed = { x: 0, y: 0 };
                 }
-            });            canvas.addEventListener('mousemove', (e) => {
+            }
+
+            canvas.addEventListener('mousedown', handleStart);
+            canvas.addEventListener('touchstart', handleStart);            function handleMove(e) {
                 if (isDragging && dragBody) {
-                    const mousePosition = getMousePosition(e);
+                    e.preventDefault();
+                    const mousePosition = getMousePosition(e.type.startsWith('mouse') ? e : e.touches[0]);
                     
                     if (previousPosition) {
                         dragSpeed = {
@@ -304,9 +319,10 @@
                     Body.setVelocity(dragBody, { x: 0, y: 0 });
                     previousPosition = mousePosition;
                 }
-            });
+            }
 
-            canvas.addEventListener('mouseup', () => {
+            canvas.addEventListener('mousemove', handleMove);
+            canvas.addEventListener('touchmove', handleMove, { passive: false });            function handleEnd() {
                 if (dragBody) {
                     // Aplicar momentum al soltar
                     Body.setVelocity(dragBody, dragSpeed);
@@ -314,15 +330,47 @@
                 isDragging = false;
                 dragBody = null;
                 previousPosition = null;
-            });
+            }
 
-            function getMousePosition(e) {
+            canvas.addEventListener('mouseup', handleEnd);
+            canvas.addEventListener('touchend', handleEnd);
+            canvas.addEventListener('touchcancel', handleEnd);            function getMousePosition(e) {
                 const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
                 return {
-                    x: e.clientX - rect.left,
-                    y: e.clientY - rect.top
+                    x: (e.clientX - rect.left) * scaleX,
+                    y: (e.clientY - rect.top) * scaleY
                 };
             }
+
+            // Ajustar tamaño del canvas cuando cambia el tamaño de la ventana
+            function resizeCanvas() {
+                const container = document.getElementById('game-container');
+                render.canvas.width = container.clientWidth;
+                render.canvas.height = container.clientHeight;
+                render.options.width = container.clientWidth;
+                render.options.height = container.clientHeight;
+
+                // Ajustar posición de las paredes
+                const walls = Matter.Composite.allBodies(engine.world).filter(body => body.isStatic);
+                const width = render.canvas.width;
+                const height = render.canvas.height;
+
+                Matter.Body.setPosition(walls[0], { x: width/2, y: height + 30 }); // suelo
+                Matter.Body.setPosition(walls[1], { x: -30, y: height/2 }); // izquierda
+                Matter.Body.setPosition(walls[2], { x: width + 30, y: height/2 }); // derecha
+                Matter.Body.setPosition(walls[3], { x: width/2, y: -30 }); // techo
+
+                // Ajustar tamaño de las paredes
+                Matter.Body.setVertices(walls[0], Matter.Bodies.rectangle(width/2, height + 30, width + 60, 60, { isStatic: true }).vertices);
+                Matter.Body.setVertices(walls[1], Matter.Bodies.rectangle(-30, height/2, 60, height + 60, { isStatic: true }).vertices);
+                Matter.Body.setVertices(walls[2], Matter.Bodies.rectangle(width + 30, height/2, 60, height + 60, { isStatic: true }).vertices);
+                Matter.Body.setVertices(walls[3], Matter.Bodies.rectangle(width/2, -30, width + 60, 60, { isStatic: true }).vertices);
+            }
+
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas(); // Ajustar tamaño inicial
         });
 
         // ... existing translation code ...
@@ -566,16 +614,16 @@
         .btn-group .btn:last-child {
             border-top-right-radius: 8px;
             border-bottom-right-radius: 8px;
-        }
-
-        /* Game specific styles */
+        }        /* Game specific styles */
         #game-container {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 800px;
-            height: 600px;
+            width: 90vw;
+            max-width: 800px;
+            height: 90vh;
+            max-height: 600px;
             background-color: rgba(0, 0, 0, 0.8);
             border-radius: 10px;
             border: 2px solid #995a29;
@@ -586,31 +634,59 @@
         #game-canvas {
             width: 100%;
             height: 100%;
-            touch-action: none;
-        }
-
-        .add-button {
+            touch-action: manipulation;
+        }        .add-button, .clear-button {
             position: absolute;
-            top: -5px;
-            right: -5px;
             width: 50px;
             height: 50px;
             background: linear-gradient(45deg, #995a29, #e28c46);
             border: none;
             border-radius: 50%;
             color: white;
-            font-size: 24px;
             cursor: pointer;
             z-index: 11;
             transition: all 0.3s ease;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .add-button:hover {
+        .add-button {
+            top: -5px;
+            right: -5px;
+        }
+
+        .clear-button {
+            top: -5px;
+            left: -5px;
+        }
+
+        .add-button:hover, .clear-button:hover {
             transform: scale(1.1);
             box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-        }        
+        }
+
+        @media (max-width: 768px) {
+            .add-button, .clear-button {
+                width: 40px;
+                height: 40px;
+                font-size: 30px;
+            }
+
+            .item-selector {
+                width: calc(100% - 40px);
+                height: calc(100% - 40px);
+                top: 20px;
+                right: 20px;
+            }
+
+            .item-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
         .item-selector {
             position: absolute;
             top: 20px;
