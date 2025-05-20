@@ -213,6 +213,16 @@
                 "title": "Monster Chest",
                 "description": "¡Gestiona tu inventario!"
             }
+        },
+        "chest": {
+            "gravity": "Gravedad:",
+            "weapons": "Armas",
+            "food": "Comida",
+            "materials": "Materiales",
+            "buttons": {
+                "add": "Añadir items",
+                "clear": "Borrar todos los items"
+            }
         }
     },
     "en": {
@@ -428,6 +438,16 @@
             "chest": {
                 "title": "Monster Chest",
                 "description": "Manage your inventory!"
+            }
+        },
+        "chest": {
+            "gravity": "Gravity:",
+            "weapons": "Weapons",
+            "food": "Food",
+            "materials": "Materials",
+            "buttons": {
+                "add": "Add items",
+                "clear": "Clear all items"
             }
         }
     }
