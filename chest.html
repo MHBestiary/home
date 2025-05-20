@@ -13,8 +13,8 @@
         <div id="item-selector" class="item-selector">
             <div class="gravity-control">
                 <span>Gravedad:</span>
-                <input type="range" id="gravity-slider" min="-1" max="10" step="0.5" value="1">
-                <span id="gravity-value">0.5</span>
+                <input type="range" id="gravity-slider" min="-5" max="5" step="0.5" value="0">
+                <span id="gravity-value">0</span>
             </div>
             <div class="item-category">
                 <h3>Armas</h3>
@@ -140,7 +140,7 @@
                   Body = Matter.Body,
                   Events = Matter.Events;            // Crear motor y mundo con física optimizada
             const engine = Engine.create({
-                gravity: { x: 0, y: 0.5 },
+                gravity: { x: 0, y: 0 },
                 constraintIterations: 2,
                 positionIterations: 6,
                 velocityIterations: 4
@@ -236,11 +236,14 @@
                     const itemType = e.target.dataset.type;
                     const itemName = e.target.dataset.item;
                     const rect = canvas.getBoundingClientRect();
-                    const x = Math.min(Math.max(e.clientX - rect.left, 100), rect.width - 100);
-                    const y = 100;
+                    // Generar posición aleatoria dentro del área visible
+                    const x = Math.random() * (rect.width - 200) + 100; // 100px de margen en cada lado
+                    const y = Math.random() * (rect.height / 2); // Spawn en la mitad superior
                     createItem(itemType, itemName, x, y);
                 }
-            });function createItem(type, name, x, y) {
+            });
+
+            function createItem(type, name, x, y) {
                 let size = type === 'food' ? 30 : 50;
                 let texturePath;
                   switch(type) {
@@ -257,10 +260,11 @@
 
                 const scaleX = canvas.width / canvas.getBoundingClientRect().width;
                 const adjustedX = x * scaleX;
+                const adjustedY = y * (canvas.height / canvas.getBoundingClientRect().height);
 
                 const item = Bodies.rectangle(
                     adjustedX,
-                    y,
+                    adjustedY,
                     size,
                     size,
                     {
@@ -635,9 +639,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 90vw;
+            width: 95vw;
             max-width: 800px;
-            height: 90vh;
+            height: 95vh;
             max-height: 600px;
             background-color: rgba(0, 0, 0, 0.8);
             border-radius: 10px;
@@ -692,31 +696,96 @@
             }
 
             .item-selector {
-                width: calc(100% - 40px);
-                height: calc(100% - 40px);
-                top: 20px;
-                right: 20px;
+                width: 85vw;
+                height: auto;
+                max-height: 80vh;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 50px;
             }
 
             .item-grid {
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+            }
+
+            .item-grid img {
+                width: 40px;
+                height: 40px;
+                padding: 4px;
+            }
+
+            .add-button {
+                top: 5px;
+                right: 5px;
+                width: 35px;
+                height: 35px;
+                font-size: 24px;
+            }
+
+            .clear-button {
+                top: 5px;
+                left: 5px;
+                width: 35px;
+                height: 35px;
+                font-size: 24px;
+            }
+
+            .gravity-control {
+                padding: 10px 5px;
+                margin-bottom: 15px;
+            }
+
+            .gravity-control span {
+                font-size: 0.9em;
+            }
+
+            .gravity-control input[type="range"] {
+                height: 6px;
+            }
+
+            .gravity-control input[type="range"]::-webkit-slider-thumb {
+                width: 16px;
+                height: 16px;
+            }
+
+            .gravity-control input[type="range"]::-moz-range-thumb {
+                width: 16px;
+                height: 16px;
+            }
+
+            .item-category h3 {
+                font-size: 1em;
+                margin-bottom: 8px;
             }
         }
+
+        @media (max-width: 480px) {
+            .item-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .item-selector {
+                width: 90vw;
+                padding: 10px;
+            }
+        }
+
         .item-selector {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 10px;
+            right: 10px;
             background: rgba(0, 0, 0, 0.9);
             border-radius: 10px;
-            padding: 20px;
+            padding: 15px;
             display: none;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
             z-index: 10;
             border: 2px solid #995a29;
             overflow-y: auto;
-            width: 320px;
-            height: 600px;
+            width: 280px;
+            max-height: 90vh;
             scrollbar-width: thin;
             scrollbar-color: #995a29 rgba(0, 0, 0, 0.3);
         }
