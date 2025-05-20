@@ -86,8 +86,9 @@
     <div class="wrapper">
       <div class="container">
         <canvas id="wheel"></canvas>
-        <button style="font-family:'Albertus MT Std Regular';font-weight: bold;" id="spin-btn"></button>
+        <button style="font-family:'Albertus MT Std Regular';font-weight: bold;" id="spin-btn">SPIN</button>
         <div class="wheel-indicator"></div>
+        <div id="final-value"></div>  <!-- Añade esta línea -->
       </div>
     </div>
     
@@ -385,55 +386,51 @@
         const iconContainer = document.querySelector('.weapon-icons-container');
         
         spinBtn.disabled = true;
-        finalValue.innerHTML = `<p style="font-family:'Albertus MT Std Regular';font-weight: bold;font-size:32px;">${t.spinning}!</p>`;
+        if (finalValue) {
+            finalValue.innerHTML = `<p style="font-family:'Albertus MT Std Regular';font-weight: bold;font-size:32px;">${t.spinning || 'Spinning'}!</p>`;
+        }
         
+        const extraSpins = (Math.floor(Math.random() * 4) + 5) * 360;
         const currentArray = currentMode === 'monsters' ? monsters : armas;
         const sectionSize = 360 / currentArray.length;
         const randomSection = Math.floor(Math.random() * currentArray.length);
-        const finalRotation = (randomSection * sectionSize) + (sectionSize / 2) - 90;
-        let currentRotation = 0;
-        let totalSpins = 0;
-        let rotationSpeed = 10;
+        const finalAngle = extraSpins + (randomSection * sectionSize);
         
-        let rotationInterval = window.setInterval(() => {
-            currentRotation -= rotationSpeed;
+        let currentRotation = myChart.options.rotation || 0;
+        const animationDuration = 5000;
+        const startTime = Date.now();
+        
+        function animate() {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / animationDuration, 1);
+            
+            const easing = 1 - Math.pow(1 - progress, 4);
+            const rotation = currentRotation - (finalAngle * easing);
+            
+            myChart.options.rotation = rotation;
             
             if (iconContainer) {
-                iconContainer.style.transform = `translate(-50%, -50%) rotate(${currentRotation}deg)`;
+                // Modificar cómo se aplica la rotación a los iconos
+                iconContainer.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
                 const icons = iconContainer.querySelectorAll('.weapon-icon');
                 icons.forEach(icon => {
-                    const translatePart = icon.style.transform.split('rotate')[0];
-                    icon.style.transform = `${translatePart} rotate(${-currentRotation}deg)`;
+                    // Mantener la posición pero contrarrestar la rotación
+                    const currentTransform = icon.style.transform;
+                    const translatePart = currentTransform.split('rotate')[0];
+                    icon.style.transform = `${translatePart} rotate(${-rotation}deg)`;
                 });
             }
             
-            if (currentRotation <= -360) {
-                currentRotation = 0;
-                totalSpins++;
-                rotationSpeed = Math.max(3, rotationSpeed * 0.8);
-            }
-
-            if (totalSpins >= 3 && rotationSpeed <= 3) {
-                currentRotation = -finalRotation;
-                if (iconContainer) {
-                    iconContainer.style.transform = `translate(-50%, -50%) rotate(${currentRotation}deg)`;
-                    const icons = iconContainer.querySelectorAll('.weapon-icon');
-                    icons.forEach(icon => {
-                        const translatePart = icon.style.transform.split('rotate')[0];
-                        icon.style.transform = `${translatePart} rotate(${-currentRotation}deg)`;
-                    });
-                }
-                myChart.options.rotation = currentRotation;
-                myChart.update();
-                valueGenerator(currentRotation);
-                clearInterval(rotationInterval);
-                spinBtn.disabled = false;
-                return;
-            }
+            myChart.update('none');
             
-            myChart.options.rotation = currentRotation;
-            myChart.update();
-        }, 20);
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                valueGenerator(rotation);
+            }
+        }
+        
+        requestAnimationFrame(animate);
     });
 
     function toggleSidebar() {
@@ -547,64 +544,90 @@
     background-repeat: repeat;
     }
     .wrapper {
-    width: 40%;
-    max-width: 42em;
-    max-height: 90vh;
-    position: absolute;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-    margin-top: 2em;
-    padding-right: 3em;
-    padding-left: 3em;
-    border-radius: 1em;
+        width: 40%;
+        max-width: 42em;
+        max-height: 90vh;
+        position: fixed;  /* Cambiar a fixed */
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        margin-top: 2em;
+        padding-right: 3em;
+        padding-left: 3em;
+        border-radius: 1em;
+        perspective: 1000px;
     }
     .container {
-    position: relative;
-    width: 100%;
-    height: 100%;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform-style: preserve-3d;
+        perspective: 1000px;
     }
+
     #wheel {
-    max-height: inherit;
-    width: inherit;
-    top: 0;
-    padding: 0;
+        max-height: inherit;
+        width: inherit;
+        position: relative;
+        margin: 0 auto;
     }
+
     @keyframes rotate {
     100% {
         transform: rotate(360deg);
     }
     }
     #spin-btn {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-    height: 18%;
-    width: 18%;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 0;
-    background: radial-gradient(#e28c46 50%, #331c07 85%);
-    color: #000000;
-    text-transform: uppercase;
-    font-size: 1.6em;
-    letter-spacing: 0.1em;
-    font-weight: 600;
-    border: #000000 10px outset;
+        position: fixed;  /* Cambiar a fixed */
+        left: 50%;
+        top: 50%;
+        width: 100px;
+        height: 100px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        cursor: pointer;
+        background: radial-gradient(#e28c46 50%, #331c07 85%);
+        color: #000000;
+        text-transform: uppercase;
+        font-size: 1.6em;
+        letter-spacing: 0.1em;
+        font-weight: 600;
+        border: #000000 10px outset;
+        z-index: 10;
+        transition: none;
+        will-change: transform;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        pointer-events: auto;
     }
+
+    @media screen and (max-width: 768px) {
+        #spin-btn {
+            width: 80px;  /* Tamaño más pequeño para móviles */
+            height: 80px;
+            font-size: 1.2em;
+            border-width: 6px;
+        }
+    }
+
     img {
     position: absolute;
     width: 4em;
     top: 45%;
+    top: 45%;
     right: -8%;
     }
     #final-value {
-    font-size: 1.5em;
-    text-align: center;
-    margin-top: 1.5em;
-    color: #202020;
-    font-weight: 500;
+        position: fixed;  /* Cambiar a fixed */
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 20px;
+        width: 100%;
+        text-align: center;
+        z-index: 10;
     }
     @media screen and (max-width: 768px) {
     .wrapper {
@@ -961,7 +984,7 @@
     position: absolute;
     width: 60px;
     height: 60px;
-    transform-origin: center;
+    transform-origin: center center; /* Añadir transform-origin */
     pointer-events: none;
     z-index: 1;
     left: 50%;
@@ -975,8 +998,10 @@
     left: 50%;
     width: 100%;
     height: 100%;
+    transform-origin: center center; /* Añadir transform-origin */
     transform: translate(-50%, -50%);
     pointer-events: none;
+    z-index: 5; /* Añadir z-index para mantener los iconos debajo del botón */
 }
 
 @media screen and (max-width: 768px) {
