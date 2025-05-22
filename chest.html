@@ -305,8 +305,16 @@
                         render: {
                             sprite: {
                                 texture: texturePath,                                
-                                xScale: type === 'weapon' ? 1.5 : 1,
-                                yScale: type === 'weapon' ? 1.5 : 1
+                                xScale: (function() {
+                                    if (type === 'weapon') return 1.5;
+                                    else
+                                    return 1;
+                                })(),
+                                yScale: (function() {
+                                    if (type === 'weapon') return 1.5;
+                                    else
+                                    return 1;
+                                })()
                             }
                         },
                         angle: Math.random() * Math.PI,
