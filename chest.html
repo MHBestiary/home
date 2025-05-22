@@ -304,7 +304,7 @@
                     {
                         render: {
                             sprite: {
-                                texture: texturePath,
+                                texture: texturePath,                                
                                 xScale: type === 'weapon' ? 1.5 : 1,
                                 yScale: type === 'weapon' ? 1.5 : 1
                             }
@@ -313,7 +313,17 @@
                         friction: 0.03,
                         frictionAir: 0.002,
                         restitution: 0.7,
-                        mass: type === 'weapon' ? 3 : 1,
+                        mass: (function() {
+                            if (type === 'weapon') {
+                                return 10;
+                            } else if (type === 'food') {
+                                return 1;
+                            } else if (type === 'material') {
+                                return 30;
+                            } else {
+                                return 1;
+                            }
+                        })(),
                         chamfer: { radius: 5 },
                         label: `${type}-${name}`
                     }
@@ -733,7 +743,6 @@
             left: 15px;
             right: 15px;
             bottom: 15px;
-            border: 1px solid #ebce65;
             border-radius: 3px;
             pointer-events: none;
             opacity: 0.3;
