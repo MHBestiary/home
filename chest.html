@@ -14,7 +14,7 @@
         <div id="item-selector" class="item-selector">
             <div class="gravity-control">
                 <span data-translation-key="gravity">Gravedad:</span>
-                <input type="range" id="gravity-slider" min="-6" max="6" step="1" value="0">
+                <input type="range" id="gravity-slider" min="-3" max="3" step="1" value="0">
                 <span id="gravity-value">0</span>
             </div>
             <div class="item-category">
@@ -426,12 +426,10 @@
                 if (value === 0) {
                     gravityValue = 0;
                 } else if (value > 0) {
-                    // Valores positivos: 0.25, 0.5, 1, 2, 5, 10
-                    const positiveValues = [0.25, 0.5, 1, 2, 5, 10];
+                    const positiveValues = [0.1, 1, 5];
                     gravityValue = positiveValues[value - 1];
                 } else {
-                    // Valores negativos: -0.25, -0.5, -1, -2, -5, -10
-                    const negativeValues = [-0.25, -0.5, -1, -2, -5, -10];
+                    const negativeValues = [-0.1, -1, -5];
                     gravityValue = negativeValues[Math.abs(value) - 1];
                 }
                 
