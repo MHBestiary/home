@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>SHOOTER</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/weapons/LBG.png">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         body {
@@ -511,7 +512,8 @@
         // Control del jugador con ratón
         canvas.addEventListener('mousemove', (e) => {
             const rect = canvas.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
+            const scaleX = canvas.width / rect.width;
+            const mouseX = (e.clientX - rect.left) * scaleX;
             player.x = Math.max(0, Math.min(canvas.width - player.width, mouseX - player.width/2));
         });
 
@@ -549,8 +551,9 @@
         function handleTouch(e) {
             e.preventDefault();
             const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
             const touch = e.touches ? e.touches[0] : e;
-            const x = (touch.clientX - rect.left) * (canvas.width / rect.width);
+            const x = (touch.clientX - rect.left) * scaleX;
             player.x = Math.max(0, Math.min(canvas.width - player.width, x - player.width/2));
         }
 
@@ -787,26 +790,21 @@
 
         // Ajustar el canvas al redimensionar
         function resizeCanvas() {
+            const isMobile = window.innerWidth <= 480;
+            const container = document.getElementById('game-container');
             
+            if (isMobile) {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
+            } else {
+                // En PC, mantener un tamaño fijo más grande
+                canvas.width = 800;
+                canvas.height = 1200;
+            }
             
             // Actualizar posición inicial del jugador
             player.x = canvas.width / 2 - player.width / 2;
-            player.y = canvas.height - player.height - 0;
-            
-            // Ajustamos el tamaño real para mantener el ratio de aspecto
-            const container = document.getElementById('game-container');
-            const containerRatio = container.clientWidth / container.clientHeight;
-            const canvasRatio = canvas.width / canvas.height;
-            
-            if (containerRatio > canvasRatio) {
-                canvas.style.height = '100%';
-                canvas.style.width = 'auto';
-            } else {
-                canvas.style.width = '100%';
-                canvas.style.height = 'auto';
-            }
+            player.y = canvas.height - player.height - 20;
         }
 
         window.addEventListener('resize', resizeCanvas);
@@ -817,6 +815,9 @@
             document.getElementById('highscore').textContent = highscore;
             gameLoop();
         });
+    </script>
+</body>
+</html>
     </script>
 </body>
 </html>
