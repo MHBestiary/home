@@ -416,9 +416,9 @@
         <div class="tab-container">
             <div class="tab-buttons">
                 <button class="tab-button active" onclick="switchTab('stats')">Stats</button>
-                <button class="tab-button" onclick="switchTab('inventory')">Inventory</button>
-                <button class="tab-button" onclick="switchTab('upgrades')">Upgrades</button>
-                <button class="tab-button" onclick="switchTab('achievements')">Achievements</button>
+                <button class="tab-button" onclick="switchTab('inventory')">Items</button>
+                <button class="tab-button" onclick="switchTab('upgrades')">Shop</button>
+                <button class="tab-button" onclick="switchTab('achievements')">Ranking</button>
             </div>
 
             <!-- Stats Tab -->
@@ -545,7 +545,7 @@
                 </div>
             </div>
             <div id="achievements" class="tab-content">
-                <h2 class="title text-2xl mb-4">Achievements & Ranking</h2>
+                <h2 class="title text-2xl mb-4">Ranking</h2>
                 <div id="achievementList" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4"></div>
                 <div class="mt-4">
                     <h3 class="text-xl font-bold">Best Multiplier</h3>
@@ -605,7 +605,7 @@
             if (gameState.monsterLevel % 5 === 0 && gameState.monsterLevel < 45) {
                 monsterImg.classList.remove('final-boss');
                 monsterImg.classList.remove('normalMonster');
-                monsterImg.style.filter = "drop-shadow(0 0 5px #7b00ff) drop-shadow(0 0 40px #7b00ff)";
+                monsterImg.style.filter = "drop-shadow(0 0 5px #7b00ff) drop-shadow(0 0 20px #7b00ff)";
             } else if (gameState.monsterLevel >= 45) {
                 if (!monsterImg.classList.contains('final-boss')) {
                     monsterImg.classList.add('final-boss');
@@ -817,14 +817,14 @@
             const achievementList = document.getElementById('achievementList');
             const achievements = [
                 { name: "First Monster", unlocked: gameState.monsterLevel > 1 },
-                { name: "100 Monsters", unlocked: gameState.monsterLevel >= 100 },
+                { name: "75 Monsters", unlocked: gameState.monsterLevel >= 75 },
                 { name: "1000 Zenny", unlocked: gameState.zenny >= 1000 },
                 { name: "Max Multiplier 10x", unlocked: gameState.multiplier >= 10 },
                 { name: "Prestige!", unlocked: gameState.multiplier > 1 },
-                { name: "Boss Slayer", unlocked: gameState.monsterLevel >= 45 }
+                { name: "Fatalis Slayer", unlocked: gameState.monsterLevel >= 46 }
             ];
             achievementList.innerHTML = achievements.map(a =>
-                `<div style="color:${a.unlocked ? '#ffd700' : '#aaa'};font-weight:bold;">${a.unlocked ? '✔️' : '❌'} ${a.name}</div>`
+                `<div style="color:${a.unlocked ? '#ffd700' : '#ccc'};font-weight:bold;">${a.unlocked ? '✔️' : '❌'} ${a.name.toUpperCase()}</div>`
             ).join('');
             // Ranking local
             let best = parseFloat(localStorage.getItem('bestMultiplier') || '1');
