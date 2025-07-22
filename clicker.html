@@ -95,9 +95,21 @@
             -webkit-user-select: none;
             -webkit-touch-callout: none;
         }
+        #monsterImage.normalMonster {
+            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 1));
+        }
+
+        #monsterImage.final-boss {
+            filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 10px #fff200) drop-shadow(0 0 120px #d3a500a2);
+            animation: rainbowGlow 2s linear infinite;
+            will-change: transform;
+        }
+        @keyframes rainbowGlow {
+            0%   { filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 10px #fff200) drop-shadow(0 0 120px #d3a500a2) hue-rotate(0deg);}
+            100% { filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 10px #fff200) drop-shadow(0 0 120px #d3a500a2) hue-rotate(360deg);}
+        }
 
         #monsterImage:hover {
-            filter: drop-shadow(0 0 7px rgba(255, 0, 0, 1));
             transform: scale(1.1);
         }
 
@@ -120,7 +132,7 @@
 
         .progress-dots {
             display: flex;
-            gap: 3px;
+            gap: 1.5px;
             justify-content: center;
             align-items: center;
             margin-bottom: 8px;
@@ -587,17 +599,29 @@
                 currentHealth: threatLevel * 50 + gameState.monsterLevel * 10 - 10
             };
 
+            const monsterImg = document.getElementById('monsterImage');
+
             // Double health for last monster before next threat level
             if (gameState.monsterLevel % 5 === 0 && gameState.monsterLevel < 45) {
-                currentMonster.maxHealth *= 2;
-                currentMonster.currentHealth *= 2;
+                monsterImg.classList.remove('final-boss');
+                monsterImg.classList.remove('normalMonster');
+                monsterImg.style.filter = "drop-shadow(0 0 5px #7b00ff) drop-shadow(0 0 40px #7b00ff)";
+            } else if (gameState.monsterLevel >= 45) {
+                if (!monsterImg.classList.contains('final-boss')) {
+                    monsterImg.classList.add('final-boss');
+                }
+                monsterImg.classList.remove('normalMonster');
+                monsterImg.style.filter = ""; // No sobrescribas el filtro, deja que el CSS lo haga
+            } else {
+                monsterImg.classList.remove('final-boss');
+                monsterImg.classList.add('normalMonster');
+                monsterImg.style.filter = ""; // No sobrescribas el filtro, deja que el CSS lo haga
             }
 
             reward = Math.floor((currentMonster.threat * 10 + gameState.monsterLevel) * gameState.multiplier);
             
             // Update UI elements
             document.getElementById('monsterName').textContent = currentMonster.name;
-            const monsterImg = document.getElementById('monsterImage');
             monsterImg.onerror = () => {
                 // If image fails to load, try again
                 monsterImg.src = currentMonster.image + '?t=' + new Date().getTime();
@@ -609,13 +633,6 @@
             document.getElementById('monsterReward').textContent = "Reward: " + reward + " Zenny";
             updateHealthBar();
             updateProgressBar();
-
-            // Cambiar sombra para bosses (múltiplo de 5, excepto el último)
-            if (gameState.monsterLevel % 5 === 0 && gameState.monsterLevel < 45) {
-                monsterImg.style.filter = "drop-shadow(0 0 7px #7b00ff)";
-            } else {
-                monsterImg.style.filter = "drop-shadow(0 0 15px rgba(0, 0, 0, 1))";
-            }
         }
 
         function clickMonster(event) {
@@ -658,8 +675,10 @@
 
                 // Animación shake y partículas al derrotar monstruo
                 const monsterImg = document.getElementById('monsterImage');
-                monsterImg.classList.add('shake');
-                setTimeout(() => monsterImg.classList.remove('shake'), 400);
+                if (!monsterImg.classList.contains('final-boss')) {
+                    monsterImg.classList.add('shake');
+                    setTimeout(() => monsterImg.classList.remove('shake'), 400);
+                }
             }
             document.getElementById('currentHealth').textContent = Math.max(0, currentMonster.currentHealth);
             updateHealthBar();
@@ -900,14 +919,14 @@
             }
         }, 100);
 
-        // Easter egg: Ctrl + Shift + E en inventario suma +1000 al multiplicador
+        // Easter egg: Ctrl + Shift + E en inventario suma +10000 al multiplicador
         document.addEventListener('keydown', function(e) {
             const inventoryTab = document.getElementById('inventory');
             if (
                 inventoryTab.classList.contains('active') &&
                 e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'e'
             ) {
-                gameState.multiplier += 1000;
+                gameState.multiplier += 10000;
                 updateUI();
             }
         });
