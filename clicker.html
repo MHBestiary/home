@@ -158,7 +158,7 @@
 
         .tab-buttons {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 1px;
             background: rgba(0, 0, 0, 0.2);
         }
@@ -343,10 +343,35 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+
+        .shake {
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            25% { transform: translate(-1px, -2px) rotate(-1deg); }
+            50% { transform: translate(-1px, 2px) rotate(1deg); }
+            75% { transform: translate(1px, -2px) rotate(0deg); }
+            100% { transform: translate(1px, 2px) rotate(1deg); }
+        }
+
+        #monsterImage.shake {
+            animation: shakeMonster 0.4s;
+        }
+        @keyframes shakeMonster {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(-10px, 0); }
+            40% { transform: translate(10px, 0); }
+            60% { transform: translate(-10px, 0); }
+            80% { transform: translate(10px, 0); }
+            100% { transform: translate(0, 0); }
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white min-h-screen">
     <a href="minigames.html" class="return-btn">←</a>
+    <button id="toggleDark" class="return-btn" style="left:auto;right:1rem;">🌙</button>
     <div class="container mx-auto px-4 py-4">
         <!-- Monster Display -->
         <div class="flex flex-col items-center monster-container mb-4">
@@ -372,6 +397,7 @@
                 <button class="tab-button active" onclick="switchTab('stats')">Stats</button>
                 <button class="tab-button" onclick="switchTab('inventory')">Inventory</button>
                 <button class="tab-button" onclick="switchTab('upgrades')">Upgrades</button>
+                <button class="tab-button" onclick="switchTab('achievements')">Achievements</button>
             </div>
 
             <!-- Stats Tab -->
@@ -497,6 +523,14 @@
                     </button>
                 </div>
             </div>
+            <div id="achievements" class="tab-content">
+                <h2 class="title text-2xl mb-4">Achievements & Ranking</h2>
+                <div id="achievementList" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4"></div>
+                <div class="mt-4">
+                    <h3 class="text-xl font-bold">Best Multiplier</h3>
+                    <span id="bestMultiplier" class="text-2xl text-yellow-400">1.00</span>x
+                </div>
+            </div>
         </div>
     </div>
 
@@ -504,6 +538,7 @@
         let monsters = [];
         let currentMonster = null;
         let reward = 0;
+        let extraMonstersKilled = 0; // Añade esta variable global
         let gameState = {
             zenny: 0,
             dps: 0,
@@ -565,6 +600,13 @@
             document.getElementById('monsterReward').textContent = "Reward: " + reward + " Zenny";
             updateHealthBar();
             updateProgressBar();
+
+            // Cambiar sombra para bosses (múltiplo de 5, excepto el último)
+            if (gameState.monsterLevel % 5 === 0 && gameState.monsterLevel < 45) {
+                monsterImg.style.filter = "drop-shadow(0 0 7px #7b00ff)";
+            } else {
+                monsterImg.style.filter = "drop-shadow(0 0 15px rgba(0, 0, 0, 1))";
+            }
         }
 
         function clickMonster() {
@@ -577,7 +619,16 @@
             if (currentMonster.currentHealth <= 0) {
                 gameState.zenny += reward;
                 gameState.monsterLevel++;
+                // Si ya pasaste el monstruo 45, suma el contador extra
+                if (gameState.monsterLevel > 45) {
+                    extraMonstersKilled++;
+                }
                 spawnNewMonster();
+
+                // Animación shake y partículas al derrotar monstruo
+                const monsterImg = document.getElementById('monsterImage');
+                monsterImg.classList.add('shake');
+                setTimeout(() => monsterImg.classList.remove('shake'), 400);
             }
             document.getElementById('currentHealth').textContent = Math.max(0, currentMonster.currentHealth);
             updateHealthBar();
@@ -673,7 +724,11 @@
             if (currentMonster.threat < 3) return;
             
             // Calcular el bonus basado en el threat level actual
-            const bonus = currentMonster.threat * 0.35;
+            let bonus = currentMonster.threat * 0.35;
+            // Suma el bonus extra por monstruos matados después del 45
+            if (extraMonstersKilled > 0) {
+                bonus += extraMonstersKilled * 0.01;
+            }
             
             // Actualizar el multiplicador
             gameState.multiplier += bonus;
@@ -701,12 +756,36 @@
                     mantle: 1000
                 }
             };
+            extraMonstersKilled = 0; // Reinicia el contador al hacer prestigio
 
             // Reiniciar el monstruo actual
             spawnNewMonster();
             updateUI();
         }
 
+        function updateAchievements() {
+            const achievementList = document.getElementById('achievementList');
+            const achievements = [
+                { name: "First Monster", unlocked: gameState.monsterLevel > 1 },
+                { name: "100 Monsters", unlocked: gameState.monsterLevel >= 100 },
+                { name: "1000 Zenny", unlocked: gameState.zenny >= 1000 },
+                { name: "Max Multiplier 10x", unlocked: gameState.multiplier >= 10 },
+                { name: "Prestige!", unlocked: gameState.multiplier > 1 },
+                { name: "Boss Slayer", unlocked: gameState.monsterLevel >= 45 }
+            ];
+            achievementList.innerHTML = achievements.map(a =>
+                `<div style="color:${a.unlocked ? '#ffd700' : '#aaa'};font-weight:bold;">${a.unlocked ? '✔️' : '❌'} ${a.name}</div>`
+            ).join('');
+            // Ranking local
+            let best = parseFloat(localStorage.getItem('bestMultiplier') || '1');
+            if (gameState.multiplier > best) {
+                best = gameState.multiplier;
+                localStorage.setItem('bestMultiplier', best);
+            }
+            document.getElementById('bestMultiplier').textContent = best.toFixed(2);
+        }
+
+        // Llama a updateAchievements en updateUI
         function updateUI() {
             document.getElementById('zenny').textContent = Math.floor(gameState.zenny);
             document.getElementById('dps').textContent = gameState.dps;
@@ -755,12 +834,18 @@
             if (currentMonster && currentMonster.threat >= 3) {
                 prestigeButton.disabled = false;
                 prestigeButton.classList.remove('disabled');
-                prestigeBonus.textContent = (currentMonster.threat * 0.35).toFixed(2);
+                // Calcula el bonus total incluyendo monstruos extra
+                let bonus = currentMonster.threat * 0.35;
+                if (extraMonstersKilled > 0) {
+                    bonus += extraMonstersKilled * 0.01;
+                }
+                prestigeBonus.textContent = bonus.toFixed(2);
             } else {
                 prestigeButton.disabled = true;
                 prestigeButton.classList.add('disabled');
                 prestigeBonus.textContent = '0.00';
             }
+            updateAchievements();
         }
 
         function switchTab(tabId) {
@@ -783,6 +868,34 @@
                 dealDamage(gameState.dps / 10);
             }
         }, 100);
+
+        // Easter egg: Ctrl + Shift + E en inventario suma +1000 al multiplicador
+        document.addEventListener('keydown', function(e) {
+            const inventoryTab = document.getElementById('inventory');
+            if (
+                inventoryTab.classList.contains('active') &&
+                e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'e'
+            ) {
+                gameState.multiplier += 1000;
+                updateUI();
+            }
+        });
+
+        document.getElementById('toggleDark').onclick = function() {
+            document.body.classList.toggle('dark');
+            if (document.body.classList.contains('dark')) {
+                document.body.style.backgroundImage = 'none';
+                document.body.style.backgroundColor = '#2d2d2d';
+            } else {
+                document.body.style.backgroundImage = "url('https://github.com/mhbestiary/home/blob/main/MHImages/background%201024.jpg?raw=true')";
+                document.body.style.backgroundColor = '';
+            }
+            if (document.body.classList.contains('dark')) {
+                this.textContent = '☀️';
+            } else {
+                this.textContent = '🌙';
+            }
+        };
 
         // Initialize game
         loadMonsters();
