@@ -390,7 +390,7 @@
             </div>
             <img id="monsterImage" src="" alt="Monster" 
                 class="w-60 h-60 sm:w-80 sm:h-80 object-contain cursor-pointer"
-                onclick="clickMonster()"
+                onclick="clickMonster(event)"
                 draggable="false"
                 onselectstart="return false;">
             <p id="monsterReward" class="text-3xl mt-6 title"></p>
@@ -614,9 +614,31 @@
             }
         }
 
-        function clickMonster() {
+        function clickMonster(event) {
             if (!currentMonster) return;
             dealDamage(gameState.clickDamage);
+
+            // Partícula visual en cada click, desde el punto del click
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.left = event.clientX + 'px';
+            particle.style.top = event.clientY + 'px';
+            particle.style.width = '10px';
+            particle.style.height = '10px';
+            particle.style.borderRadius = '50%';
+            particle.style.background = '#ffd700';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = 1000;
+            document.body.appendChild(particle);
+
+            const angle = Math.random() * 2 * Math.PI;
+            const distance = 40 + Math.random() * 20;
+            particle.animate([
+                { transform: 'translate(0,0)', opacity: 1 },
+                { transform: `translate(${Math.cos(angle)*distance}px,${Math.sin(angle)*distance}px)`, opacity: 0 }
+            ], { duration: 400, easing: 'ease-out' });
+
+            setTimeout(() => particle.remove(), 350);
         }
 
         function dealDamage(amount) {
