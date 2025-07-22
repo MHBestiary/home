@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CLICKER</title>
     <link rel="icon" href="https://raw.githubusercontent.com/mhbestiary/home/refs/heads/main/MHImages/0_Icons/blast.png">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -87,6 +87,9 @@
         #monsterImage {
             filter: drop-shadow(0 0 7px rgba(0, 0, 0, 1));
             transition: all 0.3s ease;
+            user-select: none;
+            -webkit-user-drag: none;
+            pointer-events: auto;
         }
 
         #monsterImage:hover {
@@ -387,7 +390,9 @@
             </div>
             <img id="monsterImage" src="" alt="Monster" 
                 class="w-60 h-60 sm:w-80 sm:h-80 object-contain cursor-pointer"
-                onclick="clickMonster()">
+                onclick="clickMonster()"
+                draggable="false"
+                onselectstart="return false;">
             <p id="monsterReward" class="text-3xl mt-6 title"></p>
         </div>
 
