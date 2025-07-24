@@ -110,7 +110,7 @@
             "title": "GENERADOR",
             "entrada": "GENERADOR DE MONSTRUOS",
             "secciones": {
-                "id": "ID:",
+                "id": "ID (autocompletado):",
                 "nombre": "Nombre:",
                 "tipo": "Tipo:",
                 "peligro": "Peligro:",
@@ -336,7 +336,7 @@
             "title": "GENERATOR",            
             "entrada": "MONSTER GENERATOR",
             "secciones": {
-                "id": "ID:",
+                "id": "ID (autocompleted):",
                 "nombre": "Name:",
                 "tipo": "Type:",
                 "peligro": "Threat:",
