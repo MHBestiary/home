@@ -90,6 +90,52 @@
         ]
     },
     {
+        "id": 103,
+        "name": "Alatreon (Dragon)",
+        "type": "Elder Dragon",
+        "threat": 9,
+        "locale": ["Unknown"],
+        "variants": [],
+        "game": ["MH WORLD", "MH3"],
+        "image": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/Alatreon_Dragon/Icon.png",
+        "gallery": [],
+        "description": "Un símbolo de destrucción: muchos temen incluso decir su nombre. Se dice que puede controlar a toda la naturaleza, pero todos (o casi todos) los registros sobre él han ardido.",
+        "description_en": "A symbol of destruction: many fear even to say its name. It is said to be able to control all of nature, but all (or almost all) records about it have burned.",
+        "weaknesses": {"fuego": 2, "agua": 2, "rayo": 1, "hielo": 2, "dragon": 3, "nitro": 1, "veneno": 1, "paralisis": 1, "sueño": 1, "stun": 1},
+        "materials": [
+            {
+                "name": "Esfera de Dragón Azul",
+                "name_en": "Blue Dragon's Sphere",
+                "rarity": 5,
+                "dropRate": 9,
+                "source": "Body Carv, Horn Break, Carv / Capture, Hunt, Feline Plunder, Tail Carv, Wound Front Legs",
+                "icon": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/0_Icons/particons/m_scale.png"
+            },
+            {
+                "name": "Tesoro de Dragon Antiguo",
+                "name_en": "Elder Dragon Treasure",
+                "rarity": 5,
+                "dropRate": 22,
+                "source": "Palico Ticket, Shine",
+                "icon": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/0_Icons/particons/m_scale.png"
+            },
+            {
+                "name": "Garra",
+                "name_en": "Claw",
+                "rarity": 5,
+                "dropRate": 28,
+                "source": "Body Carv, Carv / Capture, Hunt, Feline Plunder, Shine",
+                "icon": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/0_Icons/particons/m_scale.png"
+            }
+        ],
+        "parts": [
+            {"name": "Cabeza", "name_en": "Head", "breakable": true, "cortable": false, "weaknesses": {"slash": 3, "blunt": 3, "pierce": 1}},
+            {"name": "Cuerpo", "name_en": "Body", "breakable": true, "cortable": false, "weaknesses": {"slash": 1, "blunt": 1, "pierce": 2}},
+            {"name": "Alas", "name_en": "Wings", "breakable": true, "cortable": false, "weaknesses": {"slash": 2, "blunt": 2, "pierce": 1}},
+            {"name": "Cola", "name_en": "Tail", "breakable": false, "cortable": true, "weaknesses": {"slash": 2, "blunt": 2, "pierce": 2}}
+        ]
+    },
+    {
         "id": 7,
         "name": "Alatreon (Fire)",
         "type": "Elder Dragon",
@@ -148,52 +194,6 @@
         "description": "Un símbolo de destrucción: muchos temen incluso decir su nombre. Se dice que puede controlar a toda la naturaleza, pero todos (o casi todos) los registros sobre él han ardido.",
         "description_en": "A symbol of destruction: many fear even to say its name. It is said to be able to control all of nature, but all (or almost all) records about it have burned.",
         "weaknesses": {"fuego": 3, "agua": 2, "rayo": 1, "hielo": 0, "dragon": 1, "nitro": 1, "veneno": 1, "paralisis": 1, "sueño": 1, "stun": 1},
-        "materials": [
-            {
-                "name": "Esfera de Dragón Azul",
-                "name_en": "Blue Dragon's Sphere",
-                "rarity": 5,
-                "dropRate": 9,
-                "source": "Body Carv, Horn Break, Carv / Capture, Hunt, Feline Plunder, Tail Carv, Wound Front Legs",
-                "icon": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/0_Icons/particons/m_scale.png"
-            },
-            {
-                "name": "Tesoro de Dragon Antiguo",
-                "name_en": "Elder Dragon Treasure",
-                "rarity": 5,
-                "dropRate": 22,
-                "source": "Palico Ticket, Shine",
-                "icon": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/0_Icons/particons/m_scale.png"
-            },
-            {
-                "name": "Garra",
-                "name_en": "Claw",
-                "rarity": 5,
-                "dropRate": 28,
-                "source": "Body Carv, Carv / Capture, Hunt, Feline Plunder, Shine",
-                "icon": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/0_Icons/particons/m_scale.png"
-            }
-        ],
-        "parts": [
-            {"name": "Cabeza", "name_en": "Head", "breakable": true, "cortable": false, "weaknesses": {"slash": 3, "blunt": 3, "pierce": 1}},
-            {"name": "Cuerpo", "name_en": "Body", "breakable": true, "cortable": false, "weaknesses": {"slash": 1, "blunt": 1, "pierce": 2}},
-            {"name": "Alas", "name_en": "Wings", "breakable": true, "cortable": false, "weaknesses": {"slash": 2, "blunt": 2, "pierce": 1}},
-            {"name": "Cola", "name_en": "Tail", "breakable": false, "cortable": true, "weaknesses": {"slash": 2, "blunt": 2, "pierce": 2}}
-        ]
-    },
-    {
-        "id": 103,
-        "name": "Alatreon (Dragon)",
-        "type": "Elder Dragon",
-        "threat": 9,
-        "locale": ["Unknown"],
-        "variants": [],
-        "game": ["MH WORLD", "MH3"],
-        "image": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/Alatreon_Dragon/Icon.png",
-        "gallery": [],
-        "description": "Un símbolo de destrucción: muchos temen incluso decir su nombre. Se dice que puede controlar a toda la naturaleza, pero todos (o casi todos) los registros sobre él han ardido.",
-        "description_en": "A symbol of destruction: many fear even to say its name. It is said to be able to control all of nature, but all (or almost all) records about it have burned.",
-        "weaknesses": {"fuego": 2, "agua": 2, "rayo": 1, "hielo": 2, "dragon": 3, "nitro": 1, "veneno": 1, "paralisis": 1, "sueño": 1, "stun": 1},
         "materials": [
             {
                 "name": "Esfera de Dragón Azul",
@@ -1477,43 +1477,6 @@
         ]
     },
     {
-        "id": 92,
-        "name": "G. Doshaguma",
-        "type": "Construct",
-        "threat": 6,
-        "locale": ["Unknown"],
-        "variants": [{"name": "Doshaguma", "image": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/Doshaguma/Icon.png"}],
-        "game": ["MH WILDS"],
-        "spoiler": true,
-        "image": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/G. Doshaguma/Icon.png",
-        "gallery": [],
-        "description": "Guardian Doshaguma es una nueva construcción",
-        "description_en": "Guardian Doshaguma is a new construct",
-        "weaknesses": {"fuego": 3, "agua": 1, "rayo": 2, "hielo": 3, "dragon": 2, "nitro": 2, "veneno": 2, "paralisis": 2, "sueño": 2, "stun": 2},
-        "materials": [
-            {
-                "name": "Gema Bestial",
-                "name_en": "Brute Gem",
-                "rarity": 7,
-                "dropRate": 5,
-                "source": "Reward, Carv",
-                "icon": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/0_Icons/particons/m_gem.png"
-            },
-            {
-                "name": "Certificado",
-                "name_en": "Certificate",
-                "rarity": 6,
-                "dropRate": 8,
-                "source": "Reward",
-                "icon": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/0_Icons/ticket_white.png"
-            }
-        ],
-        "parts": [
-            {"name": "Cabeza", "name_en": "Head", "breakable": true, "cortable": false, "weaknesses": {"slash": 2, "blunt": 3, "pierce": 2}},
-            {"name": "Patas Delanteras", "name_en": "Front Legs", "breakable": true, "cortable": false, "weaknesses": {"slash": 3, "blunt": 3, "pierce": 3}}
-        ]
-    },
-    {
         "id": 99,
         "name": "G. Anjanath F",
         "type": "Construct",
@@ -1598,6 +1561,43 @@
             {"name": "Cabeza", "name_en": "Head", "breakable": true, "cortable": false, "weaknesses": {"slash": 2, "blunt": 2, "pierce": 2}},
             {"name": "Cola", "name_en": "Tail", "breakable": false, "cortable": true, "weaknesses": {"slash": 2, "blunt": 2, "pierce": 2}},
             {"name": "Cadenas", "name_en": "Chains", "breakable": true, "cortable": false, "weaknesses": {"slash": 2, "blunt": 2, "pierce": 2}}
+        ]
+    },
+    {
+        "id": 92,
+        "name": "G. Doshaguma",
+        "type": "Construct",
+        "threat": 6,
+        "locale": ["Unknown"],
+        "variants": [{"name": "Doshaguma", "image": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/Doshaguma/Icon.png"}],
+        "game": ["MH WILDS"],
+        "spoiler": true,
+        "image": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/G. Doshaguma/Icon.png",
+        "gallery": [],
+        "description": "Guardian Doshaguma es una nueva construcción",
+        "description_en": "Guardian Doshaguma is a new construct",
+        "weaknesses": {"fuego": 3, "agua": 1, "rayo": 2, "hielo": 3, "dragon": 2, "nitro": 2, "veneno": 2, "paralisis": 2, "sueño": 2, "stun": 2},
+        "materials": [
+            {
+                "name": "Gema Bestial",
+                "name_en": "Brute Gem",
+                "rarity": 7,
+                "dropRate": 5,
+                "source": "Reward, Carv",
+                "icon": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/0_Icons/particons/m_gem.png"
+            },
+            {
+                "name": "Certificado",
+                "name_en": "Certificate",
+                "rarity": 6,
+                "dropRate": 8,
+                "source": "Reward",
+                "icon": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/0_Icons/ticket_white.png"
+            }
+        ],
+        "parts": [
+            {"name": "Cabeza", "name_en": "Head", "breakable": true, "cortable": false, "weaknesses": {"slash": 2, "blunt": 3, "pierce": 2}},
+            {"name": "Patas Delanteras", "name_en": "Front Legs", "breakable": true, "cortable": false, "weaknesses": {"slash": 3, "blunt": 3, "pierce": 3}}
         ]
     },
     {
