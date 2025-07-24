@@ -1351,7 +1351,7 @@
     "threat": 5,
     "locale": ["Normal", "Desert"],
     "spoiler": true,
-    "variants": [],
+    "variants": [{"name": "Steve", "image": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/Steve/Icon.png"}],
     "game": ["MH4", "MH GENERATIONS", "MH RISE", "MH WILDS"],
     "image": "https://raw.githubusercontent.com/MHBestiary/home/refs/heads/main/MHImages/Seregios/Icon.png",
     "gallery": [],
